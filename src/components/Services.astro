@@ -1,0 +1,242 @@
+---
+const services = [
+  {
+    number: '(01)',
+    title: 'Influence',
+    beyondText: 'expectation',
+    category: 'PARTNERSHIPS',
+    image: '/hover-1.png',
+  },
+  {
+    number: '(02)',
+    title: 'Stories',
+    beyondText: 'the playbook',
+    category: 'STORYTELLING',
+    image: '/hover-2.png',
+  },
+  {
+    number: '(03)',
+    title: 'Connection',
+    beyondText: 'the handshake',
+    category: 'RELATIONSHIPS',
+    image: '/hover-3.png',
+  },
+  {
+    number: '(04)',
+    title: 'Sponsorship',
+    beyondText: 'the signage',
+    category: 'CULTURE',
+    image: '/hover-4.png',
+  },
+];
+---
+
+<section class="services" id="services">
+  <div class="container">
+    <div class="services__header reveal">
+      <h2 class="services__heading">
+        The four <span class="services__heading-highlight">doors</span> of what we do...
+      </h2>
+    </div>
+
+    <div class="services__list">
+      {services.map((service, index) => (
+        <div
+          class="services__item reveal"
+          style={`transition-delay: ${index * 0.1}s;`}
+        >
+          <div class="services__item-hover-image">
+            <img src={service.image} alt="" />
+          </div>
+          <div class="services__item-left">
+            <span class="services__number">{service.number}</span>
+            <h3 class="services__title">
+              {service.title}
+              <img src="/beyond-script.png" alt="Beyond" class="services__beyond-img" />
+              {service.beyondText}
+            </h3>
+          </div>
+          <span class="services__category">{service.category}</span>
+        </div>
+      ))}
+    </div>
+
+
+  </div>
+</section>
+
+<style>
+  .services {
+    background-color: var(--color-dark-section);
+    padding: var(--section-padding-y) 0;
+    position: relative;
+  }
+
+  .services__header {
+    margin-bottom: 0;
+  }
+
+  .services__heading {
+    font-family: var(--font-serif);
+    font-size: 32px;
+    font-weight: 500 !important; /* Ensure medium weight */
+    color: var(--color-cream);
+  }
+
+  .services__heading span.services__heading-highlight {
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-variation-settings: "wght" 700, "HGHT" 1000;
+    color: #916364 !important;
+    display: inline-block;
+  }
+
+
+
+  .services__list {
+    border-top: 1px solid var(--color-divider-dark);
+    margin-top: 120px;
+  }
+
+  .services__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--color-divider-dark);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+
+  .services__item:hover {
+    background-color: transparent;
+  }
+
+  .services__item-hover-image {
+    position: absolute;
+    top: 50%;
+    right: 15%; /* Position as seen in screenshot */
+    transform: translateY(-50%) rotate(5deg);
+    width: 380px;
+    height: 480px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .services__item:nth-child(even) .services__item-hover-image {
+    transform: translateY(-50%) rotate(-5deg);
+  }
+
+  .services__item:hover .services__item-hover-image {
+    opacity: 1;
+    transform: translateY(-50%) rotate(5deg) scale(1.05);
+  }
+
+  .services__item:nth-child(even):hover .services__item-hover-image {
+    transform: translateY(-50%) rotate(-5deg) scale(1.05);
+  }
+
+  .services__item-hover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .services__item-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .services__number {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--color-text-cream);
+    min-width: 32px;
+    transition: color 0.4s ease;
+  }
+
+  .services__item:hover .services__number {
+    color: #FFFFFF;
+  }
+
+  .services__title {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--color-cream);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    letter-spacing: 0.05em;
+    transition: color 0.4s ease;
+  }
+
+  .services__item:hover .services__title {
+    color: #6E4142;
+  }
+
+  .services__beyond-img {
+    height: 80px;
+    width: auto;
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0 4px;
+    position: relative;
+    top: 10px;
+    transition: filter 0.4s ease;
+  }
+
+  .services__item:hover .services__beyond-img {
+    filter: brightness(0) saturate(100%) invert(24%) sepia(23%) saturate(1005%) hue-rotate(314deg) brightness(98%) contrast(92%);
+    /* Filter to approximate #6E4142 on a white image */
+  }
+
+  .services__category {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--color-text-cream);
+    opacity: 0.6;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .services__item:hover .services__category {
+    color: #FFFFFF;
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .services__item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 28px 0;
+    }
+
+    .services__category {
+      margin-left: 56px;
+    }
+
+    .services__item-hover-image {
+      width: 280px;
+      height: 350px;
+      right: 5%;
+    }
+  }
+</style>

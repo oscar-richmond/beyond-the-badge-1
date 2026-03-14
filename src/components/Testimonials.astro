@@ -1,0 +1,119 @@
+---
+const featuredTestimonial = {
+  name: 'Clara Whitlock',
+  role: 'Global Brand Lead, Elara Group',
+  quote: '"Beyond the Badge took our unshaped ambition and turned it into cultural resonance — they didn\'t just understand our brand, they understood the cultural spaces we wanted to reach with a level of trust we never thought we\'d command."',
+  image: '/placeholder-client.jpg'
+};
+---
+
+<section class="testimonials section" id="testimonials">
+  <div class="container">
+    <div class="testimonials__header reveal">
+      <h2 class="testimonials__heading">Words from our clients</h2>
+    </div>
+
+    <div class="testimonials__grid reveal" style="transition-delay: 0.1s;">
+      <div class="testimonials__person">
+        <div class="testimonials__image-placeholder"></div>
+        <div class="testimonials__info">
+          <span class="testimonials__client-name">{featuredTestimonial.name}</span>
+          <span class="testimonials__client-role">{featuredTestimonial.role}</span>
+        </div>
+      </div>
+
+      <div class="testimonials__content">
+        <blockquote class="testimonials__quote-text">
+          {featuredTestimonial.quote}
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background-color: var(--color-cream-warm);
+    padding: var(--section-padding-y) 0;
+  }
+
+  .testimonials__heading {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 500;
+    color: var(--color-text-dark);
+    margin-bottom: 64px;
+  }
+
+  .testimonials__grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 80px;
+    align-items: flex-start;
+  }
+
+  .testimonials__person {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .testimonials__image-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, #a8a29e 0%, #8b837c 100%);
+    border-radius: 4px;
+  }
+
+  .testimonials__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .testimonials__client-name {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+  }
+
+  .testimonials__client-role {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .testimonials__content {
+    padding-top: 16px;
+  }
+
+  .testimonials__quote-text {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--color-text-dark);
+    font-style: normal;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .testimonials__grid {
+      grid-template-columns: 300px 1fr;
+      gap: 48px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .testimonials__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .testimonials__image-placeholder {
+      max-width: 300px;
+    }
+  }
+</style>

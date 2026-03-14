@@ -1,0 +1,151 @@
+---
+---
+
+<section class="about section" id="about">
+  <div class="about__watermark" aria-hidden="true">
+    <img src="/logo-monogram.png" alt="" class="about__watermark-img" />
+  </div>
+
+  <div class="container">
+    <div class="about__content reveal">
+      <p class="about__intro">
+        We <span class="about__highlight">connect</span> brands with the right spaces in art, sport, entertainment,<br />
+        and community — not to follow trends, but to shape them. Through<br />
+        bold partnerships and authentic storytelling, we build emotional<br />
+        resonance that lives beyond the logo.
+      </p>
+    </div>
+
+    <div class="about__visual reveal" style="transition-delay: 0.2s;">
+      <div class="about__image-grid">
+        <div class="about__image-wrapper">
+          <span class="about__image-label">(01)</span>
+          <div class="about__image-item about__image-item--1"></div>
+        </div>
+        <div class="about__image-wrapper">
+          <span class="about__image-label">(02)</span>
+          <div class="about__image-item about__image-item--2"></div>
+        </div>
+        <div class="about__image-wrapper">
+          <span class="about__image-label">(03)</span>
+          <div class="about__image-item about__image-item--3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    position: relative;
+    background-color: #ffffff;
+    overflow: hidden;
+    padding: var(--section-padding-y) 0;
+  }
+
+  .about__watermark {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    height: 120%;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .about__watermark-img {
+    height: 100%;
+    width: auto;
+    opacity: 0.03;
+    filter: invert(1);
+  }
+
+  .about__content {
+    position: relative;
+    z-index: 1;
+    max-width: 1092px; /* 1028 + 64 */
+    margin-bottom: 280px;
+  }
+
+  .about__intro {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 400; /* regular */
+    line-height: 57px;
+    letter-spacing: 0.05em; /* 5% */
+    color: var(--color-text-dark);
+    margin-bottom: 24px;
+  }
+
+  .about__highlight {
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-variation-settings: "wght" 700, "HGHT" 1000; /* 'bold tall' */
+    color: #8CB7A0;
+  }
+
+  .about__statement {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--color-text-dark);
+  }
+
+  .about__visual {
+    position: relative;
+    z-index: 1;
+  }
+
+  .about__image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 240px);
+    gap: 32px;
+    justify-content: flex-end;
+  }
+
+  .about__image-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .about__image-label {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-dark-section);
+  }
+
+  .about__image-item {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .about__image-item--1 {
+    background-image: url('/about-1.jpg');
+    background-color: var(--color-divider-light);
+  }
+
+  .about__image-item--2 {
+    background-image: url('/about-2.jpg');
+    background-color: var(--color-divider-light);
+  }
+
+  .about__image-item--3 {
+    background-image: url('/about-3.jpg');
+    background-color: var(--color-divider-light);
+  }
+
+  @media (max-width: 768px) {
+    .about__image-grid {
+      max-width: 100%;
+    }
+
+    .about__content {
+      margin-bottom: 48px;
+    }
+  }
+</style>

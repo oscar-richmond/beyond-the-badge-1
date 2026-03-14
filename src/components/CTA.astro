@@ -1,0 +1,124 @@
+---
+const marqueeItems = [
+  "Brand Strategy",
+  "Visual Storytelling",
+  "Social",
+  "Event Partnerships",
+  "Cultural Strategy",
+  "Talent"
+];
+---
+
+<section class="cta" id="contact">
+  <div class="cta__marquee-container">
+    <div class="cta__marquee">
+      <div class="cta__marquee-track">
+        {marqueeItems.map(item => <span class="cta__marquee-item">{item}</span>)}
+        {marqueeItems.map(item => <span class="cta__marquee-item" aria-hidden="true">{item}</span>)}
+        {marqueeItems.map(item => <span class="cta__marquee-item" aria-hidden="true">{item}</span>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="cta__center-card reveal">
+    <div class="cta__image-placeholder"></div>
+    <div class="cta__card-text">
+      <span class="cta__card-title">100 DAYS OF NOTHING</span>
+      <p class="cta__card-desc">Campaign to build momentum<br />within target audience</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    background-color: var(--color-cream);
+    padding: 120px 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+  }
+
+  .cta__marquee-container {
+    position: absolute;
+    width: 100%;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    z-index: 0;
+  }
+
+  .cta__marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .cta__marquee-track {
+    display: inline-flex;
+    gap: 40px;
+    animation: marquee 40s linear infinite;
+  }
+
+  .cta__marquee-item {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 500;
+    color: var(--color-text-dark);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .cta__marquee-item::after {
+    content: "•";
+    margin-left: 40px;
+    opacity: 0.3;
+  }
+
+  .cta__center-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+    background-color: var(--color-cream);
+    padding: 24px;
+    border-radius: 8px;
+  }
+
+  .cta__image-placeholder {
+    width: 280px;
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(135deg, #a48181 0%, #825a5a 100%);
+  }
+
+  .cta__card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cta__card-title {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-forest);
+  }
+
+  .cta__card-desc {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--color-forest);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-33.33% - 13.3px)); }
+  }
+</style>
