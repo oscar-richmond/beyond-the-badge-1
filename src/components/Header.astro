@@ -83,9 +83,7 @@ const navItems = [
   .header__logo {
     display: flex;
     align-items: center;
-    border-radius: 6px;
-    padding: 5px;
-    transition: transform var(--transition-base), background-color 0.3s ease;
+    transition: transform var(--transition-base);
   }
 
   .header__logo:hover {
@@ -93,22 +91,18 @@ const navItems = [
     transform: scale(1.05);
   }
 
-  /* Scrolled state — white background pill behind the logo */
-  .header:not(.at-top) .header__logo {
-    background-color: rgba(255, 255, 255, 0.95);
-  }
-
   .header__logo-img {
     height: 36px;
     width: auto;
-    /* At-top: invert to white so logo is visible on dark hero */
+    /* At-top: make logo appear white on dark hero */
     filter: brightness(0) invert(1);
     transition: filter 0.3s ease;
   }
 
-  /* Scrolled state — restore natural colour */
+  /* Scrolled state — show natural green B; multiply blend removes white PNG background */
   .header:not(.at-top) .header__logo-img {
     filter: none;
+    mix-blend-mode: multiply;
   }
 
   .header__nav-list {
