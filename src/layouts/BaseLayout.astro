@@ -35,8 +35,11 @@ const {
     <slot />
 
     <script>
-      // Scroll reveal observer
-      const revealElements = document.querySelectorAll('.reveal, .reveal--left, .reveal--right, .reveal--scale');
+      // No-JS fallback: html gets .no-js by default, removed when JS runs
+      document.documentElement.classList.remove('no-js');
+
+      const REVEAL_SEL = '.reveal, .reveal--left, .reveal--right, .reveal--scale';
+
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -48,7 +51,20 @@ const {
         },
         { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
       );
-      revealElements.forEach((el) => observer.observe(el));
+
+      // Auto-stagger siblings inside [data-reveal-group]
+      document.querySelectorAll('[data-reveal-group]').forEach((group) => {
+        Array.from(group.querySelectorAll(REVEAL_SEL)).forEach((child, i) => {
+          (child as HTMLElement).style.transitionDelay = `${(i * 0.1).toFixed(1)}s`;
+        });
+      });
+
+      // Observe all reveal elements except those inside the testimonials section
+      document.querySelectorAll<HTMLElement>(REVEAL_SEL).forEach((el) => {
+        if (!el.closest('#testimonials')) {
+          observer.observe(el);
+        }
+      });
     </script>
   </body>
 </html>

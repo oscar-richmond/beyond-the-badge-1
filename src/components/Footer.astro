@@ -10,15 +10,15 @@ const navItems = [
 <footer class="footer">
   <div class="footer__inner container">
     <div class="footer__top">
-      <div class="footer__brand">
+      <div class="footer__brand reveal">
         <img src={`${import.meta.env.BASE_URL}/logo-monogram.png`} alt="Beyond the Badge" class="footer__logo-img" />
       </div>
     </div>
 
-    <div class="footer__bottom">
-      <p class="footer__tagline">Cultural relevance isn't a logo.</p>
+    <div class="footer__bottom" data-reveal-group>
+      <p class="footer__tagline reveal">Cultural relevance isn't a logo.</p>
 
-      <nav class="footer__nav" aria-label="Footer navigation">
+      <nav class="footer__nav reveal" aria-label="Footer navigation">
         <ul class="footer__nav-list">
           {navItems.map((item) => (
             <li>
@@ -28,7 +28,7 @@ const navItems = [
         </ul>
       </nav>
 
-      <div class="footer__contact">
+      <div class="footer__contact reveal">
         <a href="tel:+441768881430" class="footer__contact-link">01768 881430</a>
         <a href="mailto:info@beyondthebadge.agency" class="footer__contact-link">info@beyondthebadge.agency</a>
       </div>
