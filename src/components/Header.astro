@@ -50,7 +50,7 @@ const navItems = [
     left: 0;
     right: 0;
     z-index: 100;
-    padding: 24px var(--section-padding-x);
+    padding: 18px var(--section-padding-x);
     background-color: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -83,7 +83,9 @@ const navItems = [
   .header__logo {
     display: flex;
     align-items: center;
-    transition: transform var(--transition-base);
+    border-radius: 6px;
+    padding: 5px;
+    transition: transform var(--transition-base), background-color 0.3s ease;
   }
 
   .header__logo:hover {
@@ -91,9 +93,22 @@ const navItems = [
     transform: scale(1.05);
   }
 
+  /* Scrolled state — white background pill behind the logo */
+  .header:not(.at-top) .header__logo {
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
   .header__logo-img {
-    height: 48px;
+    height: 36px;
     width: auto;
+    /* At-top: invert to white so logo is visible on dark hero */
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+  }
+
+  /* Scrolled state — restore natural colour */
+  .header:not(.at-top) .header__logo-img {
+    filter: none;
   }
 
   .header__nav-list {
