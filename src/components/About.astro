@@ -3,7 +3,7 @@
 
 <section class="about section" id="about">
   <div class="about__watermark" aria-hidden="true">
-    <img src="/logo-monogram.png" alt="" class="about__watermark-img" />
+    <img src={`${import.meta.env.BASE_URL}logo-monogram.png`} alt="" class="about__watermark-img" />
   </div>
 
   <div class="container">
@@ -20,15 +20,15 @@
       <div class="about__image-grid">
         <div class="about__image-wrapper">
           <span class="about__image-label">(01)</span>
-          <div class="about__image-item about__image-item--1"></div>
+          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-1.jpg')`}></div>
         </div>
         <div class="about__image-wrapper">
           <span class="about__image-label">(02)</span>
-          <div class="about__image-item about__image-item--2"></div>
+          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-2.jpg')`}></div>
         </div>
         <div class="about__image-wrapper">
           <span class="about__image-label">(03)</span>
-          <div class="about__image-item about__image-item--3"></div>
+          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-3.jpg')`}></div>
         </div>
       </div>
     </div>
@@ -122,20 +122,6 @@
     height: 300px;
     background-size: cover;
     background-position: center;
-  }
-
-  .about__image-item--1 {
-    background-image: url('/about-1.jpg');
-    background-color: var(--color-divider-light);
-  }
-
-  .about__image-item--2 {
-    background-image: url('/about-2.jpg');
-    background-color: var(--color-divider-light);
-  }
-
-  .about__image-item--3 {
-    background-image: url('/about-3.jpg');
     background-color: var(--color-divider-light);
   }
 

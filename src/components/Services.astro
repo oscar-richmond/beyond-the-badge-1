@@ -1,32 +1,33 @@
 ---
+const base = import.meta.env.BASE_URL;
 const services = [
   {
     number: '(01)',
     title: 'Influence',
     beyondText: 'expectation',
     category: 'PARTNERSHIPS',
-    image: '/hover-1.png',
+    image: `${base}hover-1.png`,
   },
   {
     number: '(02)',
     title: 'Stories',
     beyondText: 'the playbook',
     category: 'STORYTELLING',
-    image: '/hover-2.png',
+    image: `${base}hover-2.png`,
   },
   {
     number: '(03)',
     title: 'Connection',
     beyondText: 'the handshake',
     category: 'RELATIONSHIPS',
-    image: '/hover-3.png',
+    image: `${base}hover-3.png`,
   },
   {
     number: '(04)',
     title: 'Sponsorship',
     beyondText: 'the signage',
     category: 'CULTURE',
-    image: '/hover-4.png',
+    image: `${base}hover-4.png`,
   },
 ];
 ---
@@ -52,7 +53,7 @@ const services = [
             <span class="services__number">{service.number}</span>
             <h3 class="services__title">
               {service.title}
-              <img src="/beyond-script.png" alt="Beyond" class="services__beyond-img" />
+              <img src={`${base}beyond-script.png`} alt="Beyond" class="services__beyond-img" />
               {service.beyondText}
             </h3>
           </div>
