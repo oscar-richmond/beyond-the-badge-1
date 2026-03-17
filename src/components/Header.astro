@@ -99,10 +99,9 @@ const navItems = [
     transition: filter 0.3s ease;
   }
 
-  /* Scrolled state — show natural green B; multiply blend removes white PNG background */
+  /* Scrolled state — convert white logo to brand green #004f26 */
   .header:not(.at-top) .header__logo-img {
-    filter: none;
-    mix-blend-mode: multiply;
+    filter: brightness(0.15) sepia(1) hue-rotate(110deg) saturate(6) brightness(1.1);
   }
 
   .header__nav-list {
