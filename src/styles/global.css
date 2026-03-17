@@ -149,13 +149,34 @@ button {
 /* --- Scroll Reveal Animation --- */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(28px);
   transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
 }
 
-.reveal.visible {
+.reveal--left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+}
+
+.reveal--right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+}
+
+.reveal--scale {
+  opacity: 0;
+  transform: scale(0.95) translateY(16px);
+  transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+}
+
+.reveal.visible,
+.reveal--left.visible,
+.reveal--right.visible,
+.reveal--scale.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* --- Selection --- */

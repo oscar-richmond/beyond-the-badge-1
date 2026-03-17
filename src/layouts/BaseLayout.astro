@@ -36,7 +36,7 @@ const {
 
     <script>
       // Scroll reveal observer
-      const revealElements = document.querySelectorAll('.reveal');
+      const revealElements = document.querySelectorAll('.reveal, .reveal--left, .reveal--right, .reveal--scale');
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -46,7 +46,7 @@ const {
             }
           });
         },
-        { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
       );
       revealElements.forEach((el) => observer.observe(el));
     </script>

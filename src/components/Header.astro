@@ -63,7 +63,16 @@ const navItems = [
     right: 0;
     z-index: 100;
     padding: 24px var(--section-padding-x);
-    transition: background-color var(--transition-base);
+    transition: background-color 0.4s var(--ease-smooth), backdrop-filter 0.4s var(--ease-smooth), padding 0.4s var(--ease-smooth);
+  }
+
+  .header.scrolled {
+    background-color: rgba(6, 26, 18, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(232, 224, 212, 0.08);
   }
 
   .header.scrolled {
@@ -364,6 +373,18 @@ const navItems = [
 </style>
 
 <script>
+  // Header scroll background
+  const header = document.querySelector('.header');
+  const onScroll = () => {
+    if (window.scrollY > 80) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // Run on load in case page is already scrolled
+
   const menuBtn = document.querySelector('.header__menu-btn');
   const mobileNav = document.getElementById('mobile-nav');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');

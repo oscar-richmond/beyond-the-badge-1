@@ -13,8 +13,8 @@ const featuredTestimonial = {
       <h2 class="testimonials__heading">Words from our clients</h2>
     </div>
 
-    <div class="testimonials__grid reveal" style="transition-delay: 0.1s;">
-      <div class="testimonials__person">
+    <div class="testimonials__grid">
+      <div class="testimonials__person reveal--left">
         <div class="testimonials__image-placeholder"></div>
         <div class="testimonials__info">
           <span class="testimonials__client-name">{featuredTestimonial.name}</span>
@@ -22,7 +22,7 @@ const featuredTestimonial = {
         </div>
       </div>
 
-      <div class="testimonials__content">
+      <div class="testimonials__content reveal--right" style="transition-delay: 0.1s;">
         <blockquote class="testimonials__quote-text">
           {featuredTestimonial.quote}
         </blockquote>

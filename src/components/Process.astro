@@ -25,7 +25,7 @@ const processes = [
   </div>
   
   <div class="container">
-    <div class="process__header reveal">
+    <div class="process__header reveal--left">
       <h2 class="process__heading">
         What we do<br /><em>Differently.</em>
       </h2>
@@ -34,9 +34,12 @@ const processes = [
       </p>
     </div>
 
-    <div class="process__grid reveal" style="transition-delay: 0.2s;">
+    <div class="process__grid">
       {processes.map((process, index) => (
-        <div class={`process__card ${index === 2 ? 'process__card--dark' : ''}`}>
+        <div
+          class={`process__card reveal--scale ${index === 2 ? 'process__card--dark' : ''}`}
+          style={`transition-delay: ${index * 0.12}s;`}
+        >
           <span class="process__number">0{index + 1}</span>
           <h3 class="process__title">{process.title}</h3>
           <p class="process__text">{process.text}</p>
