@@ -27,7 +27,7 @@ const processes = [
   <div class="container">
     <div class="process__header reveal--left">
       <h2 class="process__heading">
-        What we do<br /><em>Differently.</em>
+        What we do<br /><span class="process__heading-highlight">Differently.</span>
       </h2>
       <p class="process__intro">
         Our approach is rooted in authentic relationships, not transactional exchanges.
@@ -52,7 +52,7 @@ const processes = [
 <style>
   .process {
     position: relative;
-    background-color: var(--color-cream);
+    background-color: #ffffff;
     padding: var(--section-padding-y) 0;
     overflow: hidden;
   }
@@ -83,16 +83,18 @@ const processes = [
 
   .process__heading {
     font-family: var(--font-serif);
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: 64px;
     font-weight: 500;
     color: var(--color-text-dark);
     line-height: 1.1;
   }
 
-  .process__heading em {
-    font-family: var(--font-script);
+  .process__heading-highlight {
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
     font-style: italic;
-    color: var(--color-forest);
+    font-weight: 700;
+    font-variation-settings: "wght" 700, "HGHT" 1000;
+    color: #8CB7A0;
   }
 
   .process__intro {
