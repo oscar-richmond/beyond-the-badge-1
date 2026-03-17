@@ -51,16 +51,16 @@ const navItems = [
     right: 0;
     z-index: 100;
     padding: 24px var(--section-padding-x);
-    transition: background-color 0.4s var(--ease-smooth), backdrop-filter 0.4s var(--ease-smooth), padding 0.4s var(--ease-smooth);
-  }
-
-  .header.scrolled {
-    background-color: rgba(6, 26, 18, 0.88);
+    background-color: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    padding-top: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(232, 224, 212, 0.08);
+    border-bottom: 1px solid rgba(0, 79, 38, 0.08);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+  .header.nav-hidden {
+    transform: translateY(-100%);
   }
 
   .header__inner {
@@ -96,14 +96,14 @@ const navItems = [
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 400;
-    color: var(--color-text-light);
+    color: #004f26;
     letter-spacing: 0.02em;
     transition: color var(--transition-base);
   }
 
   .header__nav-link:hover {
     opacity: 1;
-    color: var(--color-cream);
+    color: #004f26;
   }
 
   .header__menu-btn {
@@ -118,7 +118,7 @@ const navItems = [
     display: block;
     width: 24px;
     height: 1.5px;
-    background-color: var(--color-text-light);
+    background-color: #004f26;
     transition: transform var(--transition-base), opacity var(--transition-base);
   }
 
@@ -172,16 +172,18 @@ const navItems = [
   const mobileNav = document.getElementById('mobile-nav');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');
 
-  // Header scroll background
+  // Hide on scroll down, reveal on scroll up
+  let lastScrollY = window.scrollY;
   const onScroll = () => {
-    if (window.scrollY > 80) {
-      header?.classList.add('scrolled');
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      header?.classList.add('nav-hidden');
     } else {
-      header?.classList.remove('scrolled');
+      header?.classList.remove('nav-hidden');
     }
+    lastScrollY = currentScrollY;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 
   // Mobile menu toggle
   menuBtn?.addEventListener('click', () => {
