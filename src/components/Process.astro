@@ -52,6 +52,7 @@ const processes = [
 <style>
   .process {
     position: relative;
+    z-index: 10;
     background-color: #ffffff;
     padding: var(--section-padding-y) 0;
     overflow: visible;
@@ -64,7 +65,7 @@ const processes = [
     height: 120%;
     pointer-events: none;
     user-select: none;
-    z-index: 50;
+    z-index: 1;
   }
 
   .process__watermark-img {
@@ -80,7 +81,7 @@ const processes = [
     align-items: flex-end;
     margin-bottom: 64px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   .process__heading {
@@ -113,7 +114,7 @@ const processes = [
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   .process__card {
