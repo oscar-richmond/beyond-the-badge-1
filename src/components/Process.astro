@@ -37,7 +37,7 @@ const processes = [
     <div class="process__grid">
       {processes.map((process, index) => (
         <div
-          class={`process__card reveal--scale ${index === 2 ? 'process__card--dark' : ''}`}
+          class={`process__card reveal--scale`}
           style={`transition-delay: ${index * 0.12}s;`}
         >
           <span class="process__number">0{index + 1}</span>
@@ -115,30 +115,30 @@ const processes = [
   }
 
   .process__card {
-    background-color: var(--color-cream-light);
+    background-color: #F7F7F7;
     padding: 32px;
-    border: 1px solid var(--color-divider-light);
+    border: none;
     display: flex;
     flex-direction: column;
     min-height: 280px;
+    transition: background-color 0.3s ease;
   }
-  
-  .process__card--dark {
+
+  .process__card:hover {
     background-color: var(--color-forest);
-    border-color: var(--color-forest);
   }
-  
-  .process__card--dark .process__title,
-  .process__card--dark .process__text,
-  .process__card--dark .process__number {
+
+  .process__card:hover .process__title,
+  .process__card:hover .process__text,
+  .process__card:hover .process__number {
     color: var(--color-cream);
   }
-  
-  .process__card--dark .process__text {
+
+  .process__card:hover .process__text {
     opacity: 0.8;
   }
-  
-  .process__card--dark .process__number {
+
+  .process__card:hover .process__number {
     opacity: 0.5;
   }
 
@@ -148,21 +148,26 @@ const processes = [
     color: var(--color-text-dark);
     opacity: 0.5;
     margin-bottom: auto;
+    transition: color 0.3s ease, opacity 0.3s ease;
   }
 
   .process__title {
     font-family: var(--font-serif);
-    font-size: 1.2rem;
+    font-size: 26px;
     font-weight: 600;
+    letter-spacing: 0.05em;
     color: var(--color-text-dark);
     margin-bottom: 12px;
     margin-top: 48px;
+    transition: color 0.3s ease;
   }
 
   .process__text {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
     color: var(--color-text-muted);
   }
 
