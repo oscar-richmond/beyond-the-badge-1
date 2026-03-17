@@ -47,8 +47,8 @@ const testimonials = [
             class={`t-name-btn${i === 0 ? ' is-active' : ''}`}
             data-index={String(i)}
           >
-            <span class="t-arrow">&rarr;</span>
-            {t.name}
+            <span class="t-arrow" aria-hidden="true">&rarr;</span>
+            <span class="t-name-text">{t.name}</span>
           </button>
         ))}
       </div>
@@ -116,46 +116,61 @@ const testimonials = [
   }
 
   .t-name-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    position: relative;
+    display: block;
     width: 100%;
     padding: 16px 0;
     font-family: var(--font-serif);
     font-size: 24px;
     font-weight: 400;
     letter-spacing: 0.05em;
-    color: var(--color-text-dark);
-    opacity: 0.45;
+    color: #9a9a8a;
     text-align: left;
     cursor: pointer;
     background: none;
-    transition: font-weight 0.35s ease, opacity 0.35s ease;
+    transition: color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+                font-weight 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+                opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
   .testimonials__names .t-name-btn:last-child {
     border: none;
   }
 
-  .t-arrow {
-    color: #004f26;
-    opacity: 0;
-    transform: translateX(-6px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    flex-shrink: 0;
-    display: inline-block;
-  }
-
   .t-name-btn.is-active,
   .t-name-btn:hover {
     font-weight: 700;
     opacity: 1;
+    color: #004f26;
+  }
+
+  /* Arrow — absolute, sits at x:0, fades in slightly after slide starts */
+  .t-arrow {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #004f26;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.1s;
+    pointer-events: none;
   }
 
   .t-name-btn.is-active .t-arrow,
   .t-name-btn:hover .t-arrow {
     opacity: 1;
+  }
+
+  /* Name text — slides right on hover/active */
+  .t-name-text {
+    display: inline-block;
     transform: translateX(0);
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .t-name-btn.is-active .t-name-text,
+  .t-name-btn:hover .t-name-text {
+    transform: translateX(28px);
   }
 
   /* ─── Centre: photo stage ─── */
