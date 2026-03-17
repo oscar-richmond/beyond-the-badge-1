@@ -56,9 +56,18 @@ const navItems = [
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(0, 79, 38, 0.08);
     transform: translateY(0);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   }
 
+  /* State 1 — at top of page */
+  .header.at-top {
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: transparent;
+  }
+
+  /* Slide out on scroll down */
   .header.nav-hidden {
     transform: translateY(-100%);
   }
@@ -92,18 +101,24 @@ const navItems = [
     gap: 36px;
   }
 
+  /* State 2 (scrolled) — green links */
   .header__nav-link {
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 400;
     color: #004f26;
     letter-spacing: 0.02em;
-    transition: color var(--transition-base);
+    transition: color 0.3s ease, opacity 0.3s ease;
   }
 
   .header__nav-link:hover {
     opacity: 1;
     color: #004f26;
+  }
+
+  /* State 1 — white links when at top */
+  .header.at-top .header__nav-link {
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .header__menu-btn {
@@ -114,12 +129,18 @@ const navItems = [
     z-index: 101;
   }
 
+  /* State 2 (scrolled) — green hamburger */
   .header__menu-line {
     display: block;
     width: 24px;
     height: 1.5px;
     background-color: #004f26;
-    transition: transform var(--transition-base), opacity var(--transition-base);
+    transition: transform var(--transition-base), opacity var(--transition-base), background-color 0.3s ease;
+  }
+
+  /* State 1 — white hamburger when at top */
+  .header.at-top .header__menu-line {
+    background-color: rgba(255, 255, 255, 0.9);
   }
 
   /* Mobile nav overlay */
@@ -172,18 +193,31 @@ const navItems = [
   const mobileNav = document.getElementById('mobile-nav');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');
 
-  // Hide on scroll down, reveal on scroll up
+  // Hide on scroll down, reveal on scroll up — plus at-top state
   let lastScrollY = window.scrollY;
-  const onScroll = () => {
+
+  const updateNav = () => {
     const currentScrollY = window.scrollY;
+
+    // Slide behaviour
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
       header?.classList.add('nav-hidden');
     } else {
       header?.classList.remove('nav-hidden');
     }
+
+    // At-top transparent state
+    if (currentScrollY < 10) {
+      header?.classList.add('at-top');
+    } else {
+      header?.classList.remove('at-top');
+    }
+
     lastScrollY = currentScrollY;
   };
-  window.addEventListener('scroll', onScroll, { passive: true });
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav(); // Set correct state on load
 
   // Mobile menu toggle
   menuBtn?.addEventListener('click', () => {
