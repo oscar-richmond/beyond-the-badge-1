@@ -29,62 +29,85 @@ const testimonials = [
 ];
 ---
 
-<section class="testimonials section" id="testimonials">
-  <div class="container">
+<!-- Outer scroll track: 300vh gives 200vh of sticky scroll distance (3 × ~67vh per testimonial) -->
+<div class="testimonials-track" id="testimonials">
+  <!-- Sticky panel: pins to viewport while track scrolls past -->
+  <section class="testimonials-sticky" aria-label="Words from our clients">
+    <div class="container">
 
-    <div class="testimonials__header">
-      <h2 class="testimonials__heading">Words from our clients</h2>
+      <div class="testimonials__header">
+        <h2 class="testimonials__heading">Words from our clients</h2>
+      </div>
+
+      <hr class="testimonials__rule" />
+
+      <div class="testimonials__body">
+
+        <!-- Left: name list -->
+        <div class="testimonials__names">
+          {testimonials.map((t, i) => (
+            <button
+              class={`t-name-btn${i === 0 ? ' is-active' : ''}`}
+              data-index={String(i)}
+            >
+              <span class="t-arrow" aria-hidden="true">&rarr;</span>
+              <span class="t-name-text">{t.name}</span>
+            </button>
+          ))}
+        </div>
+
+        <!-- Centre: portrait (position:absolute crossfade) -->
+        <div class="testimonials__photo-stage">
+          {testimonials.map((t, i) => (
+            <div class={`t-photo${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
+              <img src={t.image} alt={t.name} />
+            </div>
+          ))}
+        </div>
+
+        <!-- Right: quote (position:absolute crossfade) -->
+        <div class="testimonials__quote-stage">
+          {testimonials.map((t, i) => (
+            <div class={`t-quote${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
+              <blockquote>
+                {t.quoteBefore}<em class="t-highlight">{t.quoteHighlight}</em>{t.quoteAfter}
+              </blockquote>
+              <footer class="t-attribution">
+                <strong class="t-client-name">{t.name}</strong>
+                <span class="t-client-role">{t.title}</span>
+              </footer>
+            </div>
+          ))}
+        </div>
+
+      </div>
     </div>
-
-    <hr class="testimonials__rule" />
-
-    <div class="testimonials__body">
-
-      <!-- Left: name list -->
-      <div class="testimonials__names">
-        {testimonials.map((t, i) => (
-          <button
-            class={`t-name-btn${i === 0 ? ' is-active' : ''}`}
-            data-index={String(i)}
-          >
-            <span class="t-arrow" aria-hidden="true">&rarr;</span>
-            <span class="t-name-text">{t.name}</span>
-          </button>
-        ))}
-      </div>
-
-      <!-- Centre: portrait (position:absolute crossfade) -->
-      <div class="testimonials__photo-stage">
-        {testimonials.map((t, i) => (
-          <div class={`t-photo${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
-            <img src={t.image} alt={t.name} />
-          </div>
-        ))}
-      </div>
-
-      <!-- Right: quote (position:absolute crossfade) -->
-      <div class="testimonials__quote-stage">
-        {testimonials.map((t, i) => (
-          <div class={`t-quote${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
-            <blockquote>
-              {t.quoteBefore}<em class="t-highlight">{t.quoteHighlight}</em>{t.quoteAfter}
-            </blockquote>
-            <footer class="t-attribution">
-              <strong class="t-client-name">{t.name}</strong>
-              <span class="t-client-role">{t.title}</span>
-            </footer>
-          </div>
-        ))}
-      </div>
-
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <style>
-  .testimonials {
+  /* ─── Scroll track (outer, 300vh) ─── */
+  .testimonials-track {
+    height: 300vh;
     background-color: #ffffff;
-    padding: var(--section-padding-y) 0;
+    /* Needed so sticky child has correct offset parent */
+    position: relative;
+  }
+
+  /* ─── Sticky panel (pins while track scrolls) ─── */
+  .testimonials-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .testimonials-sticky .container {
+    width: 100%;
   }
 
   .testimonials__heading {
@@ -129,22 +152,16 @@ const testimonials = [
     cursor: pointer;
     background: none;
     transition: color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
-                font-weight 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
-                opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-
-  .testimonials__names .t-name-btn:last-child {
-    border: none;
+                font-weight 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
   .t-name-btn.is-active,
   .t-name-btn:hover {
     font-weight: 700;
-    opacity: 1;
     color: #004f26;
   }
 
-  /* Arrow — absolute, sits at x:0, fades in slightly after slide starts */
+  /* Arrow — absolute at left:0, fades in after slide begins */
   .t-arrow {
     position: absolute;
     left: 0;
@@ -161,7 +178,7 @@ const testimonials = [
     opacity: 1;
   }
 
-  /* Name text — slides right on hover/active */
+  /* Name text — slides right */
   .t-name-text {
     display: inline-block;
     transform: translateX(0);
@@ -184,7 +201,7 @@ const testimonials = [
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.6s ease;
   }
 
   .t-photo.is-active {
@@ -203,7 +220,6 @@ const testimonials = [
   /* ─── Right: quote stage ─── */
   .testimonials__quote-stage {
     position: relative;
-    /* min-height keeps layout stable even when inactive quotes collapse */
     min-height: 280px;
   }
 
@@ -212,7 +228,7 @@ const testimonials = [
     inset: 0;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.5s ease;
   }
 
   .t-quote.is-active {
@@ -252,32 +268,36 @@ const testimonials = [
   .t-client-role {
     font-family: var(--font-sans);
     font-size: 0.75rem;
-    font-weight: 400;
     color: var(--color-text-muted);
-    letter-spacing: 0.03em;
   }
 
-  /* ─── Responsive ─── */
+  /* ─── Mobile: unpin, stack all three ─── */
   @media (max-width: 768px) {
+    .testimonials-track {
+      height: auto;
+    }
+
+    .testimonials-sticky {
+      position: static;
+      height: auto;
+      padding: var(--section-padding-y) 0;
+    }
+
     .testimonials__body {
       grid-template-columns: 1fr;
       gap: 36px 0;
     }
 
-    .testimonials__names {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 8px 0;
+    /* Show all photos and quotes stacked on mobile */
+    .t-photo {
+      position: static;
+      opacity: 1 !important;
     }
 
-    .t-name-btn {
-      padding: 10px 20px 10px 0;
-      border: none;
-      border-bottom: 2px solid transparent;
-    }
-
-    .t-name-btn.is-active {
-      border-bottom-color: #004f26;
+    .t-quote {
+      position: static;
+      opacity: 1 !important;
+      pointer-events: auto;
     }
 
     .testimonials__photo-stage {
@@ -287,33 +307,46 @@ const testimonials = [
     .testimonials__quote-stage {
       min-height: 0;
     }
+
+    .testimonials__names {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .t-name-btn {
+      padding: 10px 20px 10px 0;
+    }
   }
 </style>
 
 <script>
+  // ─── State ───────────────────────────────────────────────────────────────────
   const btns   = document.querySelectorAll<HTMLButtonElement>('.t-name-btn');
   const photos = document.querySelectorAll<HTMLElement>('.t-photo');
   const quotes = document.querySelectorAll<HTMLElement>('.t-quote');
+  const track  = document.getElementById('testimonials') as HTMLElement;
 
-  let current = 0;
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  const TOTAL = testimonials_count(); // resolved at runtime from DOM
+  let current  = 0;
   let switching = false;
+  let hoverTimer: ReturnType<typeof setTimeout> | null = null;
 
+  function testimonials_count() {
+    return document.querySelectorAll('.t-name-btn').length;
+  }
+
+  // ─── Activate a testimonial ───────────────────────────────────────────────
   function activate(i: number) {
     if (i === current || switching) return;
     switching = true;
 
-    // Update name buttons immediately
     btns.forEach((b, idx) => b.classList.toggle('is-active', idx === i));
 
-    // Fade out old photo & quote
     photos[current].classList.remove('is-active');
     quotes[current].classList.remove('is-active');
 
-    const prev = current;
     current = i;
 
-    // After brief gap, fade in new photo & quote
     setTimeout(() => {
       photos[i].classList.add('is-active');
       quotes[i].classList.add('is-active');
@@ -321,16 +354,40 @@ const testimonials = [
     }, 120);
   }
 
+  // ─── Scroll-progress driver ───────────────────────────────────────────────
+  function onScroll() {
+    if (!track) return;
+
+    const rect           = track.getBoundingClientRect();
+    const trackH         = track.offsetHeight;          // 300vh
+    const vh             = window.innerHeight;
+    const totalTravel    = trackH - vh;                 // 200vh — usable scroll range
+    const scrolled       = -rect.top;                  // px scrolled into the track
+
+    // Only drive when inside the sticky zone
+    if (scrolled < 0 || scrolled > totalTravel) return;
+
+    const progress = scrolled / totalTravel;           // 0 → 1
+    const n        = btns.length;
+    const idx      = Math.min(n - 1, Math.floor(progress * n));
+
+    activate(idx);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // set correct state on load
+
+  // ─── Manual click / hover (still works when reading the pinned panel) ─────
   btns.forEach((btn, i) => {
     btn.addEventListener('click', () => {
-      if (timer) clearTimeout(timer);
+      if (hoverTimer) clearTimeout(hoverTimer);
       activate(i);
     });
     btn.addEventListener('mouseenter', () => {
-      timer = setTimeout(() => activate(i), 200);
+      hoverTimer = setTimeout(() => activate(i), 200);
     });
     btn.addEventListener('mouseleave', () => {
-      if (timer) clearTimeout(timer);
+      if (hoverTimer) clearTimeout(hoverTimer);
     });
   });
 </script>
