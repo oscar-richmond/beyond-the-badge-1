@@ -54,17 +54,17 @@ const processes = [
     position: relative;
     background-color: #ffffff;
     padding: var(--section-padding-y) 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .process__watermark {
     position: absolute;
     top: -10%;
-    right: -8%;
+    right: var(--section-padding-x, 5%);
     height: 120%;
     pointer-events: none;
     user-select: none;
-    z-index: 0;
+    z-index: 50;
   }
 
   .process__watermark-img {
