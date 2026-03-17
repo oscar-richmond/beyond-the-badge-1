@@ -32,7 +32,7 @@ const testimonials = [
 <section class="testimonials section" id="testimonials">
   <div class="container">
 
-    <div class="testimonials__header reveal">
+    <div class="testimonials__header">
       <h2 class="testimonials__heading">Words from our clients</h2>
     </div>
 
@@ -41,38 +41,37 @@ const testimonials = [
     <div class="testimonials__body">
 
       <!-- Left: name list -->
-      <nav class="testimonials__names" aria-label="Testimonial navigation">
+      <div class="testimonials__names">
         {testimonials.map((t, i) => (
           <button
-            class={`testimonials__name-btn${i === 0 ? ' active' : ''}`}
-            data-index={i}
-            aria-pressed={i === 0 ? 'true' : 'false'}
+            class={`t-name-btn${i === 0 ? ' is-active' : ''}`}
+            data-index={String(i)}
           >
-            <span class="testimonials__arrow" aria-hidden="true">&rarr;</span>
-            <span class="testimonials__name-text">{t.name}</span>
+            <span class="t-arrow">&rarr;</span>
+            {t.name}
           </button>
         ))}
-      </nav>
+      </div>
 
-      <!-- Centre: portrait photo (grid-stacked for crossfade) -->
-      <div class="testimonials__photo-wrap">
+      <!-- Centre: portrait (position:absolute crossfade) -->
+      <div class="testimonials__photo-stage">
         {testimonials.map((t, i) => (
-          <div class={`testimonials__photo-item${i === 0 ? ' active' : ''}`} data-index={i}>
-            <img src={t.image} alt={t.name} class="testimonials__photo-img" />
+          <div class={`t-photo${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
+            <img src={t.image} alt={t.name} />
           </div>
         ))}
       </div>
 
-      <!-- Right: quote (grid-stacked for crossfade) -->
-      <div class="testimonials__quote-wrap">
+      <!-- Right: quote (position:absolute crossfade) -->
+      <div class="testimonials__quote-stage">
         {testimonials.map((t, i) => (
-          <div class={`testimonials__quote-item${i === 0 ? ' active' : ''}`} data-index={i}>
-            <blockquote class="testimonials__quote-text">
-              {t.quoteBefore}<em class="testimonials__highlight">{t.quoteHighlight}</em>{t.quoteAfter}
+          <div class={`t-quote${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
+            <blockquote>
+              {t.quoteBefore}<em class="t-highlight">{t.quoteHighlight}</em>{t.quoteAfter}
             </blockquote>
-            <footer class="testimonials__attribution">
-              <span class="testimonials__client-name">{t.name}</span>
-              <span class="testimonials__client-role">{t.title}</span>
+            <footer class="t-attribution">
+              <strong class="t-client-name">{t.name}</strong>
+              <span class="t-client-role">{t.title}</span>
             </footer>
           </div>
         ))}
@@ -90,225 +89,219 @@ const testimonials = [
 
   .testimonials__heading {
     font-family: var(--font-serif);
-    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
     font-weight: 500;
     color: var(--color-text-dark);
-    margin-bottom: 32px;
+    margin: 0 0 28px;
   }
 
   .testimonials__rule {
     border: none;
-    border-top: 1px solid rgba(26, 58, 42, 0.15);
-    margin: 0 0 56px;
+    border-top: 1px solid rgba(26, 58, 42, 0.18);
+    margin: 0 0 52px;
   }
 
-  /* ── Body grid ── */
+  /* ─── Three-column grid ─── */
   .testimonials__body {
     display: grid;
-    grid-template-columns: 20% 25% 1fr;
-    gap: clamp(24px, 4vw, 64px);
+    grid-template-columns: minmax(140px, 20%) minmax(180px, 26%) 1fr;
+    gap: 0 clamp(32px, 5vw, 72px);
     align-items: start;
   }
 
-  /* ── Left: name list ── */
+  /* ─── Left: name list ─── */
   .testimonials__names {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    padding-top: 8px;
   }
 
-  .testimonials__name-btn {
+  .t-name-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(26, 58, 42, 0.1);
+    gap: 8px;
+    width: 100%;
+    padding: 16px 0;
+    border-top: 1px solid rgba(26, 58, 42, 0.1);
     font-family: var(--font-serif);
-    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
     font-weight: 400;
     color: var(--color-text-dark);
     text-align: left;
     cursor: pointer;
-    transition: color 0.25s ease;
+    background: none;
+    transition: font-weight 0.2s ease, color 0.2s ease;
   }
 
-  .testimonials__name-btn:first-child {
-    border-top: 1px solid rgba(26, 58, 42, 0.1);
+  .testimonials__names .t-name-btn:last-child {
+    border-bottom: 1px solid rgba(26, 58, 42, 0.1);
   }
 
-  .testimonials__arrow {
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    font-size: 0.9em;
-    flex-shrink: 0;
+  .t-arrow {
     color: #004f26;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+    display: inline-block;
   }
 
-  .testimonials__name-btn.active,
-  .testimonials__name-btn:hover {
-    font-weight: 600;
-    color: var(--color-text-dark);
+  .t-name-btn.is-active,
+  .t-name-btn:hover {
+    font-weight: 700;
   }
 
-  .testimonials__name-btn.active .testimonials__arrow,
-  .testimonials__name-btn:hover .testimonials__arrow {
+  .t-name-btn.is-active .t-arrow,
+  .t-name-btn:hover .t-arrow {
     opacity: 1;
     transform: translateX(0);
   }
 
-  /* ── Centre: photo ── */
-  .testimonials__photo-wrap {
-    display: grid;
-    aspect-ratio: 4 / 5;
+  /* ─── Centre: photo stage ─── */
+  .testimonials__photo-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
   }
 
-  .testimonials__photo-item {
-    grid-area: 1 / 1;
+  .t-photo {
+    position: absolute;
+    inset: 0;
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
-  .testimonials__photo-item.active {
+  .t-photo.is-active {
     opacity: 1;
   }
 
-  .testimonials__photo-img {
+  .t-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top center;
     filter: grayscale(1);
+    display: block;
   }
 
-  /* ── Right: quote ── */
-  .testimonials__quote-wrap {
-    display: grid;
-    padding-top: 8px;
+  /* ─── Right: quote stage ─── */
+  .testimonials__quote-stage {
+    position: relative;
+    /* min-height keeps layout stable even when inactive quotes collapse */
+    min-height: 280px;
   }
 
-  .testimonials__quote-item {
-    grid-area: 1 / 1;
+  .t-quote {
+    position: absolute;
+    inset: 0;
     opacity: 0;
-    transition: opacity 0.4s ease;
     pointer-events: none;
+    transition: opacity 0.4s ease;
   }
 
-  .testimonials__quote-item.active {
+  .t-quote.is-active {
     opacity: 1;
     pointer-events: auto;
+    position: relative; /* takes up space in flow */
   }
 
-  .testimonials__quote-text {
+  .t-quote blockquote {
     font-family: var(--font-serif);
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-size: clamp(1.5rem, 2.6vw, 2.4rem);
     font-weight: 300;
-    line-height: 1.3;
+    line-height: 1.32;
     color: var(--color-text-dark);
     font-style: normal;
-    margin: 0 0 32px;
+    margin: 0 0 28px;
   }
 
-  .testimonials__highlight {
-    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+  .t-highlight {
     font-style: italic;
     font-weight: 500;
-    font-variation-settings: "wght" 500, "HGHT" 800;
     color: #004f26;
   }
 
-  .testimonials__attribution {
+  .t-attribution {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
+    padding-top: 18px;
     border-top: 1px solid rgba(26, 58, 42, 0.12);
-    padding-top: 20px;
   }
 
-  .testimonials__client-name {
+  .t-client-name {
     font-family: var(--font-serif);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-text-dark);
   }
 
-  .testimonials__client-role {
+  .t-client-role {
     font-family: var(--font-sans);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 400;
     color: var(--color-text-muted);
+    letter-spacing: 0.03em;
   }
 
-  /* ── Responsive ── */
-  @media (max-width: 1024px) {
-    .testimonials__body {
-      grid-template-columns: 24% 28% 1fr;
-    }
-  }
-
+  /* ─── Responsive ─── */
   @media (max-width: 768px) {
     .testimonials__body {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: 36px 0;
     }
 
     .testimonials__names {
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 0;
+      gap: 8px 0;
     }
 
-    .testimonials__name-btn {
-      padding: 10px 16px 10px 0;
+    .t-name-btn {
+      padding: 10px 20px 10px 0;
       border: none;
       border-bottom: 2px solid transparent;
     }
 
-    .testimonials__name-btn.active {
+    .t-name-btn.is-active {
       border-bottom-color: #004f26;
     }
 
-    .testimonials__photo-wrap {
-      aspect-ratio: 3 / 2;
-      max-width: 360px;
+    .testimonials__photo-stage {
+      aspect-ratio: 4 / 3;
+    }
+
+    .testimonials__quote-stage {
+      min-height: 0;
     }
   }
 </style>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.testimonials__name-btn');
-  const photos = document.querySelectorAll('.testimonials__photo-item');
-  const quotes = document.querySelectorAll('.testimonials__quote-item');
+  const btns   = document.querySelectorAll<HTMLButtonElement>('.t-name-btn');
+  const photos = document.querySelectorAll<HTMLElement>('.t-photo');
+  const quotes = document.querySelectorAll<HTMLElement>('.t-quote');
 
   let current = 0;
-  let hoverTimer: ReturnType<typeof setTimeout> | null = null;
+  let timer: ReturnType<typeof setTimeout> | null = null;
 
-  function activate(index: number) {
-    if (index === current) return;
-    current = index;
-
-    buttons.forEach((btn, i) => {
-      btn.classList.toggle('active', i === index);
-      btn.setAttribute('aria-pressed', String(i === index));
-    });
-    photos.forEach((p, i) => p.classList.toggle('active', i === index));
-    quotes.forEach((q, i) => q.classList.toggle('active', i === index));
+  function activate(i: number) {
+    if (i === current) return;
+    current = i;
+    btns.forEach((b, idx)   => b.classList.toggle('is-active', idx === i));
+    photos.forEach((p, idx) => p.classList.toggle('is-active', idx === i));
+    quotes.forEach((q, idx) => q.classList.toggle('is-active', idx === i));
   }
 
-  buttons.forEach((btn, i) => {
-    // Click — immediate
+  btns.forEach((btn, i) => {
     btn.addEventListener('click', () => {
-      if (hoverTimer) clearTimeout(hoverTimer);
+      if (timer) clearTimeout(timer);
       activate(i);
     });
-
-    // Hover — 200ms delay to avoid flickering
     btn.addEventListener('mouseenter', () => {
-      hoverTimer = setTimeout(() => activate(i), 200);
+      timer = setTimeout(() => activate(i), 200);
     });
-
     btn.addEventListener('mouseleave', () => {
-      if (hoverTimer) clearTimeout(hoverTimer);
+      if (timer) clearTimeout(timer);
     });
   });
 </script>
