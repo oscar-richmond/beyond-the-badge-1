@@ -20,12 +20,9 @@ const processes = [
 ---
 
 <section class="process section" id="process">
-  <img
-    src={`${import.meta.env.BASE_URL}/logo-monogram.png`}
-    alt=""
-    class="process__watermark"
-    aria-hidden="true"
-  />
+  <div class="process__watermark" aria-hidden="true">
+    <img src={`${import.meta.env.BASE_URL}/logo-monogram.png`} alt="" class="process__watermark-img" />
+  </div>
   
   <div class="container">
     <div class="process__header reveal--left">
@@ -62,17 +59,19 @@ const processes = [
 
   .process__watermark {
     position: absolute;
-    left: 57%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: auto;
-    opacity: 0.1;
-    filter: grayscale(1);
-    mix-blend-mode: multiply;
+    top: -5%;
+    right: -5%;
+    height: 110%;
     pointer-events: none;
     user-select: none;
     z-index: 0;
+  }
+
+  .process__watermark-img {
+    height: 100%;
+    width: auto;
+    opacity: 0.06;
+    filter: grayscale(1);
   }
 
   .process__header {
