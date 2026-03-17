@@ -126,10 +126,11 @@ const testimonials = [
     font-weight: 400;
     letter-spacing: 0.05em;
     color: var(--color-text-dark);
+    opacity: 0.45;
     text-align: left;
     cursor: pointer;
     background: none;
-    transition: font-weight 0.2s ease, color 0.2s ease;
+    transition: font-weight 0.35s ease, opacity 0.35s ease;
   }
 
   .testimonials__names .t-name-btn:last-child {
@@ -148,6 +149,7 @@ const testimonials = [
   .t-name-btn.is-active,
   .t-name-btn:hover {
     font-weight: 700;
+    opacity: 1;
   }
 
   .t-name-btn.is-active .t-arrow,
@@ -167,7 +169,7 @@ const testimonials = [
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .t-photo.is-active {
@@ -195,13 +197,13 @@ const testimonials = [
     inset: 0;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .t-quote.is-active {
     opacity: 1;
     pointer-events: auto;
-    position: relative; /* takes up space in flow */
+    position: relative;
   }
 
   .t-quote blockquote {
@@ -280,13 +282,28 @@ const testimonials = [
 
   let current = 0;
   let timer: ReturnType<typeof setTimeout> | null = null;
+  let switching = false;
 
   function activate(i: number) {
-    if (i === current) return;
+    if (i === current || switching) return;
+    switching = true;
+
+    // Update name buttons immediately
+    btns.forEach((b, idx) => b.classList.toggle('is-active', idx === i));
+
+    // Fade out old photo & quote
+    photos[current].classList.remove('is-active');
+    quotes[current].classList.remove('is-active');
+
+    const prev = current;
     current = i;
-    btns.forEach((b, idx)   => b.classList.toggle('is-active', idx === i));
-    photos.forEach((p, idx) => p.classList.toggle('is-active', idx === i));
-    quotes.forEach((q, idx) => q.classList.toggle('is-active', idx === i));
+
+    // After brief gap, fade in new photo & quote
+    setTimeout(() => {
+      photos[i].classList.add('is-active');
+      quotes[i].classList.add('is-active');
+      switching = false;
+    }, 120);
   }
 
   btns.forEach((btn, i) => {
