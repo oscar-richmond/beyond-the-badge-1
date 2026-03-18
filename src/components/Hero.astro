@@ -2,7 +2,11 @@
 ---
 
 <section class="hero" id="hero">
-  <div class="hero__bg" aria-hidden="true"></div>
+  <div
+    class="hero__bg"
+    aria-hidden="true"
+    style={`background-image: url('${import.meta.env.BASE_URL}hero-bg.jpg')`}
+  ></div>
 
   <div class="hero__inner container">
     <div class="hero__content">
@@ -37,7 +41,6 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    background-image: url('/beyond-the-badge-1/hero-bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
