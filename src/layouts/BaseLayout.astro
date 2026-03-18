@@ -65,6 +65,26 @@ const {
           observer.observe(el);
         }
       });
+      // ── Scroll-hold: toggle scroll-snap-align on key sections via IntersectionObserver ──
+      // Desktop only — mobile gets unaffected native scroll
+      if (!window.matchMedia('(max-width: 767px)').matches) {
+        const holdSections = document.querySelectorAll<HTMLElement>('#about, #services, #contact');
+
+        const holdObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-hold');
+              } else {
+                entry.target.classList.remove('scroll-hold');
+              }
+            });
+          },
+          { threshold: 0 } // fire as soon as even 1px enters the viewport
+        );
+
+        holdSections.forEach((el) => holdObserver.observe(el));
+      }
     </script>
 
     <script>
