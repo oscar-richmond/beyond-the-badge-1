@@ -147,11 +147,6 @@
     color: #8CB7A0;
   }
 
-  /* ── prefers-reduced-motion: skip straight to tagline ── */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-wordmark { display: none; }
-    .hero-tagline  { opacity: 1; transform: translateY(0); transition: none; }
-  }
 
   /* ── Footer ── */
   .hero__footer {
@@ -193,6 +188,15 @@
     const tagline  = document.querySelector<HTMLElement>('.hero-tagline');
 
     if (!wordmark || !tagline) return;
+
+    // If Reduce Motion is on, skip animation and show final state immediately
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      wordmark.style.display   = 'none';
+      tagline.style.opacity    = '1';
+      tagline.style.transform  = 'translateY(0)';
+      tagline.style.transition = 'none';
+      return;
+    }
 
     // t=2s: wordmark fades out
     setTimeout(() => {
