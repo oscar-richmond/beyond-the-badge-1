@@ -101,9 +101,12 @@ const processes = [
   }
 
   .process__intro {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
     font-weight: 400;
+    letter-spacing: 0.05em;
+    line-height: 24px;
     color: var(--color-text-muted);
     max-width: 300px;
     text-align: right;
@@ -171,7 +174,8 @@ const processes = [
     font-weight: 400;
     letter-spacing: 0.05em;
     line-height: 1.7;
-    color: var(--color-text-muted);
+    color: #004f26;
+    transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @media (max-width: 1024px) {
