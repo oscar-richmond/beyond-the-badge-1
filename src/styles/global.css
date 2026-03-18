@@ -53,8 +53,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 70px; /* offset for sticky header */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -132,13 +130,6 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-/* --- Scroll snap — gentle pull on key sections --- */
-#about,
-#services,
-#contact {
-  scroll-snap-align: start;
 }
 
 /* --- Font Classes --- */
