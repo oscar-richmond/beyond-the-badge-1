@@ -189,15 +189,6 @@
 
     if (!wordmark || !tagline) return;
 
-    // If Reduce Motion is on, skip animation and show final state immediately
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      wordmark.style.display   = 'none';
-      tagline.style.opacity    = '1';
-      tagline.style.transform  = 'translateY(0)';
-      tagline.style.transition = 'none';
-      return;
-    }
-
     // t=2s: wordmark fades out
     setTimeout(() => {
       wordmark.style.opacity = '0';
@@ -205,9 +196,8 @@
 
     // t=2.8s: tagline fades in (0.4s overlap)
     setTimeout(() => {
-      tagline.style.opacity = '1';
+      tagline.style.opacity   = '1';
       tagline.style.transform = 'translateY(0)';
     }, 2800);
   });
 </script>
-
