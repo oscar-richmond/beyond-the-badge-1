@@ -206,22 +206,30 @@
 </style>
 
 <script>
-  // One-shot crossfade: wordmark → tagline
-  // t=0:    load
-  // t=2000: wordmark begins fading out (1.2s)
-  // t=2800: tagline begins fading in (0.4s overlap before wordmark fully gone)
-  const wordmark = document.getElementById('hero-wordmark');
-  const tagline  = document.getElementById('hero-tagline');
+  const wordmark = document.querySelector<HTMLElement>('.hero__wordmark');
+  const tagline  = document.querySelector<HTMLElement>('.hero-tagline');
 
   if (wordmark && tagline) {
-    // Start wordmark fade-out after 2s hold
-    setTimeout(() => {
-      wordmark.classList.add('hero__wordmark--out');
+    // Force initial states via inline style — overrides any cascade
+    Object.assign(wordmark.style, {
+      opacity: '1',
+      transition: 'opacity 1.2s ease-in-out',
+    });
+    Object.assign(tagline.style, {
+      opacity: '0',
+      transform: 'translateY(8px)',
+      transition: 'opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)',
+    });
 
-      // 0.8s later → 0.4s overlap before wordmark finishes
-      setTimeout(() => {
-        tagline.classList.add('hero-tagline--in');
-      }, 800);
+    // t=2000: wordmark fades out
+    setTimeout(() => {
+      wordmark.style.opacity = '0';
     }, 2000);
+
+    // t=2800: tagline fades in (0.4s overlap)
+    setTimeout(() => {
+      tagline.style.opacity = '1';
+      tagline.style.transform = 'translateY(0)';
+    }, 2800);
   }
 </script>
