@@ -58,19 +58,6 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-/* Desktop-only scroll-snap container */
-@media (min-width: 768px) {
-  html {
-    scroll-snap-type: y proximity;
-    scroll-padding-top: 70px;
-  }
-
-  /* Applied by JS when section enters viewport */
-  .scroll-hold {
-    scroll-snap-align: start;
-  }
-}
-
 body {
   font-family: var(--font-serif);
   font-weight: 400;
