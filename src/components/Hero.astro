@@ -10,9 +10,23 @@
 
   <div class="hero__inner container">
     <div class="hero__content">
-      <h1 class="hero__title">
-        <img src={`${import.meta.env.BASE_URL}/logo-full.png`} alt="Beyond the badge" class="hero__logo-img" />
-      </h1>
+      <!-- Stacked crossfade container -->
+      <div class="hero__xfade" aria-live="polite">
+        <!-- Wordmark — fades OUT -->
+        <h1 class="hero__wordmark" id="hero-wordmark">
+          <img
+            src={`${import.meta.env.BASE_URL}/logo-full.png`}
+            alt="Beyond the Badge"
+            class="hero__logo-img"
+          />
+        </h1>
+
+        <!-- Tagline — fades IN -->
+        <p class="hero-tagline" id="hero-tagline" aria-label="Less logo. More legacy.">
+          <span class="tagline-plain">Less logo.</span>
+          <span class="tagline-italic"> More legacy.</span>
+        </p>
+      </div>
     </div>
 
     <div class="hero__footer reveal" style="transition-delay: 0.3s;">
@@ -46,7 +60,7 @@
     background-repeat: no-repeat;
   }
 
-  /* Dark overlay so white logo stays legible */
+  /* Dark overlay so logo/text stays legible */
   .hero__bg::after {
     content: '';
     position: absolute;
@@ -69,8 +83,32 @@
     text-align: center;
   }
 
-  .hero__title {
-    animation: heroFadeIn 1.2s var(--ease-smooth) both;
+  /* ── Crossfade container: stacks wordmark + tagline in the same spot ── */
+  .hero__xfade {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* tall enough to contain both elements */
+    min-height: 80px;
+  }
+
+  /* Wordmark */
+  .hero__wordmark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    /* start visible */
+    opacity: 1;
+    transition: opacity 1.2s ease-in-out;
+  }
+
+  .hero__wordmark--out {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .hero__logo-img {
@@ -79,6 +117,61 @@
     height: auto;
   }
 
+  /* Tagline */
+  .hero-tagline {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0;
+    /* start invisible */
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+  }
+
+  .hero-tagline--in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .tagline-plain {
+    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+  }
+
+  .tagline-italic {
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-variation-settings: "wght" 700, "HGHT" 1000;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: #8CB7A0;
+  }
+
+  /* ── prefers-reduced-motion: skip straight to tagline ── */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__wordmark {
+      display: none;
+    }
+    .hero-tagline {
+      opacity: 1;
+      transform: translateY(0);
+      transition: none;
+    }
+  }
+
+  /* ── Footer links ── */
   .hero__footer {
     position: absolute;
     bottom: 32px;
@@ -102,17 +195,6 @@
     color: var(--color-cream);
   }
 
-  @keyframes heroFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   @media (max-width: 768px) {
     .hero__footer {
       flex-direction: column;
@@ -122,3 +204,24 @@
     }
   }
 </style>
+
+<script>
+  // One-shot crossfade: wordmark → tagline
+  // t=0:    load
+  // t=2000: wordmark begins fading out (1.2s)
+  // t=2800: tagline begins fading in (0.4s overlap before wordmark fully gone)
+  const wordmark = document.getElementById('hero-wordmark');
+  const tagline  = document.getElementById('hero-tagline');
+
+  if (wordmark && tagline) {
+    // Start wordmark fade-out after 2s hold
+    setTimeout(() => {
+      wordmark.classList.add('hero__wordmark--out');
+
+      // 0.8s later → 0.4s overlap before wordmark finishes
+      setTimeout(() => {
+        tagline.classList.add('hero-tagline--in');
+      }, 800);
+    }, 2000);
+  }
+</script>
