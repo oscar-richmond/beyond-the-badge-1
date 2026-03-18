@@ -10,22 +10,23 @@
 
   <div class="hero__inner container">
     <div class="hero__content">
-      <!-- Stacked crossfade container -->
       <div class="hero__xfade" aria-live="polite">
-        <!-- Wordmark — fades OUT -->
-        <h1 class="hero__wordmark" id="hero-wordmark">
+
+        <!-- Wordmark — visible on load, fades OUT -->
+        <h1 class="hero-wordmark">
           <img
-            src={`${import.meta.env.BASE_URL}/logo-full.png`}
+            src={`${import.meta.env.BASE_URL}logo-full.png`}
             alt="Beyond the Badge"
             class="hero__logo-img"
           />
         </h1>
 
-        <!-- Tagline — fades IN -->
-        <p class="hero-tagline" id="hero-tagline" aria-label="Less logo. More legacy.">
+        <!-- Tagline — hidden on load, fades IN -->
+        <p class="hero-tagline" aria-label="Less logo. More legacy.">
           <span class="tagline-plain">Less logo.</span>
           <span class="tagline-italic"> More legacy.</span>
         </p>
+
       </div>
     </div>
 
@@ -41,6 +42,7 @@
 </section>
 
 <style>
+  /* ── Hero shell ── */
   .hero {
     position: relative;
     min-height: 100vh;
@@ -60,7 +62,6 @@
     background-repeat: no-repeat;
   }
 
-  /* Dark overlay so logo/text stays legible */
   .hero__bg::after {
     content: '';
     position: absolute;
@@ -83,61 +84,48 @@
     text-align: center;
   }
 
-  /* ── Crossfade container: stacks wordmark + tagline in the same spot ── */
+  /* ── Crossfade wrapper: stacks wordmark + tagline in the same spot ── */
   .hero__xfade {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* tall enough to contain both elements */
     min-height: 80px;
   }
 
-  /* Wordmark */
-  .hero__wordmark {
+  /* ── Wordmark: visible by default ── */
+  .hero-wordmark {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0;
-    /* start visible */
     opacity: 1;
     transition: opacity 1.2s ease-in-out;
-  }
-
-  .hero__wordmark--out {
-    opacity: 0;
-    pointer-events: none;
   }
 
   .hero__logo-img {
     width: 100%;
     max-width: 195px;
     height: auto;
+    display: block;
   }
 
-  /* Tagline */
+  /* ── Tagline: hidden by default ── */
   .hero-tagline {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
     margin: 0;
-    /* start invisible */
     opacity: 0;
     transform: translateY(8px);
     transition:
       opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
       transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
     white-space: nowrap;
-  }
-
-  .hero-tagline--in {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .tagline-plain {
@@ -161,17 +149,11 @@
 
   /* ── prefers-reduced-motion: skip straight to tagline ── */
   @media (prefers-reduced-motion: reduce) {
-    .hero__wordmark {
-      display: none;
-    }
-    .hero-tagline {
-      opacity: 1;
-      transform: translateY(0);
-      transition: none;
-    }
+    .hero-wordmark { display: none; }
+    .hero-tagline  { opacity: 1; transform: translateY(0); transition: none; }
   }
 
-  /* ── Footer links ── */
+  /* ── Footer ── */
   .hero__footer {
     position: absolute;
     bottom: 32px;
@@ -206,30 +188,22 @@
 </style>
 
 <script>
-  const wordmark = document.querySelector<HTMLElement>('.hero__wordmark');
-  const tagline  = document.querySelector<HTMLElement>('.hero-tagline');
+  document.addEventListener('DOMContentLoaded', () => {
+    const wordmark = document.querySelector<HTMLElement>('.hero-wordmark');
+    const tagline  = document.querySelector<HTMLElement>('.hero-tagline');
 
-  if (wordmark && tagline) {
-    // Force initial states via inline style — overrides any cascade
-    Object.assign(wordmark.style, {
-      opacity: '1',
-      transition: 'opacity 1.2s ease-in-out',
-    });
-    Object.assign(tagline.style, {
-      opacity: '0',
-      transform: 'translateY(8px)',
-      transition: 'opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)',
-    });
+    if (!wordmark || !tagline) return;
 
-    // t=2000: wordmark fades out
+    // t=2s: wordmark fades out
     setTimeout(() => {
       wordmark.style.opacity = '0';
     }, 2000);
 
-    // t=2800: tagline fades in (0.4s overlap)
+    // t=2.8s: tagline fades in (0.4s overlap)
     setTimeout(() => {
       tagline.style.opacity = '1';
       tagline.style.transform = 'translateY(0)';
     }, 2800);
-  }
+  });
 </script>
+
