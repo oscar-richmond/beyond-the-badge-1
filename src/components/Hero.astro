@@ -2,9 +2,7 @@
 ---
 
 <section class="hero" id="hero">
-  <div class="hero__bg">
-    <div class="hero__gradient"></div>
-  </div>
+  <div class="hero__bg" aria-hidden="true"></div>
 
   <div class="hero__inner container">
     <div class="hero__content">
@@ -39,13 +37,18 @@
     position: absolute;
     inset: 0;
     z-index: 0;
+    background-image: url('/beyond-the-badge-1/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  .hero__gradient {
+  /* Dark overlay so white logo stays legible */
+  .hero__bg::after {
+    content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse at 50% 50%, var(--color-forest-mid) 0%, var(--color-forest) 40%, var(--color-forest-deep) 100%);
+    background: rgba(0, 0, 0, 0.45);
   }
 
   .hero__inner {
