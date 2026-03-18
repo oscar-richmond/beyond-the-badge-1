@@ -67,5 +67,41 @@ const {
       });
     </script>
 
+    <script>
+      import Lenis from 'lenis';
+
+      // Desktop / fine-pointer only — mobile gets native scroll
+      const prefersNative = window.matchMedia('(max-width: 767px)').matches
+                         || !window.matchMedia('(pointer: fine)').matches;
+
+      if (!prefersNative) {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 2,
+        });
+
+        // Feed Lenis into rAF — this is what drives the animation
+        function raf(time: number) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Anchor link clicks — let Lenis handle them smoothly
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', (e: MouseEvent) => {
+            const id = a.getAttribute('href');
+            if (!id || id === '#') return;
+            const target = document.querySelector<HTMLElement>(id);
+            if (!target) return;
+            e.preventDefault();
+            lenis.scrollTo(target, { offset: -70 });
+          });
+        });
+      }
+    </script>
+
   </body>
 </html>
