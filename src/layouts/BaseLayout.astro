@@ -66,5 +66,99 @@ const {
         }
       });
     </script>
+
+    <script>
+      // ── Lerp smooth scroll (desktop only) ──────────────────────────────────
+      // Skip on mobile / touch screens
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+                    || !window.matchMedia('(pointer: fine)').matches;
+
+      if (!isMobile) {
+        const BASE_LERP = 0.08;
+        const HOLD_LERP = 0.04;  // slower when entering hold sections
+        const HOLD_THRESHOLD = 0.30; // first 30% of section
+
+        let targetY  = window.scrollY;
+        let currentY = window.scrollY;
+        let rafId: ReturnType<typeof requestAnimationFrame> | null = null;
+
+        // Sections that get the scroll-hold treatment
+        const holdSections = Array.from(
+          document.querySelectorAll<HTMLElement>('#about, #services')
+        );
+
+        function getLerp(): number {
+          for (const el of holdSections) {
+            const progress = -el.getBoundingClientRect().top / el.offsetHeight;
+            if (progress >= 0 && progress < HOLD_THRESHOLD) return HOLD_LERP;
+          }
+          return BASE_LERP;
+        }
+
+        function maxScroll(): number {
+          return document.documentElement.scrollHeight - window.innerHeight;
+        }
+
+        function tick(): void {
+          const factor = getLerp();
+          currentY += (targetY - currentY) * factor;
+
+          if (Math.abs(targetY - currentY) < 0.5) {
+            currentY = targetY;
+            window.scrollTo(0, currentY);
+            rafId = null;
+          } else {
+            window.scrollTo(0, currentY);
+            rafId = requestAnimationFrame(tick);
+          }
+        }
+
+        function scheduleRaf(): void {
+          if (!rafId) rafId = requestAnimationFrame(tick);
+        }
+
+        // Intercept wheel events — ctrl+scroll (pinch-zoom) is always allowed
+        window.addEventListener('wheel', (e: WheelEvent) => {
+          if (e.ctrlKey) return;
+          e.preventDefault();
+
+          // Normalise across deltaMode
+          let delta = e.deltaY;
+          if (e.deltaMode === 1) delta *= 32;   // line → px
+          if (e.deltaMode === 2) delta *= window.innerHeight; // page → px
+
+          targetY = Math.max(0, Math.min(maxScroll(), targetY + delta));
+          scheduleRaf();
+        }, { passive: false });
+
+        // Sync targetY when anything else changes scroll (keyboard, scrollbar drag, etc.)
+        window.addEventListener('scroll', () => {
+          // Only sync if we're NOT mid-animation (user is using scrollbar / keyboard)
+          if (!rafId) {
+            targetY  = window.scrollY;
+            currentY = window.scrollY;
+          }
+        }, { passive: true });
+
+        // Anchor links: smoothly scroll via the lerp system
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', (e: MouseEvent) => {
+            const id = a.getAttribute('href');
+            if (!id || id === '#') return;
+            const target = document.querySelector<HTMLElement>(id);
+            if (!target) return;
+            e.preventDefault();
+            targetY = Math.min(target.offsetTop, maxScroll());
+            scheduleRaf();
+          });
+        });
+
+        // On resize, re-sync in case page height changed
+        window.addEventListener('resize', () => {
+          targetY  = window.scrollY;
+          currentY = window.scrollY;
+        }, { passive: true });
+      }
+    </script>
   </body>
 </html>
