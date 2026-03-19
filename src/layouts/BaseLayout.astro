@@ -103,5 +103,141 @@ const {
       }
     </script>
 
+    <script>
+      // ── Line-by-line clip reveal + HR draw-in ─────────────────────────────
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const onMobile       = window.matchMedia('(max-width: 767px)').matches;
+
+      // ── Effect 1: Line clip reveal (desktop only, no reduced-motion) ───────
+      if (!prefersReduced && !onMobile) {
+
+        // Inject CSS for initial hidden state and revealed state
+        const css = document.createElement('style');
+        css.textContent = `
+          .lr-clip { overflow: hidden; display: block; }
+          .lr-inner { display: block; transform: translateY(105%); }
+          .lr-clip.lr-visible .lr-inner {
+            transform: translateY(0);
+          }
+        `;
+        document.head.appendChild(css);
+
+        // Split a plain-text element into per-line clip wrappers
+        function splitLines(el: HTMLElement) {
+          const text = el.textContent?.trim() ?? '';
+          if (!text) return;
+
+          // Temporarily wrap each word to measure its line
+          el.innerHTML = text
+            .split(/\s+/)
+            .filter(Boolean)
+            .map(w => `<span class="lw" style="display:inline-block">${w}</span>`)
+            .join(' ');
+
+          // Group words by vertical position
+          const wordEls = Array.from(el.querySelectorAll<HTMLElement>('.lw'));
+          const lineGroups: string[][] = [];
+          let currentTop = -9999;
+          let group: string[] = [];
+
+          wordEls.forEach(w => {
+            const top = w.offsetTop;
+            if (Math.abs(top - currentTop) > 3) {
+              if (group.length) lineGroups.push(group);
+              group = [w.textContent?.trim() ?? ''];
+              currentTop = top;
+            } else {
+              group.push(w.textContent?.trim() ?? '');
+            }
+          });
+          if (group.length) lineGroups.push(group);
+
+          // Rebuild with clip+inner wrappers
+          el.innerHTML = '';
+          lineGroups.forEach((words, i) => {
+            const clip  = document.createElement('div');
+            clip.className = 'lr-clip';
+            const inner = document.createElement('div');
+            inner.className = 'lr-inner';
+            inner.textContent = words.join(' ');
+            inner.style.transition =
+              `transform 0.9s cubic-bezier(0.16,1,0.3,1) ${(i * 0.08).toFixed(2)}s`;
+            clip.appendChild(inner);
+            el.appendChild(clip);
+          });
+
+          return el; // observe the element itself
+        }
+
+        // Wrap a rich-HTML element (has child elements) in a single clip
+        function wrapBlock(el: HTMLElement): HTMLElement {
+          const clip = document.createElement('div');
+          clip.className = 'lr-clip';
+          el.parentNode!.insertBefore(clip, el);
+          clip.appendChild(el);
+          el.classList.add('lr-inner');
+          el.style.transition = 'transform 0.9s cubic-bezier(0.16,1,0.3,1)';
+          return clip; // observe the clip wrapper
+        }
+
+        // Collect target headings — skip testimonials, nav, header, hero,
+        // and anything already inside a .reveal* ancestor (its parent handles reveal)
+        const REVEAL_ANCESTOR = '.reveal, .reveal--left, .reveal--right, .reveal--scale';
+        const targets = Array.from(
+          document.querySelectorAll<HTMLElement>('h2, h3')
+        ).filter(el =>
+          !el.closest('#testimonials') &&
+          !el.closest('nav') &&
+          !el.closest('header') &&
+          !el.closest('#hero') &&
+          !el.closest(REVEAL_ANCESTOR)   // skip elements covered by existing system
+        );
+
+        const lineObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('lr-visible');
+              lineObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        // Fonts must be loaded so line measurements are accurate
+        (document.fonts?.ready ?? Promise.resolve()).then(() => {
+          targets.forEach(el => {
+            const hasHtmlChildren = Array.from(el.childNodes)
+              .some(n => n.nodeType === Node.ELEMENT_NODE);
+            const observed = hasHtmlChildren ? wrapBlock(el) : (splitLines(el), el);
+            lineObserver.observe(observed);
+          });
+        });
+      }
+
+      // ── Effect 2: HR draw-in ──────────────────────────────────────────────
+      if (!prefersReduced) {
+        const hrCss = document.createElement('style');
+        hrCss.textContent = `
+          hr {
+            width: 0 !important;
+            transition: width 1.1s cubic-bezier(0.16,1,0.3,1);
+          }
+          hr.hr-visible {
+            width: 100% !important;
+          }
+        `;
+        document.head.appendChild(hrCss);
+
+        const hrObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('hr-visible');
+              hrObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('hr').forEach(hr => hrObserver.observe(hr));
+      }
+    </script>
   </body>
 </html>
