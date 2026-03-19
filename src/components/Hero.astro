@@ -9,22 +9,10 @@
   ></div>
 
   <div class="hero__inner container">
-    <div class="hero__content">
-
-      <h1 class="hero__wordmark">
-        <img
-          src={`${import.meta.env.BASE_URL}logo-full.png`}
-          alt="Beyond the Badge"
-          class="hero__logo-img"
-        />
-      </h1>
-
-      <p class="hero__tagline">
-        <span class="tagline-plain">Less logo.</span>
-        <span class="tagline-italic"> More legacy.</span>
-      </p>
-
-    </div>
+    <p class="hero__tagline">
+      <span class="tagline-plain">Less logo.</span>
+      <span class="tagline-italic"> More legacy.</span>
+    </p>
   </div>
 </section>
 
@@ -34,6 +22,7 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
   }
 
@@ -57,31 +46,15 @@
     position: relative;
     z-index: 1;
     width: 100%;
-  }
-
-  .hero__content {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  /* ── Wordmark ── */
-  .hero__wordmark {
-    margin: 0;
-    animation: heroEntry 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-  }
-
-  .hero__logo-img {
-    width: 100%;
-    max-width: 195px;
-    height: auto;
-    display: block;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   /* ── Tagline ── */
   .hero__tagline {
     margin: 0;
-    animation: heroEntry 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+    animation: heroEntry 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
     white-space: nowrap;
   }
 
@@ -89,7 +62,7 @@
     font-family: 'Awesome Serif VAR', var(--font-serif);
     font-style: normal;
     font-weight: 700;
-    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     letter-spacing: 0.05em;
     color: #ffffff;
   }
@@ -99,12 +72,11 @@
     font-style: italic;
     font-weight: 700;
     font-variation-settings: "wght" 700, "HGHT" 1000;
-    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     letter-spacing: 0.05em;
     color: #8CB7A0;
   }
 
-  /* ── Luxury entry keyframe ── */
   @keyframes heroEntry {
     from {
       opacity: 0;
