@@ -90,7 +90,7 @@
   .rotating-phrase {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 50%;
     font-family: 'Awesome Serif Italic VAR', var(--font-serif);
     font-style: italic;
     font-weight: 700;
@@ -99,9 +99,9 @@
     letter-spacing: 0.05em;
     color: #8CB7A0;
     white-space: nowrap;
-    /* default hidden state — entering from below */
+    /* default hidden state — entering from below, centred on wrapper midline */
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(calc(-50% + 10px));
   }
 
   @keyframes heroEntry {
@@ -130,20 +130,20 @@
     function show(el: HTMLElement) {
       el.style.transition = 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)';
       el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
+      el.style.transform = 'translateY(-50%)';
     }
 
     function exit(el: HTMLElement) {
       el.style.transition = 'opacity 0.5s ease-in, transform 0.5s ease-in';
       el.style.opacity = '0';
-      el.style.transform = 'translateY(-10px)';
+      el.style.transform = 'translateY(calc(-50% - 10px))';
     }
 
     function reset(el: HTMLElement) {
       // Snap back to enter-from-below state without animating
       el.style.transition = 'none';
       el.style.opacity = '0';
-      el.style.transform = 'translateY(10px)';
+      el.style.transform = 'translateY(calc(-50% + 10px))';
     }
 
     // Show first phrase immediately
