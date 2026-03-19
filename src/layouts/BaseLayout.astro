@@ -214,27 +214,41 @@ const {
       }
 
       // ── Effect 2: HR draw-in ──────────────────────────────────────────────
-      if (!prefersReduced) {
-        const hrCss = document.createElement('style');
+      const hrCss = document.createElement('style');
+
+      if (prefersReduced) {
+        // Show all lines immediately at full width
+        hrCss.textContent = `hr { width: 100%; }`;
+      } else {
         hrCss.textContent = `
           hr {
-            width: 0 !important;
-            transition: width 1.1s cubic-bezier(0.16,1,0.3,1);
+            width: 0%;
+            transform-origin: left center;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
           }
-          hr.hr-visible {
-            width: 100% !important;
+          hr.line--visible {
+            width: 100%;
           }
         `;
-        document.head.appendChild(hrCss);
+      }
+      document.head.appendChild(hrCss);
+
+      if (!prefersReduced) {
+        // Stagger sibling <hr> elements within the same parent
+        document.querySelectorAll<HTMLElement>('hr').forEach(hr => {
+          const siblings = Array.from(hr.parentElement?.querySelectorAll('hr') ?? []);
+          const idx = siblings.indexOf(hr);
+          if (idx > 0) hr.style.transitionDelay = `${(idx * 0.15).toFixed(2)}s`;
+        });
 
         const hrObserver = new IntersectionObserver(entries => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('hr-visible');
+              entry.target.classList.add('line--visible');
               hrObserver.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
 
         document.querySelectorAll('hr').forEach(hr => hrObserver.observe(hr));
       }
