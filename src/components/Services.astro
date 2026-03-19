@@ -41,24 +41,28 @@ const services = [
     </div>
 
     <div class="services__list">
+      <hr class="services__divider" />
       {services.map((service, index) => (
-        <div
-          class="services__item reveal"
-          style={`transition-delay: ${index * 0.1}s;`}
-        >
-          <div class="services__item-hover-image">
-            <img src={service.image} alt="" />
+        <>
+          <div
+            class="services__item reveal"
+            style={`transition-delay: ${index * 0.1}s;`}
+          >
+            <div class="services__item-hover-image">
+              <img src={service.image} alt="" />
+            </div>
+            <div class="services__item-left">
+              <span class="services__number">{service.number}</span>
+              <h3 class="services__title">
+                {service.title}
+                <img src={`${base}beyond-script.png`} alt="Beyond" class="services__beyond-img" />
+                {service.beyondText}
+              </h3>
+            </div>
+            <span class="services__category">{service.category}</span>
           </div>
-          <div class="services__item-left">
-            <span class="services__number">{service.number}</span>
-            <h3 class="services__title">
-              {service.title}
-              <img src={`${base}beyond-script.png`} alt="Beyond" class="services__beyond-img" />
-              {service.beyondText}
-            </h3>
-          </div>
-          <span class="services__category">{service.category}</span>
-        </div>
+          <hr class="services__divider" />
+        </>
       ))}
     </div>
 
@@ -96,7 +100,6 @@ const services = [
 
 
   .services__list {
-    border-top: 1px solid var(--color-divider-dark);
     margin-top: 120px;
   }
 
@@ -105,11 +108,17 @@ const services = [
     align-items: center;
     justify-content: space-between;
     padding: 40px 0;
-    border-bottom: 1px solid var(--color-divider-dark);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
     z-index: 1;
+  }
+
+  /* Divider lines — styled to match original border colour/thickness */
+  hr.services__divider {
+    border: none;
+    border-top: 1px solid var(--color-divider-dark);
+    margin: 0;
   }
 
   .services__item:hover {
