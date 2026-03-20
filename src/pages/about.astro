@@ -36,7 +36,8 @@ import Footer from '../components/Footer.astro';
   }
 
   .about-hero {
-    padding: 120px 48px 80px;
+    padding: 160px 48px 100px;
+    background: #ffffff;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
@@ -51,17 +52,18 @@ import Footer from '../components/Footer.astro';
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #004f26;
-    padding-top: 8px;
+    align-self: start;
+    margin-top: 6px;
   }
 
   .about-hero__text {
     grid-column: 1;
     grid-row: 1;
-    font-size: clamp(24px, 3.5vw, 44px);
+    font-size: clamp(32px, 4.5vw, 56px);
     line-height: 1.2;
     color: #004f26;
     font-weight: 400;
-    max-width: 640px;
+    max-width: 55vw;
     margin: 0;
   }
 
