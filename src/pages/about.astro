@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="About — Beyond the Badge"
+  description="Learn about Beyond the Badge — the cultural brand partnership agency led by Laura Wood."
+>
+  <Header />
+  <main class="about-page"></main>
+  <Footer />
+</BaseLayout>
+
+<!-- Active nav link state (global so it crosses component scope) -->
+<style is:global>
+  .header__nav-link--active {
+    opacity: 1 !important;
+    border-bottom: 1px solid currentColor;
+  }
+</style>
+
+<script>
+  // Mark the "About" nav link as active on this page
+  document.querySelectorAll<HTMLAnchorElement>('.header__nav-link, .mobile-nav__link').forEach(link => {
+    if (link.textContent?.trim() === 'About') {
+      link.classList.add('header__nav-link--active');
+    }
+  });
+</script>
