@@ -3,6 +3,10 @@ import '../styles/global.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
+import CTA from '../components/CTA.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
@@ -11,6 +15,8 @@ import Footer from '../components/Footer.astro';
 >
   <Header />
   <main class="about-page">
+
+    <!-- 1. Hero -->
     <section class="about-hero">
       <span class="about-hero__label">About Us</span>
       <h1 class="about-hero__text">
@@ -19,10 +25,81 @@ import Footer from '../components/Footer.astro';
         Not to chase the moment, but to shape what comes next.
       </h1>
     </section>
+
+    <!-- 2. Image pair with caption -->
+    <section class="about-images">
+      <div class="about-images__grid">
+        <div class="about-images__item">
+          <span class="about-images__num">(01)</span>
+          <div class="about-images__photo" style={`background-image: url('${base}about-1.jpg')`}></div>
+        </div>
+        <div class="about-images__item">
+          <span class="about-images__num">(02)</span>
+          <div class="about-images__photo" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+        </div>
+      </div>
+      <div class="about-images__footer">
+        <a href="#contact" class="about-images__link">Get in touch →</a>
+      </div>
+    </section>
+
+    <!-- 3. Statement + tagline -->
+    <section class="about-statement">
+      <div class="about-statement__watermark" aria-hidden="true">B</div>
+      <div class="about-statement__inner">
+        <p class="about-statement__text">
+          We don't believe in logos, slogans, or campaigns that claim a cultural position
+          without earning it. We believe in showing up with purpose, humility, and a point of
+          view — connecting brands to the communities, moments and people that give culture
+          its meaning.
+        </p>
+        <p class="about-statement__tagline">
+          <span class="about-tagline-plain">Less logo.</span>
+          <span class="about-tagline-italic"> More legacy.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- 4. Four-image strip -->
+    <section class="about-strip">
+      <div class="about-strip__grid">
+        <div class="about-strip__photo" style={`background-image: url('${base}about-1.jpg')`}></div>
+        <div class="about-strip__photo" style={`background-image: url('${base}about-2.jpg')`}></div>
+        <div class="about-strip__photo" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+        <div class="about-strip__photo" style={`background-image: url('${base}about-3.jpg')`}></div>
+      </div>
+    </section>
+
+    <!-- 5. Founder bio -->
+    <section class="about-bio">
+      <div class="about-bio__inner">
+        <div class="about-bio__content">
+          <h2 class="about-bio__headline">
+            After 25 years at the intersection of luxury, culture, and communication,
+            <em>Laura Wood</em> knows that a brand is not a badge — it's a feeling.
+            Following a decade as Global Director at JLR, where she led a team of 70+
+            to redefine brand experience &amp; culture.
+          </h2>
+          <p class="about-bio__body">
+            She spent those years building authentic spaces and meaningful relationships
+            for the world's leading brands — partnerships defined by courageous thinking,
+            remarkable creativity and the belief that true cultural resonance is always led
+            by instinct, never just strategy.
+          </p>
+          <a href="#contact" class="about-bio__btn">Read more +</a>
+        </div>
+        <span class="about-bio__label">Team Lead</span>
+      </div>
+    </section>
+
   </main>
+
+  <CTA />
+  <ContactForm />
   <Footer />
 </BaseLayout>
 
+<!-- Global: active nav state -->
 <style is:global>
   .header__nav-link--active {
     opacity: 1 !important;
@@ -31,10 +108,12 @@ import Footer from '../components/Footer.astro';
 </style>
 
 <style>
+  /* ── Base ─────────────────────────────────────────── */
   .about-page {
-    padding-top: 0;
+    background: #ffffff;
   }
 
+  /* ── 1. Hero ──────────────────────────────────────── */
   .about-hero {
     padding: 160px 48px 100px;
     background: #ffffff;
@@ -76,10 +155,241 @@ import Footer from '../components/Footer.astro';
     text-decoration: underline dotted;
     text-underline-offset: 4px;
   }
+
+  /* ── 2. Image pair ────────────────────────────────── */
+  .about-images {
+    padding: 80px 48px;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0,79,38,0.15);
+  }
+
+  .about-images__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .about-images__item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .about-images__num {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: #004f26;
+    text-transform: uppercase;
+  }
+
+  .about-images__photo {
+    width: 100%;
+    height: 480px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .about-images__footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .about-images__link {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #004f26;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+  }
+
+  .about-images__link:hover { opacity: 0.6; }
+
+  /* ── 3. Statement ─────────────────────────────────── */
+  .about-statement {
+    position: relative;
+    padding: 100px 48px;
+    background: #ffffff;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(0,79,38,0.15);
+  }
+
+  .about-statement__watermark {
+    position: absolute;
+    right: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 38vw;
+    font-weight: 700;
+    color: rgba(0, 79, 38, 0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .about-statement__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+  }
+
+  .about-statement__text {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 36px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #1a3a2a;
+    margin: 0 0 48px;
+  }
+
+  .about-statement__tagline {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+  }
+
+  .about-tagline-plain {
+    font-family: var(--font-serif);
+    font-style: normal;
+    font-weight: 700;
+    color: #1a3a2a;
+  }
+
+  .about-tagline-italic {
+    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-variation-settings: "wght" 700, "HGHT" 1000;
+    color: #8CB7A0;
+  }
+
+  /* ── 4. Image strip ───────────────────────────────── */
+  .about-strip {
+    background: #ffffff;
+  }
+
+  .about-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .about-strip__photo {
+    height: 380px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* ── 5. Founder bio ───────────────────────────────── */
+  .about-bio {
+    padding: 100px 48px;
+    background: #ffffff;
+    border-top: 1px solid rgba(0,79,38,0.15);
+    border-bottom: 1px solid rgba(0,79,38,0.15);
+  }
+
+  .about-bio__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 48px;
+  }
+
+  .about-bio__content {
+    max-width: 640px;
+  }
+
+  .about-bio__headline {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    line-height: 44px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #1a3a2a;
+    margin: 0 0 32px;
+  }
+
+  .about-bio__headline em {
+    font-style: italic;
+    color: #8CB7A0;
+  }
+
+  .about-bio__body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 26px;
+    font-weight: 400;
+    color: #1a3a2a;
+    opacity: 0.75;
+    margin: 0 0 40px;
+  }
+
+  .about-bio__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #004f26;
+    border: 1px solid rgba(0,79,38,0.35);
+    padding: 10px 20px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .about-bio__btn:hover {
+    background: #004f26;
+    color: #ffffff;
+  }
+
+  .about-bio__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #004f26;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    margin-top: 8px;
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media (max-width: 768px) {
+    .about-hero,
+    .about-images,
+    .about-statement,
+    .about-bio { padding-left: 24px; padding-right: 24px; }
+
+    .about-hero { padding-top: 120px; }
+    .about-hero { grid-template-columns: 1fr; }
+    .about-hero__label { grid-row: 2; grid-column: 1; margin-top: 16px; }
+
+    .about-images__grid { grid-template-columns: 1fr; }
+    .about-images__photo { height: 300px; }
+
+    .about-strip__grid { grid-template-columns: repeat(2, 1fr); }
+    .about-strip__photo { height: 220px; }
+
+    .about-bio__inner { grid-template-columns: 1fr; }
+    .about-bio__label { writing-mode: horizontal-tb; transform: none; }
+  }
 </style>
 
 <script>
-  // Mark the "About" nav link as active on this page
   document.querySelectorAll<HTMLAnchorElement>('.header__nav-link, .mobile-nav__link').forEach(link => {
     if (link.textContent?.trim() === 'About') {
       link.classList.add('header__nav-link--active');
