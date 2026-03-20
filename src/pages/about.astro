@@ -10,15 +10,65 @@ import Footer from '../components/Footer.astro';
   description="Learn about Beyond the Badge — the cultural brand partnership agency led by Laura Wood."
 >
   <Header />
-  <main class="about-page"></main>
+  <main class="about-page">
+    <section class="about-hero">
+      <span class="about-hero__label">About Us</span>
+      <h1 class="about-hero__text">
+        We connect brands with the spaces where culture is created —
+        <em>art, sport, entertainment</em> and <em>community</em>.
+        Not to chase the moment, but to shape what comes next.
+      </h1>
+    </section>
+  </main>
   <Footer />
 </BaseLayout>
 
-<!-- Active nav link state (global so it crosses component scope) -->
 <style is:global>
   .header__nav-link--active {
     opacity: 1 !important;
     border-bottom: 1px solid currentColor;
+  }
+</style>
+
+<style>
+  .about-page {
+    padding-top: 0;
+  }
+
+  .about-hero {
+    padding: 120px 48px 80px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 24px;
+    border-bottom: 1px solid rgba(0,79,38,0.15);
+  }
+
+  .about-hero__label {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #004f26;
+    padding-top: 8px;
+  }
+
+  .about-hero__text {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: clamp(24px, 3.5vw, 44px);
+    line-height: 1.2;
+    color: #004f26;
+    font-weight: 400;
+    max-width: 640px;
+    margin: 0;
+  }
+
+  .about-hero__text em {
+    font-style: italic;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 </style>
 
