@@ -192,6 +192,14 @@ button {
   transform: none;
 }
 
+/* --- Mobile token overrides --- */
+@media (max-width: 480px) {
+  :root {
+    --section-padding-x: 20px;
+    --section-padding-y: clamp(60px, 10vh, 100px);
+  }
+}
+
 /* --- Selection --- */
 ::selection {
   background-color: var(--color-forest);

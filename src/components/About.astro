@@ -58,7 +58,7 @@
     position: relative;
     z-index: 1;
     max-width: 1092px; /* 1028 + 64 */
-    margin-bottom: 256px;
+    margin-bottom: clamp(48px, 12vw, 256px);
   }
 
   .about__intro {
@@ -95,7 +95,7 @@
 
   .about__image-grid {
     display: grid;
-    grid-template-columns: repeat(3, 240px);
+    grid-template-columns: repeat(3, minmax(0, 240px));
     gap: 32px;
     justify-content: flex-end;
   }
@@ -122,11 +122,22 @@
 
   @media (max-width: 768px) {
     .about__image-grid {
+      grid-template-columns: 1fr 1fr;
       max-width: 100%;
     }
 
     .about__content {
       margin-bottom: 48px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about__image-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about__image-item {
+      height: 220px;
     }
   }
 </style>
