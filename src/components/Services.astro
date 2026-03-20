@@ -190,6 +190,7 @@ const services = [
     flex-wrap: wrap;
     letter-spacing: 0.05em;
     transition: color 0.4s ease;
+    overflow: visible;
   }
 
   .services__item:hover .services__title {
@@ -201,7 +202,10 @@ const services = [
     width: auto;
     display: inline-block;
     vertical-align: baseline;
-    margin: 0 3px;
+    /* Negative margins collapse the flex cross-size so the h3 centres
+       around text height, not the script's 60px bounding box.
+       The script still renders at full size via overflow:visible on parent. */
+    margin: -9px 3px;
     position: relative;
     top: 10px;
     transition: filter 0.4s ease;
