@@ -32,13 +32,89 @@ const {
     <title>{title}</title>
   </head>
   <body>
+    <!-- Luxury curtain — covers page on every load, GSAP lifts it -->
+    <div id="btb-curtain" aria-hidden="true"></div>
     <slot />
+
+    <style is:global>
+      /* ── Luxury Curtain ────────────────────────────────────────────── */
+      #btb-curtain {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        background-color: #052715;
+        pointer-events: none;
+        will-change: transform;
+      }
+    </style>
+
+    <!-- Luxury page curtain: entry reveal + exit on navigation -->
+    <script>
+      import { gsap } from 'gsap';
+      import { CustomEase } from 'gsap/CustomEase';
+
+      gsap.registerPlugin(CustomEase);
+      CustomEase.create('btbEase', '.42, 0, .24, 1');
+
+      const curtain = document.getElementById('btb-curtain');
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReduced) {
+        // Skip entirely — curtain disappears immediately
+        if (curtain) curtain.style.display = 'none';
+      } else {
+        // ── Entry: lift the curtain to reveal the page ────────────────
+        gsap.to(curtain, {
+          y: '-100%',
+          duration: 1.2,
+          ease: 'btbEase',
+          delay: 0.05,
+          onComplete() {
+            if (curtain) curtain.style.pointerEvents = 'none';
+          },
+        });
+
+        // ── Exit: drop curtain before navigating away ─────────────────
+        const HOST = window.location.hostname;
+
+        document.addEventListener('click', (e) => {
+          const target = (e.target as Element).closest('a');
+          if (!target) return;
+
+          const href = target.getAttribute('href') ?? '';
+
+          // Skip: external, anchor, special protocol, target=_blank
+          if (!href || href.startsWith('#') || href.startsWith('mailto:') ||
+              href.startsWith('tel:') || target.target === '_blank') return;
+
+          // Skip properly external URLs
+          if (href.startsWith('http') && !href.includes(HOST)) return;
+
+          // Same page? skip
+          const dest = new URL(href, window.location.href);
+          if (dest.pathname === window.location.pathname) return;
+
+          e.preventDefault();
+
+          // Reset curtain to just below top, then drop it in
+          gsap.set(curtain, { y: '-100%' });
+          gsap.to(curtain, {
+            y: '0%',
+            duration: 0.75,
+            ease: 'power2.inOut',
+            onComplete() {
+              window.location.href = dest.href;
+            },
+          });
+        }, true); // capture phase so we intercept before other handlers
+      }
+    </script>
 
     <script>
       // No-JS fallback: html gets .no-js by default, removed when JS runs
       document.documentElement.classList.remove('no-js');
 
-      const REVEAL_SEL = '.reveal, .reveal--left, .reveal--right, .reveal--scale';
+      const REVEAL_SEL = '.reveal, .reveal--left, .reveal--right, .reveal--scale, .reveal--clip';
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -49,13 +125,13 @@ const {
             }
           });
         },
-        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
       );
 
-      // Auto-stagger siblings inside [data-reveal-group]
+      // Auto-stagger siblings inside [data-reveal-group] — 0.18s feels considered
       document.querySelectorAll('[data-reveal-group]').forEach((group) => {
         Array.from(group.querySelectorAll(REVEAL_SEL)).forEach((child, i) => {
-          (child as HTMLElement).style.transitionDelay = `${(i * 0.1).toFixed(1)}s`;
+          (child as HTMLElement).style.transitionDelay = `${(i * 0.18).toFixed(2)}s`;
         });
       });
 
@@ -103,6 +179,7 @@ const {
       }
     </script>
 
+
     <script>
       // ── Line-by-line clip reveal + HR draw-in ─────────────────────────────
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -115,100 +192,154 @@ const {
         const css = document.createElement('style');
         css.textContent = `
           .lr-clip { overflow: hidden; display: block; }
-          .lr-inner { display: block; transform: translateY(105%); }
+          .lr-inner {
+            display: block;
+            transform: translateY(110%);
+            will-change: transform;
+          }
           .lr-clip.lr-visible .lr-inner {
             transform: translateY(0);
           }
         `;
         document.head.appendChild(css);
 
-        // Split a plain-text element into per-line clip wrappers
-        function splitLines(el: HTMLElement) {
-          const text = el.textContent?.trim() ?? '';
-          if (!text) return;
+        // ── Unified per-line reveal ────────────────────────────────────
+        // Handles: plain text, inline children (span/em/strong/a), <br> splits.
+        // Falls back to single-clip only if block-level children are present.
+        const BLOCK_TAGS_LRC = new Set([
+          'div','section','article','aside','ul','ol','li','table'
+        ]);
 
-          // Temporarily wrap each word to measure its line
-          el.innerHTML = text
-            .split(/\s+/)
-            .filter(Boolean)
-            .map(w => `<span class="lw" style="display:inline-block">${w}</span>`)
-            .join(' ');
+        function revealElement(el: HTMLElement): HTMLElement | null {
+          const children = Array.from(el.childNodes);
 
-          // Group words by vertical position
-          const wordEls = Array.from(el.querySelectorAll<HTMLElement>('.lw'));
+          // Block-level child → single-clip fallback
+          if (children.some(n =>
+            n.nodeType === Node.ELEMENT_NODE &&
+            BLOCK_TAGS_LRC.has((n as Element).tagName.toLowerCase())
+          )) {
+            const clip = document.createElement('div');
+            clip.className = 'lr-clip';
+            el.parentNode!.insertBefore(clip, el);
+            clip.appendChild(el);
+            el.classList.add('lr-inner');
+            el.style.transition = 'transform 1.2s cubic-bezier(0.42,0,0.24,1)';
+            return clip;
+          }
+
+          // Collect atoms: words from text nodes, outerHTML from inline elements, BR sentinels
+          type Atom = { html: string; isBr: boolean };
+          const atoms: Atom[] = [];
+
+          children.forEach(node => {
+            if (node.nodeName === 'BR') {
+              atoms.push({ html: '', isBr: true });
+            } else if (node.nodeType === Node.TEXT_NODE) {
+              (node.textContent || '').split(/\s+/).filter(w => w.length > 0)
+                .forEach(w => atoms.push({ html: w, isBr: false }));
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              atoms.push({ html: (node as Element).outerHTML, isBr: false });
+            }
+          });
+
+          if (atoms.filter(a => !a.isBr).length === 0) return null;
+
+          // Render atoms into measurement spans
+          el.innerHTML = '';
+          const wrapEls: HTMLElement[] = [];
+
+          atoms.forEach((atom, i) => {
+            if (atom.isBr) {
+              const s = document.createElement('span');
+              s.className = 'lw-br';
+              s.style.cssText = 'display:block;height:0;font-size:0;line-height:0';
+              el.appendChild(s);
+              wrapEls.push(s);
+            } else {
+              const s = document.createElement('span');
+              s.className = 'lw';
+              s.style.display = 'inline-block';
+              s.innerHTML = atom.html;
+              el.appendChild(s);
+              wrapEls.push(s);
+              const next = atoms[i + 1];
+              if (next && !next.isBr) el.appendChild(document.createTextNode(' '));
+            }
+          });
+
+          // Group by offsetTop; BR sentinels force a new line group
           const lineGroups: string[][] = [];
           let currentTop = -9999;
           let group: string[] = [];
 
-          wordEls.forEach(w => {
+          wrapEls.forEach(w => {
+            if (w.classList.contains('lw-br')) {
+              if (group.length) { lineGroups.push(group); group = []; }
+              currentTop = -9999;
+              return;
+            }
             const top = w.offsetTop;
             if (Math.abs(top - currentTop) > 3) {
               if (group.length) lineGroups.push(group);
-              group = [w.textContent?.trim() ?? ''];
-              currentTop = top;
-            } else {
-              group.push(w.textContent?.trim() ?? '');
+              group = []; currentTop = top;
             }
+            group.push(w.innerHTML); // preserves inline HTML (spans, em, etc.)
           });
           if (group.length) lineGroups.push(group);
+          if (lineGroups.length === 0) return null;
 
-          // Rebuild with clip+inner wrappers
+          // Rebuild: one lr-clip / lr-inner per line
           el.innerHTML = '';
           lineGroups.forEach((words, i) => {
             const clip  = document.createElement('div');
             clip.className = 'lr-clip';
             const inner = document.createElement('div');
             inner.className = 'lr-inner';
-            inner.textContent = words.join(' ');
             inner.style.transition =
-              `transform 0.9s cubic-bezier(0.16,1,0.3,1) ${(i * 0.08).toFixed(2)}s`;
+              `transform 1.2s cubic-bezier(0.42,0,0.24,1) ${(i * 0.12).toFixed(2)}s`;
+            inner.innerHTML = words.join(' ');
             clip.appendChild(inner);
             el.appendChild(clip);
           });
 
-          return el; // observe the element itself
+          return el;
         }
 
-        // Wrap a rich-HTML element (has child elements) in a single clip
-        function wrapBlock(el: HTMLElement): HTMLElement {
-          const clip = document.createElement('div');
-          clip.className = 'lr-clip';
-          el.parentNode!.insertBefore(clip, el);
-          clip.appendChild(el);
-          el.classList.add('lr-inner');
-          el.style.transition = 'transform 0.9s cubic-bezier(0.16,1,0.3,1)';
-          return clip; // observe the clip wrapper
-        }
-
-        // Collect target headings — skip testimonials, nav, header, hero,
-        // and anything already inside a .reveal* ancestor (its parent handles reveal)
+        // h1, h2, h3 + body paragraphs — skip structural / chrome / reveal-ancestor elements
         const REVEAL_ANCESTOR = '.reveal, .reveal--left, .reveal--right, .reveal--scale';
         const targets = Array.from(
-          document.querySelectorAll<HTMLElement>('h2, h3')
+          document.querySelectorAll<HTMLElement>('h1, h2, h3, p')
         ).filter(el =>
           !el.closest('#testimonials') &&
           !el.closest('nav') &&
           !el.closest('header') &&
           !el.closest('#hero') &&
-          !el.closest(REVEAL_ANCESTOR)   // skip elements covered by existing system
+          !el.closest('.footer') &&
+          !el.closest(REVEAL_ANCESTOR)
         );
 
         const lineObserver = new IntersectionObserver(entries => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('lr-visible');
+              // Add lr-visible to each lr-clip child so the CSS
+              // .lr-clip.lr-visible .lr-inner selector fires correctly.
+              // When the element IS the lr-clip (block-fallback), add directly.
+              const clips = entry.target.querySelectorAll(':scope > .lr-clip');
+              if (clips.length > 0) {
+                clips.forEach(clip => clip.classList.add('lr-visible'));
+              } else {
+                entry.target.classList.add('lr-visible');
+              }
               lineObserver.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         // Fonts must be loaded so line measurements are accurate
         (document.fonts?.ready ?? Promise.resolve()).then(() => {
           targets.forEach(el => {
-            const hasHtmlChildren = Array.from(el.childNodes)
-              .some(n => n.nodeType === Node.ELEMENT_NODE);
-            const observed = hasHtmlChildren ? wrapBlock(el) : (splitLines(el), el);
-            lineObserver.observe(observed);
+            const observed = revealElement(el);
+            if (observed) lineObserver.observe(observed);
           });
         });
       }

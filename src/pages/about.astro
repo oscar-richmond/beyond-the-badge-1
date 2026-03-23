@@ -20,8 +20,8 @@ const base = import.meta.env.BASE_URL;
     <section class="about-hero">
       <h1 class="about-hero__text">
         We connect brands with the spaces where culture is created —
-        <em>art</em>,
-        <em>sport</em>, <em>entertainment</em> and <em>community</em>.
+        <em data-keyword="art">art</em>,
+        <em data-keyword="sport">sport</em>, <em data-keyword="entertainment">entertainment</em> and <em data-keyword="community">community</em>.
         Not to chase the moment, but to shape what comes next.
       </h1>
       <span class="about-hero__label">About Us</span>
@@ -30,23 +30,47 @@ const base = import.meta.env.BASE_URL;
     <!-- 2. Image pair with caption -->
     <section class="about-images">
       <div class="about-images__cta-col">
-        <a href="#contact" class="about-images__link">Get in touch →</a>
+        <a href="#contact" class="about-images__link"><span>Get in touch →</span></a>
       </div>
-      <div class="about-images__photos-col">
-        <div class="about-images__item">
-          <span class="about-images__num">(01)</span>
-          <div class="about-images__photo" style={`background-image: url('${base}about-1.jpg')`}></div>
+      <div class="about-images__photos-col" data-reveal-group>
+        <div class="about-images__item reveal--scale">
+          <span class="about-images__num">
+            <span class="about-images__num-inner is-visible" data-state="default">(01)</span>
+            <span class="about-images__num-inner" data-state="art">(03)</span>
+            <span class="about-images__num-inner" data-state="sport">(05)</span>
+            <span class="about-images__num-inner" data-state="entertainment">(07)</span>
+            <span class="about-images__num-inner" data-state="community">(09)</span>
+          </span>
+          <div class="about-images__photo" id="about-photo-1">
+            <div class="about-images__layer is-active" data-state="default" style={`background-image: url('${base}about-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-3.jpg')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-3.jpg')`}></div>
+          </div>
         </div>
-        <div class="about-images__item">
-          <span class="about-images__num">(02)</span>
-          <div class="about-images__photo" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+        <div class="about-images__item reveal--scale">
+          <span class="about-images__num">
+            <span class="about-images__num-inner is-visible" data-state="default">(02)</span>
+            <span class="about-images__num-inner" data-state="art">(04)</span>
+            <span class="about-images__num-inner" data-state="sport">(06)</span>
+            <span class="about-images__num-inner" data-state="entertainment">(08)</span>
+            <span class="about-images__num-inner" data-state="community">(10)</span>
+          </span>
+          <div class="about-images__photo" id="about-photo-2">
+            <div class="about-images__layer is-active" data-state="default" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-3.jpg')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-1.jpg')`}></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 3. Statement + tagline -->
     <section class="about-statement">
-      <div class="about-statement__watermark" aria-hidden="true">B</div>
+      <img class="about-statement__watermark" src={`${base}logo-monogram.png`} alt="" aria-hidden="true" />
       <div class="about-statement__inner">
         <p class="about-statement__text">
           We build emotional resonance, not just recognition. Through bold partnerships,
@@ -57,18 +81,29 @@ const base = import.meta.env.BASE_URL;
         </p>
         <p class="about-statement__tagline">
           <span class="about-tagline-plain">Less logo.</span>
-          <span class="about-tagline-italic"> More legacy.</span>
+          <span class="about-tagline-rotating-wrapper" aria-live="polite">
+            <span class="about-rotating-phrase">More legacy.</span>
+            <span class="about-rotating-phrase">More Partnerships.</span>
+            <span class="about-rotating-phrase">More Sponsorship.</span>
+          </span>
         </p>
       </div>
     </section>
 
     <!-- 4. Four-image strip -->
-    <section class="about-strip">
-      <div class="about-strip__grid">
-        <div class="about-strip__photo" style={`background-image: url('${base}about-1.jpg')`}></div>
-        <div class="about-strip__photo" style={`background-image: url('${base}about-2.jpg')`}></div>
-        <div class="about-strip__photo" style={`background-image: url('${base}hero-bg.jpg')`}></div>
-        <div class="about-strip__photo" style={`background-image: url('${base}about-3.jpg')`}></div>
+    <section class="about-image-grid" data-reveal-group>
+      <div class="about-image-grid__item reveal--scale">
+        <img src={`${base}about-1.jpg`} alt="" loading="lazy" />
+      </div>
+      <div class="about-image-grid__item reveal--scale">
+        <img src={`${base}about-2.jpg`} alt="" loading="lazy" />
+      </div>
+      <div class="about-image-grid__item reveal--scale">
+        <img src={`${base}hero-bg.jpg`} alt="" loading="lazy" />
+      </div>
+      <div class="about-image-grid__item about-image-grid__item--labeled reveal--scale">
+        <span class="about-image-grid__index">(01)</span>
+        <img src={`${base}about-3.jpg`} alt="" loading="lazy" />
       </div>
     </section>
 
@@ -78,7 +113,7 @@ const base = import.meta.env.BASE_URL;
         <div class="about-bio__content">
           <h2 class="about-bio__headline">
             After 25 years at the intersection of luxury, culture, and communication,
-            <em>Laura Wood</em> knows that a brand is not a badge—it's a feeling.
+            <em>Laura Wood </em>&nbsp;&nbsp;knows that a brand is not a badge—it's a feeling.
             Following a decade as Global Director at JLR, where she led a team of 70<sup>+</sup>
             to redefine brand experience &amp; culture.
           </h2>
@@ -88,7 +123,13 @@ const base = import.meta.env.BASE_URL;
             collaborations, her work is defined by one goal: helping brands stop marketing and
             start mattering.
           </p>
-          <a href="#contact" class="about-bio__btn">Read more +</a>
+          <a href="#contact" class="about-bio__btn"><span>Read more +</span></a>
+          <img
+            class="about-bio__portrait"
+            src={`${base}laura-portrait.png`}
+            alt="Laura Wood"
+            aria-hidden="true"
+          />
         </div>
         <span class="about-bio__label">The Founder</span>
       </div>
@@ -96,16 +137,33 @@ const base = import.meta.env.BASE_URL;
 
   </main>
 
-  <CTA />
   <ContactForm />
   <Footer />
 </BaseLayout>
 
-<!-- Global: active nav state -->
+<!-- Global: active nav state + about-page header overrides -->
 <style is:global>
   .header__nav-link--active {
     opacity: 1 !important;
     border-bottom: 1px solid currentColor;
+  }
+
+  /* ── About page: force logo + nav links to #052715 ── */
+  /* Covers both at-top (transparent) and scrolled states */
+  .page-about .header__logo-img,
+  .page-about .header:not(.at-top) .header__logo-img {
+    /* CSS filter approximating #052715 (very dark forest green) from a black source image */
+    filter: brightness(0) saturate(100%) invert(10%) sepia(60%) saturate(1200%) hue-rotate(118deg) brightness(0.75) !important;
+  }
+
+  .page-about .header__nav-link,
+  .page-about .header.at-top .header__nav-link {
+    color: #052715 !important;
+  }
+
+  .page-about .header__menu-line,
+  .page-about .header.at-top .header__menu-line {
+    background-color: #052715 !important;
   }
 </style>
 
@@ -123,7 +181,6 @@ const base = import.meta.env.BASE_URL;
     grid-template-columns: 1fr auto;
     align-items: start;
     gap: 32px;
-    border-bottom: 1px solid rgba(0, 79, 38, 0.12);
   }
 
   .about-hero__label {
@@ -144,10 +201,10 @@ const base = import.meta.env.BASE_URL;
     grid-column: 1;
     grid-row: 1;
     font-family: var(--font-serif);
-    font-size: clamp(28px, 3.5vw, 48px);
-    line-height: 1.35;
+    font-size: 36px;
+    line-height: 48px;
     font-weight: 400;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.05em;
     color: #1a3a2a;
     max-width: 900px;
     margin: 0;
@@ -155,9 +212,17 @@ const base = import.meta.env.BASE_URL;
 
   .about-hero__text em {
     font-style: italic;
-    text-decoration: underline;
+    font-weight: 500;
+    text-decoration: underline dotted;
     text-underline-offset: 5px;
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: 6%;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .about-hero__text em:hover {
+    color: #8CB7A0;
+    text-decoration-color: #8CB7A0;
+    cursor: default;
   }
 
   /* ── 2. Image pair ────────────────────────────────── */
@@ -165,7 +230,6 @@ const base = import.meta.env.BASE_URL;
     display: grid;
     grid-template-columns: 1fr 2fr;
     background: var(--color-cream);
-    border-bottom: 1px solid rgba(0, 79, 38, 0.12);
     min-height: 600px;
   }
 
@@ -173,6 +237,7 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     align-items: flex-end;
     padding: 60px var(--section-padding-x);
+    padding-bottom: 68px;
   }
 
   .about-images__link {
@@ -180,20 +245,47 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     gap: 8px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #1a3a2a;
-    border: 1px solid rgba(26, 58, 42, 0.35);
+    border: 1px solid #052715;
     padding: 12px 20px;
-    transition: background 0.3s ease, color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 0.4s ease,
+      letter-spacing 0.4s ease;
+  }
+
+  .about-images__link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #052715;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 1;
+  }
+
+  .about-images__link span {
+    position: relative;
+    z-index: 2;
+  }
+
+  .about-images__link:hover::before {
+    clip-path: inset(0 0% 0 0);
   }
 
   .about-images__link:hover {
-    background: #1a3a2a;
-    color: #fff;
-    opacity: 1;
+    color: #f5f0e8;
+    transform: translateX(3px);
+    letter-spacing: 0.11em;
+    border-color: #052715;
   }
 
   .about-images__photos-col {
@@ -210,43 +302,88 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-images__num {
-    font-family: var(--font-sans);
-    font-size: 11px;
-    font-weight: 300;
-    letter-spacing: 0.12em;
+    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
     color: #004f26;
     text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    height: 1.25em;
+    vertical-align: bottom;
+  }
+
+  .about-images__num-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(110%);
+    transition:
+      opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+  }
+
+  .about-images__num-inner.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* exiting state — slides up */
+  .about-images__num-inner.is-exiting {
+    opacity: 0;
+    transform: translateY(-110%);
+    transition:
+      opacity 0.4s cubic-bezier(0.55, 0, 1, 0.45),
+      transform 0.4s cubic-bezier(0.55, 0, 1, 0.45);
   }
 
   .about-images__photo {
+    position: relative;
     width: 100%;
-    flex: 1;
-    min-height: 440px;
+    height: 440px;
+    overflow: hidden;
+  }
+
+  /* Layered image system for keyword hover */
+  .about-images__layer {
+    position: absolute;
+    inset: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+  }
+
+  .about-images__layer.is-active {
+    opacity: 1;
+    transform: scale(1);
   }
 
   /* ── 3. Statement ─────────────────────────────────── */
   .about-statement {
     position: relative;
-    padding: 120px var(--section-padding-x);
+    padding: 120px var(--section-padding-x) 180px;
     background: var(--color-cream);
-    overflow: hidden;
-    border-bottom: 1px solid rgba(0, 79, 38, 0.12);
   }
 
   .about-statement__watermark {
     position: absolute;
-    right: -4%;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 42vw;
-    font-weight: 700;
-    color: rgba(0, 79, 38, 0.05);
-    line-height: 1;
+    right: var(--section-padding-x);
+    top: 16px;
+    width: 1135px;
+    height: auto;
+    opacity: 0.04;
+    filter: invert(1) sepia(1) saturate(2) hue-rotate(90deg) brightness(0.2);
     pointer-events: none;
     user-select: none;
     z-index: 0;
@@ -259,20 +396,23 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-statement__text {
-    font-family: var(--font-serif);
-    font-size: clamp(18px, 1.8vw, 24px);
-    line-height: 1.7;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 32px;
     font-weight: 400;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
     color: #1a3a2a;
-    margin: 0 0 64px;
+    margin: 0 0 120px;
   }
 
   .about-statement__tagline {
     margin: 0;
-    font-size: clamp(28px, 3vw, 40px);
+    font-size: 36px;
     line-height: 1.2;
     letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 0;
   }
 
   .about-tagline-plain {
@@ -282,38 +422,118 @@ const base = import.meta.env.BASE_URL;
     color: #1a3a2a;
   }
 
-  .about-tagline-italic {
+  /* Rotating wrapper — fixed height so layout never shifts */
+  .about-tagline-rotating-wrapper {
+    position: relative;
+    display: inline-block;
+    height: 1.25em;
+    min-width: 1px;
+    overflow: visible;
+    vertical-align: baseline;
+    top: 9px;
+  }
+
+  .about-rotating-phrase {
+    position: absolute;
+    left: 7px;
+    top: calc(50% - 2px);
     font-family: 'Awesome Serif Italic VAR', var(--font-serif);
     font-style: italic;
     font-weight: 500;
     font-variation-settings: "wght" 500, "HGHT" 1000;
     color: #8CB7A0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(calc(-50% + 10px));
   }
 
   /* ── 4. Image strip ───────────────────────────────── */
-  .about-strip {
-    background: var(--color-cream);
-  }
-
-  .about-strip__grid {
+  /* ── 4. Image grid ────────────────────────────────── */
+  .about-image-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
+    grid-template-columns: 1fr 1fr 2fr 1fr;
+    gap: 16px;
+    padding: 64px var(--section-padding-x);
+    /* No background — cream comes from .about-page so watermark shows through */
+    /* No position:relative — (01) label is relative to its own item */
   }
 
-  .about-strip__photo {
-    height: 420px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+  .about-image-grid__item {
+    height: 440px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-image-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Last item: label floats 16px above, left-aligned to the image */
+  .about-image-grid__item--labeled {
+    position: relative;
+    overflow: visible; /* allow label to show above the image */
+  }
+
+  .about-image-grid__item--labeled img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-image-grid__index {
+    position: absolute;
+    bottom: calc(100% + 16px);
+    left: 0;
+    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: #004f26;
+  }
+
+  /* Image grid responsive */
+  @media (max-width: 900px) {
+    .about-image-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .about-image-grid__item {
+      height: 280px;
+    }
+
+    /* 3rd item spans both columns to keep the 2x feel */
+    .about-image-grid__item:nth-child(4) {
+      grid-column: 1 / -1;
+      height: 320px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-image-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .about-image-grid__item {
+      height: 260px;
+    }
+
+    .about-image-grid__item:nth-child(4) {
+      grid-column: auto;
+      height: 260px;
+    }
   }
 
   /* ── 5. Founder bio ───────────────────────────────── */
   .about-bio {
     padding: 120px var(--section-padding-x);
     background: var(--color-cream);
-    border-top: 1px solid rgba(0, 79, 38, 0.12);
-    border-bottom: 1px solid rgba(0, 79, 38, 0.12);
   }
 
   .about-bio__inner {
@@ -324,7 +544,29 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-bio__content {
-    max-width: 700px;
+    max-width: 900px;
+    position: relative;
+  }
+
+  .about-bio__portrait {
+    position: absolute;
+    left: calc(100% + 192px);
+    top: 140px;
+    width: 312px;
+    height: auto;
+    transform: rotate(5deg) translateY(20px) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+    z-index: 10;
+  }
+
+  .about-bio__portrait.is-visible {
+    opacity: 1;
+    transform: rotate(5deg) translateY(0) scale(1);
   }
 
   .about-bio__headline {
@@ -334,15 +576,24 @@ const base = import.meta.env.BASE_URL;
     font-weight: 400;
     letter-spacing: -0.01em;
     color: #1a3a2a;
-    margin: 0 0 40px;
+    margin: 0 0 64px;
+    max-width: 900px;
   }
 
   .about-bio__headline em {
     font-style: italic;
-    text-decoration: underline;
+    text-decoration: underline dotted;
     text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-    color: inherit;
+    text-decoration-thickness: 6%;
+    color: #052715;
+    text-decoration-color: #052715;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .about-bio__headline em:hover {
+    color: #8CB7A0;
+    text-decoration-color: #8CB7A0;
+    cursor: default;
   }
 
   .about-bio__headline sup {
@@ -353,13 +604,12 @@ const base = import.meta.env.BASE_URL;
 
   .about-bio__body {
     font-family: var(--font-sans);
-    font-size: 15px;
-    line-height: 1.75;
+    font-size: 18px;
+    line-height: 32px;
     font-weight: 400;
+    letter-spacing: 0;
     color: #1a3a2a;
-    opacity: 0.7;
-    margin: 0 0 48px;
-    max-width: 620px;
+    margin: 0;
   }
 
   .about-bio__btn {
@@ -367,20 +617,49 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     gap: 8px;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.08em;
-    text-transform: none;
+    text-transform: uppercase;
     color: #1a3a2a;
-    border: 1px solid rgba(26, 58, 42, 0.35);
+    border: 1px solid #052715;
     padding: 12px 24px;
-    transition: background 0.3s ease, color 0.3s ease;
+    margin-top: 48px;
+    margin-bottom: 180px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 0.4s ease,
+      letter-spacing 0.4s ease;
+  }
+
+  .about-bio__btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #052715;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 1;
+  }
+
+  .about-bio__btn span {
+    position: relative;
+    z-index: 2;
+  }
+
+  .about-bio__btn:hover::before {
+    clip-path: inset(0 0% 0 0);
   }
 
   .about-bio__btn:hover {
-    background: #1a3a2a;
-    color: #ffffff;
-    opacity: 1;
+    color: #f5f0e8;
+    transform: translateX(3px);
+    border-color: #052715;
+    letter-spacing: 0.11em;
   }
 
   .about-bio__label {
@@ -390,9 +669,6 @@ const base = import.meta.env.BASE_URL;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #004f26;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    margin-top: 8px;
     white-space: nowrap;
   }
 
@@ -416,9 +692,7 @@ const base = import.meta.env.BASE_URL;
       min-height: 320px;
     }
 
-    .about-strip__photo {
-      height: 260px;
-    }
+
   }
 
   /* ── Responsive: Mobile 480px ─────────────────────── */
@@ -492,9 +766,14 @@ const base = import.meta.env.BASE_URL;
     .about-hero,
     .about-images__cta-col,
     .about-statement,
+    .about-image-grid,
     .about-bio {
       padding-left: calc((100vw - var(--content-max-width)) / 2 + 40px);
       padding-right: calc((100vw - var(--content-max-width)) / 2 + 40px);
+    }
+
+    .about-statement__watermark {
+      right: calc((100vw - var(--content-max-width)) / 2 + 40px);
     }
 
     .about-images__photos-col {
@@ -504,9 +783,126 @@ const base = import.meta.env.BASE_URL;
 </style>
 
 <script>
+  // Mark the About nav link as active
   document.querySelectorAll<HTMLAnchorElement>('.header__nav-link, .mobile-nav__link').forEach(link => {
     if (link.textContent?.trim() === 'About') {
       link.classList.add('header__nav-link--active');
     }
   });
+
+  // Add body class so about-page header overrides are scoped correctly
+  document.body.classList.add('page-about');
+
+  // Rotating tagline — same logic as home hero
+  const aboutPhrases = Array.from(
+    document.querySelectorAll<HTMLElement>('.about-rotating-phrase')
+  );
+  const aboutWrapper = document.querySelector<HTMLElement>('.about-tagline-rotating-wrapper');
+
+  if (aboutPhrases.length && aboutWrapper) {
+    // Size wrapper to widest phrase so layout stays stable
+    const maxWidth = Math.max(...aboutPhrases.map(p => p.offsetWidth));
+    aboutWrapper.style.width = `${maxWidth}px`;
+
+    let current = 0;
+
+    function showPhrase(el: HTMLElement) {
+      el.style.transition = 'opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(-50%)';
+    }
+
+    function exitPhrase(el: HTMLElement) {
+      el.style.transition = 'opacity 0.5s ease-in, transform 0.5s ease-in';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(calc(-50% - 10px))';
+    }
+
+    function resetPhrase(el: HTMLElement) {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(calc(-50% + 10px))';
+    }
+
+    // Show first phrase immediately
+    showPhrase(aboutPhrases[0]);
+
+    function cycle() {
+      const outEl = aboutPhrases[current];
+      const nextIdx = (current + 1) % aboutPhrases.length;
+      const inEl = aboutPhrases[nextIdx];
+
+      exitPhrase(outEl);
+      setTimeout(() => showPhrase(inEl), 100);
+      setTimeout(() => resetPhrase(outEl), 600);
+
+      current = nextIdx;
+    }
+
+    // Hold 2.5s, then cycle every 3.3s
+    setTimeout(() => {
+      cycle();
+      setInterval(cycle, 3300);
+    }, 2500);
+  }
+
+  // ── Keyword → image + number swap ───────────────────
+  const heroKeywords = document.querySelectorAll<HTMLElement>('.about-hero__text em[data-keyword]');
+  const photoContainers = document.querySelectorAll<HTMLElement>('.about-images__photo');
+  const numContainers  = document.querySelectorAll<HTMLElement>('.about-images__num');
+
+  function swapToKeyword(keyword: string) {
+    // Images
+    photoContainers.forEach(photo => {
+      photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
+        if (layer.dataset.state === 'default') layer.classList.remove('is-active');
+        else if (layer.dataset.state === keyword) layer.classList.add('is-active');
+      });
+    });
+
+    // Numbers — slot machine: current exits up, incoming enters from below
+    numContainers.forEach(num => {
+      const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
+      const next    = num.querySelector<HTMLElement>(`.about-images__num-inner[data-state="${keyword}"]`);
+      if (current) { current.classList.remove('is-visible'); current.classList.add('is-exiting'); }
+      if (next)    { next.classList.add('is-visible'); }
+      // Clean up exiting class once transition ends
+      if (current) current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
+    });
+  }
+
+  function resetToDefault() {
+    // Images
+    photoContainers.forEach(photo => {
+      photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
+        if (layer.dataset.state === 'default') layer.classList.add('is-active');
+        else layer.classList.remove('is-active');
+      });
+    });
+
+    // Numbers
+    numContainers.forEach(num => {
+      const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
+      const dflt    = num.querySelector<HTMLElement>('.about-images__num-inner[data-state="default"]');
+      if (current && current !== dflt) { current.classList.remove('is-visible'); current.classList.add('is-exiting'); }
+      if (dflt && !dflt.classList.contains('is-visible')) { dflt.classList.add('is-visible'); }
+      if (current && current !== dflt) current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
+    });
+  }
+
+  heroKeywords.forEach(em => {
+    em.addEventListener('mouseenter', () => swapToKeyword(em.dataset.keyword!));
+    em.addEventListener('mouseleave', resetToDefault);
+  });
+
+  // ── Laura Wood portrait reveal ───────────────────────
+  const lauraEm = document.querySelector<HTMLElement>('.about-bio__headline em');
+  const portrait = document.querySelector<HTMLElement>('.about-bio__portrait');
+
+  if (lauraEm && portrait) {
+    lauraEm.addEventListener('mouseenter', () => portrait.classList.add('is-visible'));
+    lauraEm.addEventListener('mouseleave', () => portrait.classList.remove('is-visible'));
+  }
 </script>
+
+

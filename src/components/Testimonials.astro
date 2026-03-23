@@ -89,7 +89,7 @@ const testimonials = [
   /* ─── Scroll track (outer, 300vh) ─── */
   .testimonials-track {
     height: 300vh;
-    background-color: #ffffff;
+    background-color: var(--color-cream);
     /* Needed so sticky child has correct offset parent */
     position: relative;
   }
@@ -99,7 +99,7 @@ const testimonials = [
     position: sticky;
     top: -24px;
     height: calc(100vh + 24px);
-    background-color: #ffffff;
+    background-color: var(--color-cream);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -113,7 +113,7 @@ const testimonials = [
   .testimonials__heading {
     font-family: var(--font-serif);
     font-size: 32px;
-    font-weight: 500;
+    font-weight: 400;
     color: var(--color-text-dark);
     margin: 0 0 28px;
   }
@@ -201,11 +201,16 @@ const testimonials = [
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transform: scale(1.04);
+    transition:
+      opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
   }
 
   .t-photo.is-active {
     opacity: 1;
+    transform: scale(1);
   }
 
   .t-photo img {
@@ -390,4 +395,142 @@ const testimonials = [
       if (hoverTimer) clearTimeout(hoverTimer);
     });
   });
+
+  // ─── Per-line text reveal for blockquotes ────────────────────────────────
+  const tReduced  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tMobile   = window.matchMedia('(max-width: 767px)').matches;
+
+  if (!tReduced && !tMobile) {
+
+    // Inject lr-clip CSS if BaseLayout hasn't already (e.g., desktop + no reduced motion)
+    if (!document.querySelector('.lr-clip')) {
+      const lcss = document.createElement('style');
+      lcss.textContent = `
+        .lr-clip{overflow:hidden;display:block}
+        .lr-inner{display:block;transform:translateY(110%);will-change:transform}
+        .lr-clip.lr-visible .lr-inner{transform:translateY(0)}
+      `;
+      document.head.appendChild(lcss);
+    }
+
+    // Split a blockquote into lr-clip line wrappers
+    function splitBq(bq: HTMLElement) {
+      const children = Array.from(bq.childNodes);
+      type Atom = { html: string; isBr: boolean };
+      const atoms: Atom[] = [];
+
+      children.forEach(node => {
+        if (node.nodeName === 'BR') {
+          atoms.push({ html: '', isBr: true });
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          (node.textContent || '').split(/\s+/).filter(w => w.length > 0)
+            .forEach(w => atoms.push({ html: w, isBr: false }));
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          atoms.push({ html: (node as Element).outerHTML, isBr: false });
+        }
+      });
+
+      if (atoms.filter(a => !a.isBr).length === 0) return;
+
+      // Render measurement spans
+      bq.innerHTML = '';
+      const wrapEls: HTMLElement[] = [];
+      atoms.forEach((atom, i) => {
+        if (atom.isBr) {
+          const s = document.createElement('span');
+          s.className = 'lw-br';
+          s.style.cssText = 'display:block;height:0;font-size:0;line-height:0';
+          bq.appendChild(s); wrapEls.push(s);
+        } else {
+          const s = document.createElement('span');
+          s.className = 'lw'; s.style.display = 'inline-block';
+          s.innerHTML = atom.html;
+          bq.appendChild(s); wrapEls.push(s);
+          const next = atoms[i + 1];
+          if (next && !next.isBr) bq.appendChild(document.createTextNode(' '));
+        }
+      });
+
+      // Group by offsetTop
+      const lineGroups: string[][] = [];
+      let currentTop = -9999; let group: string[] = [];
+      wrapEls.forEach(w => {
+        if (w.classList.contains('lw-br')) {
+          if (group.length) { lineGroups.push(group); group = []; }
+          currentTop = -9999; return;
+        }
+        const top = w.offsetTop;
+        if (Math.abs(top - currentTop) > 3) {
+          if (group.length) lineGroups.push(group);
+          group = []; currentTop = top;
+        }
+        group.push(w.innerHTML);
+      });
+      if (group.length) lineGroups.push(group);
+      if (lineGroups.length === 0) return;
+
+      // Rebuild: one lr-clip/lr-inner per line
+      bq.innerHTML = '';
+      lineGroups.forEach((words, i) => {
+        const clip  = document.createElement('div');
+        clip.className = 'lr-clip';
+        const inner = document.createElement('div');
+        inner.className = 'lr-inner';
+        inner.style.transition =
+          `transform 0.85s cubic-bezier(0.42,0,0.24,1) ${(i * 0.09).toFixed(2)}s`;
+        inner.innerHTML = words.join(' ');
+        clip.appendChild(inner);
+        bq.appendChild(clip);
+      });
+    }
+
+    // Reveal all lr-clip lines inside a t-quote element
+    function revealQuote(quoteEl: HTMLElement) {
+      quoteEl.querySelectorAll<HTMLElement>('blockquote > .lr-clip')
+        .forEach(clip => clip.classList.add('lr-visible'));
+    }
+
+    // Reset (hide) all lr-clip lines inside a t-quote element
+    function resetQuote(quoteEl: HTMLElement) {
+      quoteEl.querySelectorAll<HTMLElement>('blockquote > .lr-clip')
+        .forEach(clip => clip.classList.remove('lr-visible'));
+    }
+
+    // Split all blockquotes once fonts are ready
+    (document.fonts?.ready ?? Promise.resolve()).then(() => {
+      document.querySelectorAll<HTMLElement>('.t-quote blockquote')
+        .forEach(bq => splitBq(bq));
+
+      // Reveal initial active quote when the section first enters view
+      const initialQuote = document.querySelector<HTMLElement>('.t-quote.is-active');
+      if (initialQuote) {
+        const trackEl = document.getElementById('testimonials');
+        const sectionObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              revealQuote(initialQuote);
+              sectionObserver.disconnect();
+            }
+          });
+        }, { threshold: 0.1 });
+        if (trackEl) sectionObserver.observe(trackEl);
+      }
+
+      // Watch for is-active changes on t-quote elements to trigger reveal/reset
+      const quoteEls = document.querySelectorAll<HTMLElement>('.t-quote');
+      const mutation = new MutationObserver(muts => {
+        muts.forEach(m => {
+          const el = m.target as HTMLElement;
+          if (!el.classList.contains('t-quote')) return;
+          if (el.classList.contains('is-active')) {
+            // Slight delay to let the crossfade opacity transition start first
+            setTimeout(() => revealQuote(el), 80);
+          } else {
+            resetQuote(el);
+          }
+        });
+      });
+      quoteEls.forEach(q => mutation.observe(q, { attributes: true, attributeFilter: ['class'] }));
+    });
+  }
 </script>

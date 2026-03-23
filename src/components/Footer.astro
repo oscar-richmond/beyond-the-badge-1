@@ -1,24 +1,31 @@
 ---
+const base = import.meta.env.BASE_URL + '/';
 const navItems = [
-  { href: '#about', label: 'About' },
-  { href: '#services', label: 'Services' },
-  { href: '#process', label: 'Process' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/terms', label: 'Terms & Conditions' },
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: 'https://www.instagram.com', label: 'Instagram' },
 ];
 ---
 
 <footer class="footer">
+  <img
+    src={`${base}logo-monogram.png`}
+    alt=""
+    aria-hidden="true"
+    class="footer__watermark"
+  />
+
   <div class="footer__inner container">
     <div class="footer__top">
-      <div class="footer__brand reveal">
-        <img src={`${import.meta.env.BASE_URL}/logo-monogram.png`} alt="Beyond the Badge" class="footer__logo-img" />
+      <div class="footer__brand">
+        <img src={`${base}logo-full.png`} alt="Beyond the Badge" class="footer__logo-img" />
       </div>
     </div>
 
-    <div class="footer__bottom" data-reveal-group>
-      <p class="footer__tagline reveal">Cultural relevance isn't a logo.</p>
+    <div class="footer__bottom">
+      <a href="mailto:info@beyondthebadge.agency" class="footer__nav-link">info@beyondthebadge.agency</a>
 
-      <nav class="footer__nav reveal" aria-label="Footer navigation">
+      <nav class="footer__nav" aria-label="Footer navigation">
         <ul class="footer__nav-list">
           {navItems.map((item) => (
             <li>
@@ -28,116 +35,11 @@ const navItems = [
         </ul>
       </nav>
 
-      <div class="footer__contact reveal">
-        <a href="tel:+441768881430" class="footer__contact-link">01768 881430</a>
-        <a href="mailto:info@beyondthebadge.agency" class="footer__contact-link">info@beyondthebadge.agency</a>
+      <div class="footer__legal">
+        <span>© Beyond The Badge 2026</span>
+        <span class="footer__legal-sep">·</span>
+        <a href="https://selfhood-studios.com/" target="_blank" rel="noopener noreferrer" class="footer__nav-link footer__legal-link">Site by Selfhood Studios</a>
       </div>
     </div>
   </div>
 </footer>
-
-<style>
-  .footer {
-    background-color: var(--color-forest);
-    padding: 80px 0 40px;
-  }
-
-  .footer__inner {
-    display: flex;
-    flex-direction: column;
-    gap: 80px;
-  }
-
-  .footer__top {
-    display: flex;
-    justify-content: center;
-    padding: 60px 0;
-  }
-
-  .footer__brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .footer__logo-img {
-    width: 120px;
-    height: auto;
-    opacity: 0.8;
-  }
-
-  .footer__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 24px;
-    border-top: 1px solid var(--color-divider-dark);
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .footer__tagline {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: var(--color-text-cream);
-    opacity: 0.6;
-  }
-
-  .footer__nav-list {
-    display: flex;
-    gap: 24px;
-  }
-
-  .footer__nav-link {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: var(--color-text-cream);
-    letter-spacing: 0.02em;
-    transition: color var(--transition-base);
-  }
-
-  .footer__nav-link:hover {
-    opacity: 1;
-    color: var(--color-cream);
-  }
-
-  .footer__contact {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-  }
-
-  .footer__contact-link {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: var(--color-text-cream);
-    transition: color var(--transition-base);
-  }
-
-  .footer__contact-link:hover {
-    opacity: 1;
-    color: var(--color-cream);
-  }
-
-  @media (max-width: 768px) {
-    .footer__bottom {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .footer__contact {
-      align-items: center;
-    }
-
-    .footer__nav-list {
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-  }
-</style>
