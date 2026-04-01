@@ -7,53 +7,71 @@ const marqueeItems = [
   "Cultural Strategy",
   "Talent"
 ];
+
+const base = import.meta.env.BASE_URL;
 ---
 
+<!--
+  CTA: two distinct blocks —
+  1. The image-over-marquee section (original appearance)
+  2. A full-width bordered bar sitting underneath it
+-->
+
+<!-- ① Image over rolling text -->
 <section class="cta" id="cta">
-  <div class="cta__marquee-container">
+  <div class="cta__marquee-container" aria-hidden="true">
     <div class="cta__marquee">
       <div class="cta__marquee-track">
         {marqueeItems.map(item => <span class="cta__marquee-item">{item}</span>)}
-        {marqueeItems.map(item => <span class="cta__marquee-item" aria-hidden="true">{item}</span>)}
-        {marqueeItems.map(item => <span class="cta__marquee-item" aria-hidden="true">{item}</span>)}
+        {marqueeItems.map(item => <span class="cta__marquee-item">{item}</span>)}
+        {marqueeItems.map(item => <span class="cta__marquee-item">{item}</span>)}
       </div>
     </div>
   </div>
 
-  <div class="cta__center-card reveal">
-    <img src={`${import.meta.env.BASE_URL}/cta-image.png`} alt="Campaign image" class="cta__image" />
-    <div class="cta__card-text">
-      <span class="cta__card-title">100 DAYS OF NOTHING</span>
-      <p class="cta__card-desc">Campaign to build momentum<br />within target audience</p>
-    </div>
+  <div class="cta__image-wrap reveal">
+    <img src={`${base}/cta-image.png`} alt="Campaign image" class="cta__image" />
   </div>
 </section>
 
+<!-- ② CTA bar — sits below the section, aligned to page margins -->
+<div class="cta__bar-outer container">
+  <div class="cta__bar">
+    <p class="cta__bar-text">Let's build something together.</p>
+    <a href={`${base}contact`} class="cta__bar-btn">
+      <span class="cta__bar-btn-label">Get in touch</span>
+      <svg class="cta__bar-btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
 <style>
+  /* ── ① Section: image centred over scrolling marquee ─────────────────── */
   .cta {
     position: relative;
     background-color: var(--color-cream);
-    padding: 100px 0 180px;
-    overflow: hidden;
+    padding-top: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 80vh;
   }
 
+  /* Marquee — absolute, fills section, behind image */
   .cta__marquee-container {
     position: absolute;
-    width: 100%;
     inset: 0;
     display: flex;
     align-items: center;
     z-index: 0;
-    margin-top: -56px;
+    margin-top: -24px;
   }
 
   .cta__marquee {
     width: 100%;
-    overflow: hidden;
+    overflow-x: clip;
     white-space: nowrap;
   }
 
@@ -78,13 +96,10 @@ const marqueeItems = [
     opacity: 0.3;
   }
 
-  .cta__center-card {
+  /* Image — centred above the marquee */
+  .cta__image-wrap {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
 
   .cta__image {
@@ -94,35 +109,114 @@ const marqueeItems = [
     display: block;
   }
 
-  .cta__card-text {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding-top: 20px;
+  /* ── ② Bar — sits below the section ───────────────────────────────────── */
+  .cta__bar-outer {
+    position: relative;
+    z-index: 2;
+    background-color: var(--color-cream);
+    padding-bottom: 80px;
+    margin-top: -112px;
+    box-sizing: border-box;
+  }
+
+  /* ── Bar ─────────────────────────────────────────────────────────────── */
+  .cta__bar {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 85px;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: max-content;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 28px;
+    border: 1px solid rgba(26, 58, 42, 0.18);
+    background: transparent;
+    box-sizing: border-box;
+    cursor: pointer;
+    /* Border transition on hover */
+    transition: border-color 0.6s cubic-bezier(0.77, 0, 0.175, 1);
   }
 
-  .cta__card-title {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--color-forest);
+  /* Sweep fill — expands left→right on hover */
+  .cta__bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #052715;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 0;
   }
 
-  .cta__card-desc {
+  .cta__bar:hover {
+    border-color: #052715;
+  }
+
+  .cta__bar:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* ── Bar text ─────────────────────────────────────────────────────────── */
+  .cta__bar-text {
+    position: relative;
+    z-index: 1;
     font-family: var(--font-serif);
-    font-size: 1.1rem;
-    line-height: 1.4;
+    font-size: 1.7rem;
+    font-weight: 400;
     color: var(--color-forest);
+    margin: 0;
+    transition: color 0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
+  }
+
+  .cta__bar:hover .cta__bar-text {
+    color: var(--color-cream);
+  }
+
+  /* ── Button ───────────────────────────────────────────────────────────── */
+  .cta__bar-btn {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    height: calc(85px - 32px);
+    margin: 16px 16px 16px 0;
+    padding: 0 24px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-cream);
+    background-color: #052715;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition:
+      background-color 0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.1s,
+      border-color     0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.1s,
+      color            0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
+  }
+
+  /* On bar hover: button inverts to outlined cream */
+  .cta__bar:hover .cta__bar-btn {
+    background-color: transparent;
+    border-color: rgba(245, 240, 232, 0.55);
+    color: var(--color-cream);
+  }
+
+  .cta__bar-btn-icon {
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1) 0.15s;
+  }
+
+  .cta__bar:hover .cta__bar-btn-icon {
+    transform: translateX(6px);
   }
 
   @keyframes marquee {
-    0% { transform: translateX(0); }
+    0%   { transform: translateX(0); }
     100% { transform: translateX(calc(-33.33% - 13.3px)); }
   }
 </style>

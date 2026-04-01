@@ -18,10 +18,10 @@ const base = import.meta.env.BASE_URL;
 
     <!-- 1. Hero -->
     <section class="about-hero">
-      <h1 class="about-hero__text">
+      <h1 class="about-hero__text" data-reveal-delay="-0.4">
         We connect brands with the spaces where culture is created —
         <em data-keyword="art">art</em>,
-        <em data-keyword="sport">sport</em>, <em data-keyword="entertainment">entertainment</em> and <em data-keyword="community">community</em>.
+        <em data-keyword="sport">sport</em>, <em data-keyword="film">film</em>, <em data-keyword="entertainment">entertainment</em>, <em data-keyword="adventure">adventure</em> and <em data-keyword="community">community</em>.
         Not to chase the moment, but to shape what comes next.
       </h1>
       <span class="about-hero__label">About Us</span>
@@ -33,35 +33,43 @@ const base = import.meta.env.BASE_URL;
         <a href="#contact" class="about-images__link"><span>Get in touch →</span></a>
       </div>
       <div class="about-images__photos-col" data-reveal-group>
-        <div class="about-images__item reveal--scale">
+        <div class="about-images__item reveal--scale" data-reveal-immediate>
           <span class="about-images__num">
             <span class="about-images__num-inner is-visible" data-state="default">(01)</span>
             <span class="about-images__num-inner" data-state="art">(03)</span>
             <span class="about-images__num-inner" data-state="sport">(05)</span>
-            <span class="about-images__num-inner" data-state="entertainment">(07)</span>
-            <span class="about-images__num-inner" data-state="community">(09)</span>
+            <span class="about-images__num-inner" data-state="film">(07)</span>
+            <span class="about-images__num-inner" data-state="entertainment">(09)</span>
+            <span class="about-images__num-inner" data-state="adventure">(11)</span>
+            <span class="about-images__num-inner" data-state="community">(13)</span>
           </span>
           <div class="about-images__photo" id="about-photo-1">
-            <div class="about-images__layer is-active" data-state="default" style={`background-image: url('${base}about-1.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-1.jpg')`}></div>
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-3.jpg')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-2.jpg')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-3.jpg')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-3.jpg')`}></div>
           </div>
         </div>
-        <div class="about-images__item reveal--scale">
+        <div class="about-images__item reveal--scale" data-reveal-immediate>
           <span class="about-images__num">
             <span class="about-images__num-inner is-visible" data-state="default">(02)</span>
             <span class="about-images__num-inner" data-state="art">(04)</span>
             <span class="about-images__num-inner" data-state="sport">(06)</span>
-            <span class="about-images__num-inner" data-state="entertainment">(08)</span>
-            <span class="about-images__num-inner" data-state="community">(10)</span>
+            <span class="about-images__num-inner" data-state="film">(08)</span>
+            <span class="about-images__num-inner" data-state="entertainment">(10)</span>
+            <span class="about-images__num-inner" data-state="adventure">(12)</span>
+            <span class="about-images__num-inner" data-state="community">(14)</span>
           </span>
           <div class="about-images__photo" id="about-photo-2">
-            <div class="about-images__layer is-active" data-state="default" style={`background-image: url('${base}hero-bg.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}hero-bg.jpg')`}></div>
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-2.jpg')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-3.jpg')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-1.jpg')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-1.jpg')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-1.jpg')`}></div>
           </div>
         </div>
@@ -72,7 +80,7 @@ const base = import.meta.env.BASE_URL;
     <section class="about-statement">
       <img class="about-statement__watermark" src={`${base}logo-monogram.png`} alt="" aria-hidden="true" />
       <div class="about-statement__inner">
-        <p class="about-statement__text">
+        <p class="about-statement__text" data-reveal-delay="0.3">
           We build emotional resonance, not just recognition. Through bold partnerships,
           authentic storytelling, cultural programming, and meaningful conversations with
           talent and communities, we help brands earn their place in culture — not by
@@ -113,8 +121,8 @@ const base = import.meta.env.BASE_URL;
         <div class="about-bio__content">
           <h2 class="about-bio__headline">
             After 25 years at the intersection of luxury, culture, and communication,
-            <em>Laura Wood </em>&nbsp;&nbsp;knows that a brand is not a badge—it's a feeling.
-            Following a decade as Global Director at JLR, where she led a team of 70<sup>+</sup>
+            <em>Laura Wood</em> knows that a brand is not a <span style="white-space:nowrap">badge—it's</span> a feeling.
+            Following a decade as Global Director at JLR, where she led a team of <span style="white-space:nowrap">70<sup>+</sup></span>
             to redefine brand experience &amp; culture.
           </h2>
           <p class="about-bio__body">
@@ -201,12 +209,12 @@ const base = import.meta.env.BASE_URL;
     grid-column: 1;
     grid-row: 1;
     font-family: var(--font-serif);
-    font-size: 36px;
-    line-height: 48px;
+    font-size: clamp(20px, 2.4vw + 8px, 36px);
+    line-height: clamp(28px, 3.2vw + 12px, 48px);
     font-weight: 400;
     letter-spacing: 0.05em;
     color: #1a3a2a;
-    max-width: 900px;
+    max-width: 952px;
     margin: 0;
   }
 
@@ -392,7 +400,7 @@ const base = import.meta.env.BASE_URL;
   .about-statement__inner {
     position: relative;
     z-index: 1;
-    max-width: 820px;
+    max-width: 952px;
   }
 
   .about-statement__text {
@@ -403,6 +411,7 @@ const base = import.meta.env.BASE_URL;
     letter-spacing: 0;
     color: #1a3a2a;
     margin: 0 0 120px;
+    max-width: 952px;
   }
 
   .about-statement__tagline {
@@ -544,7 +553,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-bio__content {
-    max-width: 900px;
+    max-width: 952px;
     position: relative;
   }
 
@@ -571,23 +580,28 @@ const base = import.meta.env.BASE_URL;
 
   .about-bio__headline {
     font-family: var(--font-serif);
-    font-size: clamp(22px, 2.5vw, 36px);
-    line-height: 1.45;
+    font-size: clamp(20px, 2.4vw + 8px, 36px);
+    line-height: clamp(28px, 3.2vw + 12px, 48px);
     font-weight: 400;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.05em;
     color: #1a3a2a;
     margin: 0 0 64px;
-    max-width: 900px;
+    max-width: 952px;
+    text-wrap: pretty;
+    hyphens: none;
   }
 
   .about-bio__headline em {
     font-style: italic;
+    font-weight: 500;
     text-decoration: underline dotted;
-    text-underline-offset: 4px;
+    text-underline-offset: 5px;
     text-decoration-thickness: 6%;
     color: #052715;
     text-decoration-color: #052715;
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
+    /* Spacing survives the line-reveal DOM rewrite; &nbsp; entities do not */
+    padding-right: 0.21em;
   }
 
   .about-bio__headline em:hover {
@@ -597,7 +611,9 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-bio__headline sup {
+    font-family: 'Inter', var(--font-sans);
     font-size: 0.55em;
+    font-weight: 600;
     vertical-align: super;
     line-height: 0;
   }
@@ -610,6 +626,7 @@ const base = import.meta.env.BASE_URL;
     letter-spacing: 0;
     color: #1a3a2a;
     margin: 0;
+    max-width: 952px;
   }
 
   .about-bio__btn {
@@ -664,11 +681,11 @@ const base = import.meta.env.BASE_URL;
 
   .about-bio__label {
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 400;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #004f26;
+    color: #1a3a2a;
     white-space: nowrap;
   }
 
@@ -846,41 +863,37 @@ const base = import.meta.env.BASE_URL;
     }, 2500);
   }
 
-  // ── Keyword → image + number swap ───────────────────
-  const heroKeywords = document.querySelectorAll<HTMLElement>('.about-hero__text em[data-keyword]');
+  // ── Keyword → image + number swap ─────────────────────────────────────
+  // Use event delegation on the stable h1 parent — NOT direct listeners on
+  // em nodes. The BaseLayout line-reveal script may rewrite em nodes after
+  // document.fonts.ready, which would destroy any directly-attached listeners.
+  const heroText       = document.querySelector<HTMLElement>('.about-hero__text');
   const photoContainers = document.querySelectorAll<HTMLElement>('.about-images__photo');
   const numContainers  = document.querySelectorAll<HTMLElement>('.about-images__num');
 
   function swapToKeyword(keyword: string) {
-    // Images
     photoContainers.forEach(photo => {
       photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
         if (layer.dataset.state === 'default') layer.classList.remove('is-active');
         else if (layer.dataset.state === keyword) layer.classList.add('is-active');
       });
     });
-
-    // Numbers — slot machine: current exits up, incoming enters from below
     numContainers.forEach(num => {
       const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
       const next    = num.querySelector<HTMLElement>(`.about-images__num-inner[data-state="${keyword}"]`);
       if (current) { current.classList.remove('is-visible'); current.classList.add('is-exiting'); }
       if (next)    { next.classList.add('is-visible'); }
-      // Clean up exiting class once transition ends
       if (current) current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
     });
   }
 
   function resetToDefault() {
-    // Images
     photoContainers.forEach(photo => {
       photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
         if (layer.dataset.state === 'default') layer.classList.add('is-active');
         else layer.classList.remove('is-active');
       });
     });
-
-    // Numbers
     numContainers.forEach(num => {
       const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
       const dflt    = num.querySelector<HTMLElement>('.about-images__num-inner[data-state="default"]');
@@ -890,18 +903,36 @@ const base = import.meta.env.BASE_URL;
     });
   }
 
-  heroKeywords.forEach(em => {
-    em.addEventListener('mouseenter', () => swapToKeyword(em.dataset.keyword!));
-    em.addEventListener('mouseleave', resetToDefault);
-  });
+  // Delegated: listen on the h1, check if the event target is a keyword em
+  if (heroText) {
+    heroText.addEventListener('mouseover', (e) => {
+      const em = (e.target as Element).closest<HTMLElement>('em[data-keyword]');
+      if (em && heroText.contains(em)) swapToKeyword(em.dataset.keyword!);
+    });
+    heroText.addEventListener('mouseout', (e) => {
+      const em = (e.target as Element).closest<HTMLElement>('em[data-keyword]');
+      // Only reset when leaving a keyword em (not moving between child nodes of it)
+      if (em && !em.contains(e.relatedTarget as Node)) resetToDefault();
+    });
+  }
 
-  // ── Laura Wood portrait reveal ───────────────────────
-  const lauraEm = document.querySelector<HTMLElement>('.about-bio__headline em');
-  const portrait = document.querySelector<HTMLElement>('.about-bio__portrait');
+  // ── Laura Wood portrait reveal ──────────────────────────────────────────
+  // Delegate on the bio content wrapper for the same reason
+  const bioContent = document.querySelector<HTMLElement>('.about-bio__content');
+  const portrait   = document.querySelector<HTMLElement>('.about-bio__portrait');
 
-  if (lauraEm && portrait) {
-    lauraEm.addEventListener('mouseenter', () => portrait.classList.add('is-visible'));
-    lauraEm.addEventListener('mouseleave', () => portrait.classList.remove('is-visible'));
+  if (bioContent && portrait) {
+    bioContent.addEventListener('mouseover', (e) => {
+      if ((e.target as Element).closest('.about-bio__headline em')) {
+        portrait.classList.add('is-visible');
+      }
+    });
+    bioContent.addEventListener('mouseout', (e) => {
+      const em = (e.target as Element).closest('.about-bio__headline em');
+      if (em && !em.contains(e.relatedTarget as Node)) {
+        portrait.classList.remove('is-visible');
+      }
+    });
   }
 </script>
 

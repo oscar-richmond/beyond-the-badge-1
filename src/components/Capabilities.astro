@@ -1,0 +1,337 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const capabilities = [
+  {
+    key: 'brand-partnerships',
+    label: 'Meaningful Partnerships',
+    img: 'cap-02.jpg',
+    description: 'Connections that move people and shift cultural narratives.',
+  },
+  {
+    key: 'cultural-strategy',
+    label: 'Cultural Presence',
+    img: 'cap-03.jpg',
+    description: 'Showing up in art, sport, and entertainment with a point of view — and a contribution.',
+  },
+  {
+    key: 'art-direction',
+    label: 'Legacy Building',
+    img: 'cap-04.jpg',
+    description: 'Designing deep-rooted social agendas and purpose strategies that endure.',
+  },
+  {
+    key: 'talent-relations',
+    label: 'Authentic Storytelling',
+    img: 'cap-05.jpg',
+    description: 'Moving from loud to considered — every touchpoint deliberate.',
+  },
+  {
+    key: 'event-production',
+    label: 'Brand Experience',
+    img: 'cap-06.jpg',
+    description: 'Transforming global brand moments through bold concept creation.',
+  },
+  {
+    key: 'community',
+    label: 'Lifestyle & Licensing',
+    img: 'cap-07.jpg',
+    description: 'Curating narrative-driven collections and drops designed to tell a story.',
+  },
+];
+---
+
+<section class="capabilities-section" id="capabilities">
+
+  <!-- Background image layers — crossfades via GSAP -->
+  <div
+    class="cap-bg"
+    data-cap="default"
+    style={`background-image: url('${base}images/capabilities/cap-01.jpg')`}
+  ></div>
+  {capabilities.map((c) => (
+    <div
+      class="cap-bg"
+      data-cap={c.key}
+      style={`background-image: url('${base}images/capabilities/${c.img}')`}
+    ></div>
+  ))}
+
+  <!-- Dark scrim -->
+  <div class="cap-overlay"></div>
+
+  <!-- ── Content ─────────────────────────────────────────────────────────── -->
+  <div class="cap-content container">
+
+    <!-- Eyebrow row -->
+    <div class="cap-header">
+      <p class="cap-eyebrow">The Categories We're Redefining</p>
+      <hr class="cap-rule" />
+    </div>
+
+    <!-- Two-column body -->
+    <div class="cap-body">
+
+      <!-- Left: description text (bottom-pinned) -->
+      <div class="cap-left">
+        <p class="cap-description" id="capDescription"></p>
+      </div>
+
+      <!-- Right: capability list -->
+      <ul class="cap-list" id="capList">
+        {capabilities.map((c) => (
+          <li
+            class="cap-item"
+            data-cap={c.key}
+            data-desc={c.description}
+          >
+            {c.label}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+  </div>
+
+</section>
+
+<style>
+  /* ── Section ────────────────────────────────────────────────────────────── */
+  .capabilities-section {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #0a1a14;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Background layers ──────────────────────────────────────────────────── */
+  .cap-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.04);
+    z-index: 0;
+    transition:
+      opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+  }
+
+  .cap-bg[data-cap="default"],
+  .cap-bg.is-active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ── Scrim ──────────────────────────────────────────────────────────────── */
+  .cap-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.48);
+    z-index: 1;
+  }
+
+  /* ── Content wrapper ────────────────────────────────────────────────────── */
+  .cap-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(80px, 12vh, 140px);
+    padding-bottom: clamp(80px, 12vh, 140px);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Eyebrow row ────────────────────────────────────────────────────────── */
+  .cap-header {
+    margin-bottom: 0;
+  }
+
+  .cap-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(248, 242, 237, 0.5);
+    margin: 0 0 18px 0;
+  }
+
+  .cap-rule {
+    border: none;
+    border-top: 1px solid rgba(248, 242, 237, 0.2);
+    margin: 0 0 0 0;
+  }
+
+  /* ── Body grid ──────────────────────────────────────────────────────────── */
+  .cap-body {
+    display: grid;
+    grid-template-columns: 28% 1fr;
+    gap: 0;
+    /* Pin description to bottom of the left column */
+    align-items: end;
+    min-height: 55vh;
+    padding-top: 40px;
+  }
+
+  /* ── Left: description ──────────────────────────────────────────────────── */
+  .cap-left {
+    align-self: end;
+    padding-bottom: 4px;
+  }
+
+  .cap-description {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: rgba(248, 242, 237, 0.55);
+    max-width: 240px;
+    margin: 0;
+    min-height: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+
+  .cap-description.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Right: capability list ─────────────────────────────────────────────── */
+  .cap-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-self: center;
+    /* Items are right-aligned */
+    text-align: right;
+  }
+
+  .cap-item {
+    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-size: clamp(1.9rem, 3.2vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #f8f2ed;
+    padding: 0.2em 0;
+    opacity: 0.35;
+    cursor: default;
+    display: block;
+    transition: opacity 0.35s ease, color 0.35s ease;
+    will-change: opacity;
+  }
+
+  .cap-list.has-hover .cap-item:not(.is-active) {
+    opacity: 0.2;
+  }
+
+  .cap-item.is-active {
+    opacity: 1;
+    color: #ffffff;
+  }
+
+  /* ── Mobile ─────────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .cap-body {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      gap: 48px;
+    }
+
+    .cap-left {
+      order: 2;
+      align-self: auto;
+    }
+
+    .cap-list {
+      order: 1;
+      text-align: left;
+    }
+
+    .cap-item {
+      font-size: clamp(2rem, 6vw, 3rem);
+      opacity: 0.5;
+    }
+
+    .cap-item.is-active {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  const list        = document.getElementById('capList') as HTMLElement | null;
+  const descEl      = document.getElementById('capDescription') as HTMLElement | null;
+  const bgs         = document.querySelectorAll<HTMLElement>('.cap-bg');
+
+  if (!list) throw new Error('Capabilities list not found');
+
+  const items = list.querySelectorAll<HTMLElement>('.cap-item');
+  let activeItem: HTMLElement | null = null;
+  let descTimer: ReturnType<typeof setTimeout> | null = null;
+
+  /* ── Background crossfade (CSS class toggle — mirrors About page) ─────── */
+  function activateBg(key: string | null): void {
+    const target = key ?? 'default';
+    bgs.forEach((bg) => {
+      bg.classList.toggle('is-active', bg.dataset.cap === target);
+    });
+  }
+
+  /* ── Description text swap ────────────────────────────────────────────── */
+  function setDescription(text: string | null): void {
+    if (!descEl) return;
+
+    if (descTimer) clearTimeout(descTimer);
+
+    if (!text) {
+      descEl.classList.remove('is-visible');
+      descTimer = setTimeout(() => { descEl.textContent = ''; }, 450);
+      return;
+    }
+
+    // Fade out → swap text → fade back in
+    descEl.classList.remove('is-visible');
+    descTimer = setTimeout(() => {
+      descEl.textContent = text;
+      // Force reflow so transition fires
+      void descEl.offsetHeight;
+      descEl.classList.add('is-visible');
+    }, 160);
+  }
+
+  /* ── Item hover ───────────────────────────────────────────────────────── */
+  items.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+      if (activeItem === item) return;
+
+      // Deactivate previous
+      activeItem?.classList.remove('is-active');
+
+      // Activate current
+      item.classList.add('is-active');
+      activeItem = item;
+
+      list.classList.add('has-hover');
+      activateBg(item.dataset.cap ?? null);
+      setDescription(item.dataset.desc ?? null);
+    });
+  });
+
+  /* ── List leave ───────────────────────────────────────────────────────── */
+  list.addEventListener('mouseleave', () => {
+    activeItem?.classList.remove('is-active');
+    activeItem = null;
+    list.classList.remove('has-hover');
+    activateBg(null);
+    setDescription(null);
+  });
+</script>

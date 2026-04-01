@@ -1,0 +1,126 @@
+---
+import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Contact — Beyond the Badge"
+  description="Get in touch with Beyond the Badge. We connect brands with the spaces where culture is created."
+>
+  <style is:global>
+    /* ── Contact section → cream background + dark text ───────────────────── */
+    body.page-contact .contact {
+      background-color: var(--color-cream);
+    }
+    body.page-contact .contact__tag {
+      color: rgba(26, 58, 42, 0.45);
+    }
+    body.page-contact .contact__heading {
+      color: #052715;
+    }
+    body.page-contact .contact__heading-em {
+      color: rgba(26, 58, 42, 0.38);
+    }
+    body.page-contact .contact__subtext {
+      color: rgba(26, 58, 42, 0.55);
+    }
+    body.page-contact .contact__detail-label {
+      color: rgba(26, 58, 42, 0.35);
+    }
+    body.page-contact .contact__detail-value {
+      color: rgba(26, 58, 42, 0.75);
+    }
+    body.page-contact .contact__detail-link:hover .contact__detail-value {
+      color: #1a3a2a;
+    }
+    body.page-contact .contact__label {
+      color: rgba(26, 58, 42, 0.4);
+    }
+    body.page-contact .contact__input {
+      color: #052715;
+      border-bottom-color: #052715;
+      caret-color: #052715;
+    }
+    body.page-contact .contact__input::placeholder {
+      color: #052715;
+    }
+    body.page-contact .contact__input:focus {
+      border-bottom-color: rgba(26, 58, 42, 0.55);
+    }
+    body.page-contact .contact__privacy {
+      color: rgba(26, 58, 42, 0.3);
+    }
+    body.page-contact .contact__submit {
+      background-color: #052715;
+      color: var(--color-cream);
+    }
+    body.page-contact .contact__submit:hover {
+      background-color: #1a3a2a;
+    }
+    body.page-contact .contact__success {
+      color: #1a3a2a;
+      border-top-color: rgba(26, 58, 42, 0.15);
+    }
+
+    /* ── Footer → forest-green background + cream text ───────────────────── */
+    body.page-contact .footer {
+      background-color: var(--color-forest);
+    }
+    body.page-contact .footer__bottom {
+      border-top-color: rgba(245, 240, 232, 0.12);
+    }
+    body.page-contact .footer__watermark {
+      filter: brightness(0) invert(1);
+      opacity: 0.07 !important;
+    }
+    body.page-contact .footer__logo-img {
+      filter: brightness(0) invert(1);
+    }
+    body.page-contact .footer__nav-link {
+      color: rgba(245, 240, 232, 0.7);
+    }
+    body.page-contact .footer__nav-link:hover {
+      opacity: 1;
+      color: var(--color-cream);
+    }
+    body.page-contact .footer__legal span,
+    body.page-contact .footer__legal-sep {
+      color: rgba(245, 240, 232, 0.5);
+    }
+
+    /* ── Header → always dark links on this cream page ─────────────────── */
+    body.page-contact .header__nav-link {
+      color: #052715 !important;
+    }
+    body.page-contact .header.at-top {
+      background-color: rgba(245, 240, 232, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: rgba(0, 79, 38, 0.08);
+    }
+    body.page-contact .header.at-top .header__nav-link {
+      color: #052715 !important;
+    }
+    body.page-contact .header.at-top .header__logo-img {
+      filter: brightness(0) saturate(100%) invert(10%) sepia(60%) saturate(1200%) hue-rotate(118deg) brightness(0.75);
+    }
+    body.page-contact .header.at-top .header__menu-line {
+      background-color: #052715;
+    }
+  </style>
+
+  <script>
+    document.body.classList.add('page-contact');
+  </script>
+
+  <Header />
+
+  <main>
+    <ContactForm />
+  </main>
+
+  <Footer />
+</BaseLayout>

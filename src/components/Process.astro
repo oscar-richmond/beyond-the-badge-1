@@ -90,6 +90,17 @@ const processes = [
     font-weight: 500;
     color: var(--color-text-dark);
     line-height: 1.1;
+    overflow: visible;
+  }
+
+  /*
+   * The line-reveal script wraps each line in .lr-clip { overflow: hidden }.
+   * That clips the italic descenders on 'Differently.' (the ff and y tails).
+   * padding-bottom extends the clipping box downward so descenders are visible.
+   * Uses :global because .lr-clip is injected by JS and has no Astro scope attr.
+   */
+  :global(.process__heading .lr-clip) {
+    padding-bottom: 0.22em;
   }
 
   .process__heading-highlight {

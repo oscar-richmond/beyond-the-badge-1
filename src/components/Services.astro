@@ -30,14 +30,15 @@ const services = [
     image: `${base}hover-4.jpg`,
   },
 ];
+
+const VIEWER_W = 300;
+const VIEWER_H = 375;
 ---
 
 <section class="services" id="services">
   <div class="container">
     <div class="services__header">
-      <h2 class="services__heading">
-        Our <span class="services__heading-highlight">approach</span>...
-      </h2>
+      <h2 class="services__heading">Our approach</h2>
     </div>
 
     <div class="services__list">
@@ -46,11 +47,9 @@ const services = [
         <>
           <div
             class="services__item reveal"
+            data-index={String(index)}
             style={`transition-delay: ${index * 0.1}s;`}
           >
-            <div class="services__item-hover-image">
-              <img src={service.image} alt="" />
-            </div>
             <div class="services__item-left">
               <span class="services__number">{service.number}</span>
               <h3 class="services__title">
@@ -65,12 +64,30 @@ const services = [
         </>
       ))}
     </div>
-
-
   </div>
 </section>
 
+<!--
+  Persistent image viewer — lives outside the list flow.
+  Follows the mouse via GSAP quickTo; strip slides to reveal the active row image.
+-->
+<div
+  class="services__viewer"
+  id="servicesViewer"
+  aria-hidden="true"
+  style={`--viewer-h: ${VIEWER_H}px;`}
+>
+  <div class="services__viewer-strip" id="servicesStrip">
+    {services.map((service) => (
+      <div class="services__viewer-item">
+        <img src={service.image} alt="" loading="eager" draggable="false" />
+      </div>
+    ))}
+  </div>
+</div>
+
 <style>
+  /* ── Section ──────────────────────────────────────────────────────────── */
   .services {
     background-color: var(--color-dark-section);
     padding: var(--section-padding-y) 0;
@@ -78,27 +95,20 @@ const services = [
   }
 
   .services__header {
-    margin-bottom: 0;
+    margin-bottom: 8px;
   }
 
   .services__heading {
-    font-family: var(--font-serif);
-    font-size: 32px;
-    font-weight: 500 !important; /* Ensure medium weight */
-    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0;
   }
 
-  .services__heading span.services__heading-highlight {
-    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
-    font-style: italic;
-    font-weight: 700;
-    font-variation-settings: "wght" 700, "HGHT" 1000;
-    color: #916364 !important;
-    display: inline-block;
-  }
-
-
-
+  /* ── List & rows ──────────────────────────────────────────────────────── */
   .services__list {
     margin-top: clamp(48px, 8vw, 120px);
   }
@@ -114,50 +124,13 @@ const services = [
     z-index: 1;
   }
 
-  /* Divider lines — styled to match original border colour/thickness */
   hr.services__divider {
     border: none;
     border-top: 1px solid #6E4142;
     margin: 0;
   }
 
-  .services__item:hover {
-    background-color: transparent;
-  }
-
-  .services__item-hover-image {
-    position: absolute;
-    top: 50%;
-    right: 15%; /* Position as seen in screenshot */
-    transform: translateY(-50%) rotate(5deg);
-    width: 240px;
-    height: 300px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: -1;
-    overflow: hidden;
-  }
-
-  .services__item:nth-child(even) .services__item-hover-image {
-    transform: translateY(-50%) rotate(-5deg);
-  }
-
-  .services__item:hover .services__item-hover-image {
-    opacity: 1;
-    transform: translateY(-50%) rotate(5deg) scale(1.05);
-  }
-
-  .services__item:nth-child(even):hover .services__item-hover-image {
-    transform: translateY(-50%) rotate(-5deg) scale(1.05);
-  }
-
-  .services__item-hover-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
+  /* ── Row hover text colours ───────────────────────────────────────────── */
   .services__item-left {
     display: flex;
     align-items: center;
@@ -175,9 +148,7 @@ const services = [
     transition: color 0.4s ease;
   }
 
-  .services__item:hover .services__number {
-    color: #FFFFFF;
-  }
+  .services__item:hover .services__number { color: #FFFFFF; }
 
   .services__title {
     font-family: var(--font-serif);
@@ -193,27 +164,26 @@ const services = [
     overflow: visible;
   }
 
-  .services__item:hover .services__title {
-    color: #6E4142;
-  }
+  .services__item:hover .services__title { color: #6E4142; }
 
   .services__beyond-img {
     height: 60px;
     width: auto;
     display: inline-block;
     vertical-align: baseline;
-    /* Negative margins collapse the flex cross-size so the h3 centres
-       around text height, not the script's 60px bounding box.
-       The script still renders at full size via overflow:visible on parent. */
     margin: -9px 3px;
     position: relative;
     top: 10px;
+    /* Same filter function list as the hover state, evaluated to white.
+       Matching lists let CSS interpolate each function individually —
+       no blue/purple flash from mismatched hue-rotate mid-transition. */
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
     transition: filter 0.4s ease;
   }
 
   .services__item:hover .services__beyond-img {
-    filter: brightness(0) saturate(100%) invert(24%) sepia(23%) saturate(1005%) hue-rotate(314deg) brightness(98%) contrast(92%);
-    /* Filter to approximate #6E4142 on a white image */
+    filter: brightness(0) saturate(100%) invert(24%) sepia(23%) saturate(1005%)
+            hue-rotate(314deg) brightness(98%) contrast(92%);
   }
 
   .services__category {
@@ -222,7 +192,6 @@ const services = [
     font-weight: 400;
     letter-spacing: 0.15em;
     color: #6E4142;
-    opacity: 1;
     text-transform: uppercase;
     white-space: nowrap;
     transition: all 0.4s ease;
@@ -230,11 +199,49 @@ const services = [
     z-index: 2;
   }
 
-  .services__item:hover .services__category {
-    color: #FFFFFF;
-    opacity: 1;
+  .services__item:hover .services__category { color: #FFFFFF; }
+
+  /* ── Persistent image viewer ──────────────────────────────────────────── */
+  /* Fixed to viewport so it can freely follow the cursor.
+     All position is managed via GSAP x/y (translateX/Y).              */
+  .services__viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: var(--viewer-h, 375px);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 90;
+    will-change: transform, opacity;
+    border-radius: 2px;
   }
 
+  /* Strip — no CSS transition; GSAP drives all animation for reliability */
+  .services__viewer-strip {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+
+  .services__viewer-item {
+    width: 300px;
+    height: var(--viewer-h, 375px);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .services__viewer-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* ── Mobile ───────────────────────────────────────────────────────────── */
   @media (max-width: 768px) {
     .services__item {
       flex-direction: column;
@@ -243,21 +250,95 @@ const services = [
       padding: 24px 0;
     }
 
-    .services__item-left {
-      gap: 14px;
-    }
+    .services__item-left { gap: 14px; }
 
     .services__category {
       margin-left: 0;
       padding-left: 0;
     }
 
-    .services__item-hover-image {
-      display: none; /* Hide decorative hover images on mobile for clean layout */
-    }
+    .services__beyond-img { height: 44px; }
 
-    .services__beyond-img {
-      height: 44px;
-    }
+    /* Viewer disabled on mobile — touch has no hover */
+    .services__viewer { display: none; }
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const VIEWER_W = 300;
+  const VIEWER_H = 375;
+  const SLIDE_DURATION = 0.55;
+  const SLIDE_EASE     = 'power3.inOut';
+
+  const section = document.querySelector<HTMLElement>('.services');
+  const viewer  = document.getElementById('servicesViewer')  as HTMLElement | null;
+  const strip   = document.getElementById('servicesStrip')   as HTMLElement | null;
+  const items   = Array.from(document.querySelectorAll<HTMLElement>('.services__item'));
+
+  // Only run on non-touch desktop
+  const isTouch = window.matchMedia('(hover: none)').matches;
+  if (!isTouch && section && viewer && strip && items.length) {
+
+    // ── Fix 1: escape Lenis ──────────────────────────────────────────────────
+    // Lenis smooth scroll works by applying transform to a wrapper ancestor.
+    // CSS position:fixed inside a transformed ancestor is viewport-offset by
+    // the scroll position, making the viewer appear far below the cursor.
+    // Moving the viewer to <body> escapes all ancestor transforms.
+    document.body.appendChild(viewer);
+
+    let currentIndex = -1;
+    let stripY = 0; // track GSAP's current Y on the strip
+
+    // ── Mouse tracking: GSAP quickTo for butter-smooth follow ────────────────
+    const xTo = gsap.quickTo(viewer, 'x', { duration: 0.55, ease: 'power3.out' });
+    const yTo = gsap.quickTo(viewer, 'y', { duration: 0.55, ease: 'power3.out' });
+
+    section.addEventListener('mousemove', (e) => {
+      xTo(e.clientX - VIEWER_W / 2);
+      yTo(e.clientY - VIEWER_H / 2);
+    });
+
+    items.forEach((item, i) => {
+      item.addEventListener('mouseenter', (e) => {
+        if (currentIndex === i) return;
+
+        const targetY = -i * VIEWER_H;
+
+        if (currentIndex === -1) {
+          // ── First hover: snap strip instantly, then fade viewer in ──────────
+          // Fix 2: Use gsap.set (not inline style + reflow trick) for instant snap.
+          // The CSS-transition restore trick is unreliable; GSAP is deterministic.
+          gsap.set(strip, { y: targetY });
+          stripY = targetY;
+
+          // Snap viewer position to cursor before fading in (no skate from 0,0)
+          gsap.set(viewer, {
+            x: (e as MouseEvent).clientX - VIEWER_W / 2,
+            y: (e as MouseEvent).clientY - VIEWER_H / 2,
+          });
+
+          gsap.to(viewer, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+        } else {
+          // ── Subsequent hover: animated slide to new row ──────────────────────
+          gsap.to(strip, {
+            y: targetY,
+            duration: SLIDE_DURATION,
+            ease: SLIDE_EASE,
+          });
+          stripY = targetY;
+        }
+
+        currentIndex = i;
+      });
+    });
+
+    // ── Leave section: fade out viewer, reset state for next entry ────────────
+    section.addEventListener('mouseleave', () => {
+      gsap.to(viewer, { opacity: 0, duration: 0.3, ease: 'power2.out' });
+      // Reset immediately (not in onComplete) so fast re-entry snaps vs slides correctly
+      currentIndex = -1;
+    });
+  }
+</script>

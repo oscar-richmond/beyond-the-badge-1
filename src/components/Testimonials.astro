@@ -32,11 +32,11 @@ const testimonials = [
 <!-- Outer scroll track: 300vh gives 200vh of sticky scroll distance (3 × ~67vh per testimonial) -->
 <div class="testimonials-track" id="testimonials">
   <!-- Sticky panel: pins to viewport while track scrolls past -->
-  <section class="testimonials-sticky" aria-label="Words from our clients">
+  <section class="testimonials-sticky" aria-label="What our friends say">
     <div class="container">
 
       <div class="testimonials__header">
-        <h2 class="testimonials__heading">Words from our clients</h2>
+        <h2 class="testimonials__heading">What our friends say</h2>
       </div>
 
       <hr class="testimonials__rule" />
@@ -111,10 +111,12 @@ const testimonials = [
   }
 
   .testimonials__heading {
-    font-family: var(--font-serif);
-    font-size: 32px;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
     font-weight: 400;
-    color: var(--color-text-dark);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #052715;
     margin: 0 0 28px;
   }
 
@@ -218,7 +220,7 @@ const testimonials = [
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    filter: grayscale(1);
+    filter: none;
     display: block;
   }
 

@@ -2,14 +2,13 @@
 const navItems = [
   { href: `${import.meta.env.BASE_URL}about`, label: 'About' },
   { href: '#services', label: 'Services' },
-  { href: '#testimonials', label: 'Testimonials' },
-  { href: '#contact', label: 'Contact' },
+  { href: `${import.meta.env.BASE_URL}contact`, label: 'Contact' },
 ];
 ---
 
 <header class="header at-top">
   <div class="header__inner">
-    <a href="/" class="header__logo" aria-label="Beyond the Badge - Home">
+    <a href={import.meta.env.BASE_URL} class="header__logo" aria-label="Beyond the Badge - Home">
       <img src={`${import.meta.env.BASE_URL}/logo-monogram.png`} alt="Beyond the Badge" class="header__logo-img" />
     </a>
 
@@ -116,7 +115,8 @@ const navItems = [
     font-size: 0.85rem;
     font-weight: 400;
     color: #004f26;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     transition: color 0.3s ease, opacity 0.3s ease;
   }
 

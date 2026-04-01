@@ -18,13 +18,13 @@
           If you believe in the power of culture to move people, let's talk.
         </p>
         <div class="contact__details">
-          <a href="mailto:hello@beyondthebadge.co.uk" class="contact__detail-link">
-            <span class="contact__detail-label">Email</span>
-            <span class="contact__detail-value">hello@beyondthebadge.co.uk</span>
-          </a>
           <a href="tel:+441234567890" class="contact__detail-link">
             <span class="contact__detail-label">Phone</span>
             <span class="contact__detail-value">+44 (0) 123 456 7890</span>
+          </a>
+          <a href="mailto:hello@beyondthebadge.co.uk" class="contact__detail-link">
+            <span class="contact__detail-label">Email</span>
+            <span class="contact__detail-value">hello@beyondthebadge.co.uk</span>
           </a>
         </div>
       </div>
@@ -70,7 +70,7 @@
             id="contact-company"
             name="company"
             class="contact__input"
-            placeholder="Who do you represent?"
+            placeholder="Company name"
           />
         </div>
 
@@ -132,6 +132,16 @@
     font-weight: 400;
     color: var(--color-cream);
     line-height: 1.08;
+    overflow: visible;
+  }
+
+  /*
+   * The line-reveal script wraps each line in .lr-clip { overflow: hidden }.
+   * With line-height: 1.08, the clip box is too tight for the descenders on
+   * 'g' in 'something' and 'remembering'. padding-bottom extends the boundary.
+   */
+  :global(.contact__heading .lr-clip) {
+    padding-bottom: 0.22em;
   }
 
   .contact__heading-em {
@@ -146,7 +156,13 @@
     display: grid;
     grid-template-columns: 1fr 1.6fr;
     gap: clamp(48px, 8vw, 120px);
-    align-items: flex-start;
+    align-items: stretch;
+  }
+
+  .contact__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .contact__subtext {

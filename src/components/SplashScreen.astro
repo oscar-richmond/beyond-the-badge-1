@@ -1,0 +1,266 @@
+---
+// SplashScreen.astro
+// Luxury entry splash: dark green (#052715), white logo reveal, counter 0→100, split-panel exit.
+// sessionStorage guard — only plays once per browser session.
+const base = import.meta.env.BASE_URL;
+---
+
+<!-- Splash: two panel halves that split apart on exit -->
+<div id="splash" aria-hidden="true">
+  <div class="splash-panel splash-panel--left"></div>
+  <div class="splash-panel splash-panel--right"></div>
+
+  <!-- Content layer sits above the panels -->
+  <div class="splash-content">
+
+    <div class="splash-logo-wrap">
+      <img
+        src={`${base}logo-full.png`}
+        alt="Beyond the Badge"
+        class="splash-logo"
+        draggable="false"
+      />
+    </div>
+
+    <div class="splash-divider-wrap">
+      <div class="splash-divider" id="splashDivider"></div>
+    </div>
+
+    <div class="splash-meta">
+      <span class="splash-label">Cultural Brand Partnerships</span>
+      <span class="splash-counter" id="splashCounter">000</span>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  /* ── Splash container ───────────────────────────────────────────────────── */
+  /* Hidden by default — JS sets display:flex immediately before animating.   */
+  /* This prevents a flash of green if the animation is ever skipped.         */
+  #splash {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: stretch;
+    pointer-events: all;
+    overflow: hidden;
+  }
+
+  /* ── Two equal vertical panels ──────────────────────────────────────────── */
+  .splash-panel {
+    flex: 0 0 50%;
+    height: 100%;
+    background-color: #052715;
+    will-change: transform;
+  }
+
+  /* ── Content layer — centred above both panels ──────────────────────────── */
+  .splash-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5vw;
+    pointer-events: none;
+  }
+
+  /* ── Logo ───────────────────────────────────────────────────────────────── */
+  .splash-logo-wrap {
+    width: min(304px, 46.4vw);
+    opacity: 0;
+    transform: scale(0.88) translateY(10px);
+    will-change: opacity, transform;
+  }
+
+  .splash-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* logo-full.png is dark on light; invert to white for the dark background */
+    filter: brightness(0) invert(1);
+    user-select: none;
+  }
+
+  /* ── Animated divider line ─────────────────────────────────────────────── */
+  .splash-divider-wrap {
+    width: min(304px, 46.4vw);
+    height: 1px;
+    margin-top: 28px;
+    overflow: hidden;
+    opacity: 0;
+  }
+
+  .splash-divider {
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.22);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  /* ── Meta row: label + counter ─────────────────────────────────────────── */
+  .splash-meta {
+    width: min(304px, 46.4vw);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 14px;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .splash-label {
+    font-family: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(9px, 1.05vw, 10.5px);
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.40);
+  }
+
+  .splash-counter {
+    font-family: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(9px, 1.05vw, 10.5px);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.35);
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { CustomEase } from 'gsap/CustomEase';
+
+  gsap.registerPlugin(CustomEase);
+
+  CustomEase.create('splashIn',  '0.16, 1, 0.3, 1');
+  CustomEase.create('splashOut', '0.76, 0, 0.24, 1');
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // btb-internal-nav is set by the page-transition curtain just before navigating.
+  // Present  → arrived via page change → skip splash, clear flag.
+  // Absent   → fresh load / hard-refresh / external entry → play splash.
+  const INTERNAL_KEY  = 'btb-internal-nav';
+  const isInternalNav = sessionStorage.getItem(INTERNAL_KEY) === '1';
+  sessionStorage.removeItem(INTERNAL_KEY); // always consume immediately
+
+  const splash   = document.getElementById('splash')                      as HTMLElement | null;
+  const panelL   = splash?.querySelector('.splash-panel--left')           as HTMLElement | null;
+  const panelR   = splash?.querySelector('.splash-panel--right')          as HTMLElement | null;
+  const logoWrap = splash?.querySelector('.splash-logo-wrap')             as HTMLElement | null;
+  const divWrap  = splash?.querySelector('.splash-divider-wrap')          as HTMLElement | null;
+  const divBar   = splash?.querySelector('.splash-divider')               as HTMLElement | null;
+  const metaRow  = splash?.querySelector('.splash-meta')                  as HTMLElement | null;
+  const counter  = document.getElementById('splashCounter')               as HTMLElement | null;
+
+  function releasePage() {
+    if (splash) splash.style.pointerEvents = 'none';
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
+
+  function hideSplash() {
+    if (splash) splash.style.display = 'none';
+  }
+
+  if (prefersReduced || isInternalNav || !splash) {
+    // Skip silently — #splash is display:none by default so no flash
+    hideSplash();
+  } else {
+    // ── Make splash visible and play animation ──────────────────────────
+    splash.style.display = 'flex';
+
+    // Lock scroll while splash is active
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    const COUNTER_DURATION_MS = 2600;
+    const HOLD_MS             = 280;
+
+    // 1. Logo scale + fade in
+    gsap.to(logoWrap, {
+      opacity:  1,
+      scale:    1,
+      y:        0,
+      duration: 1.6,
+      ease:     'splashIn',
+      delay:    0.2,
+    });
+
+    // 2. Divider line draws in
+    if (divWrap && divBar) {
+      gsap.to(divWrap, { opacity: 1, duration: 0.01, delay: 0.75 });
+      gsap.to(divBar, { scaleX: 1, duration: 1.1, ease: 'power3.out', delay: 0.78 });
+    }
+
+    // 3. Meta row fades in
+    gsap.to(metaRow, { opacity: 1, duration: 0.7, ease: 'power2.out', delay: 0.85 });
+
+    // 4. Counter ticks 000 → 100 with exponential ease-out
+    const startTime = performance.now() + 850;
+    let rafId: number;
+
+    function padCounter(n: number) {
+      return String(Math.floor(n)).padStart(3, '0');
+    }
+
+    function tickCounter(now: number) {
+      const progress = Math.min(Math.max(0, now - startTime) / COUNTER_DURATION_MS, 1);
+      const value    = (1 - Math.pow(2, -10 * progress)) * 100;
+      if (counter) counter.textContent = padCounter(value);
+      if (progress < 1) rafId = requestAnimationFrame(tickCounter);
+    }
+    rafId = requestAnimationFrame(tickCounter);
+
+    // 5. After count finishes: content fade OUT → guaranteed paint → panel split
+    //
+    // Previous approaches (timeline + stagger + .call(), hard-coded delays, double-rAF
+    // inside .call()) all failed because GSAP's timeline stagger places .call() based
+    // on internal clock arithmetic that drifts on cold first loads.
+    //
+    // Definitive fix:
+    //   a) Three individual gsap.to() calls (no stagger, explicit delays).
+    //      onComplete on the LAST-FINISHING element (metaRow, delay:0.10 + dur:0.5 = 0.60s)
+    //      is an iron-clad guarantee — it fires when that specific tween ends.
+    //   b) Double-rAF inside onComplete ensures the browser has actually painted
+    //      the "content invisible" frame before panels begin moving.
+    setTimeout(() => {
+      cancelAnimationFrame(rafId);
+      if (counter) counter.textContent = '100';
+
+      const FADE_DUR  = 0.5;
+      const FADE_EASE = 'power2.in';
+
+      // Fade each element individually — no timeline stagger
+      gsap.to(logoWrap, { opacity: 0, y: -16, duration: FADE_DUR, ease: FADE_EASE });
+      gsap.to(divWrap,  { opacity: 0, y: -16, duration: FADE_DUR, ease: FADE_EASE, delay: 0.05 });
+      gsap.to(metaRow,  {
+        opacity: 0,
+        y:       -16,
+        duration: FADE_DUR,
+        ease:     FADE_EASE,
+        delay:    0.10,   // Last to start → last to finish (0.10 + 0.5 = 0.60 s)
+        onComplete() {
+          // All three elements are now at opacity:0.
+          // Release scroll lock, then wait for browser to PAINT before splitting.
+          releasePage();
+          // Double-rAF = "after-paint" bridge:
+          //   rAF 1 → browser processes style recalculations
+          //   rAF 2 → browser composites + paints the invisible-content frame
+          // Panels only move after this guaranteed paint.
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            gsap.to(panelL, { x: '-101%', duration: 1.1, ease: 'splashOut', onComplete: hideSplash });
+            gsap.to(panelR, { x:  '101%', duration: 1.1, ease: 'splashOut' });
+          }));
+        },
+      });
+
+    }, 850 + COUNTER_DURATION_MS + HOLD_MS);
+  }
+</script>

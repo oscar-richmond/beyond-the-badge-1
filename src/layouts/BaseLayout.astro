@@ -1,4 +1,7 @@
 ---
+import SplashScreen from '../components/SplashScreen.astro';
+import Cursor      from '../components/Cursor.astro';
+
 interface Props {
   title?: string;
   description?: string;
@@ -28,53 +31,72 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon-32.png`} />
+    <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}favicon-16.png`} />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}logo-monogram.png`} />
     <title>{title}</title>
   </head>
   <body>
-    <!-- Luxury curtain — covers page on every load, GSAP lifts it -->
+    <!-- Custom dot cursor (desktop / fine-pointer only) -->
+    <Cursor />
+
+    <!-- Full luxury splash screen (first visit per session) -->
+    <SplashScreen />
+
+    <!-- Lightweight page-to-page transition curtain (z-index below splash) -->
     <div id="btb-curtain" aria-hidden="true"></div>
+
     <slot />
 
     <style is:global>
-      /* ── Luxury Curtain ────────────────────────────────────────────── */
+      /* ── Page-transition curtain (between pages, not splash) ─────── */
       #btb-curtain {
         position: fixed;
         inset: 0;
-        z-index: 9998;
+        z-index: 9000; /* below splash (9999) */
         background-color: #052715;
         pointer-events: none;
         will-change: transform;
+        /* Starts covering the page. JS lifts it to reveal on arrival.
+           On first-load with splash: splash (z:9999) is on top so this is invisible. */
+        transform: translateY(0);
       }
     </style>
 
-    <!-- Luxury page curtain: entry reveal + exit on navigation -->
+    <!-- Page-to-page transition curtain -->
     <script>
       import { gsap } from 'gsap';
       import { CustomEase } from 'gsap/CustomEase';
 
       gsap.registerPlugin(CustomEase);
-      CustomEase.create('btbEase', '.42, 0, .24, 1');
+      CustomEase.create('btbEase', '.76, 0, .24, 1');
 
-      const curtain = document.getElementById('btb-curtain');
+      const curtain      = document.getElementById('btb-curtain') as HTMLElement | null;
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      if (prefersReduced) {
-        // Skip entirely — curtain disappears immediately
+      if (prefersReduced || !curtain) {
         if (curtain) curtain.style.display = 'none';
+        // No curtain animation — signal immediately so reveals aren't blocked.
+        window.dispatchEvent(new CustomEvent('btb-ready'));
       } else {
-        // ── Entry: lift the curtain to reveal the page ────────────────
+        // ── Page arrival: lift curtain up to reveal the page ─────────────────
+        // On first-load WITH splash: splash (z:9999) sits above this (z:9000),
+        // so this lift is invisible — splash handles the reveal instead.
+        // On subsequent internal-nav arrivals: this lift IS the page reveal.
         gsap.to(curtain, {
           y: '-100%',
-          duration: 1.2,
+          duration: 0.9,
           ease: 'btbEase',
           delay: 0.05,
           onComplete() {
-            if (curtain) curtain.style.pointerEvents = 'none';
+            // Signal all reveal systems that the curtain has lifted and the
+            // page is now fully visible. Above-fold elements only animate after
+            // this fires, so the user sees them slide in rather than behind the curtain.
+            window.dispatchEvent(new CustomEvent('btb-ready'));
           },
         });
 
-        // ── Exit: drop curtain before navigating away ─────────────────
+        // ── Click → cover page → navigate ────────────────────────────────────
         const HOST = window.location.hostname;
 
         document.addEventListener('click', (e) => {
@@ -83,64 +105,90 @@ const {
 
           const href = target.getAttribute('href') ?? '';
 
-          // Skip: external, anchor, special protocol, target=_blank
           if (!href || href.startsWith('#') || href.startsWith('mailto:') ||
               href.startsWith('tel:') || target.target === '_blank') return;
 
-          // Skip properly external URLs
           if (href.startsWith('http') && !href.includes(HOST)) return;
 
-          // Same page? skip
           const dest = new URL(href, window.location.href);
           if (dest.pathname === window.location.pathname) return;
 
           e.preventDefault();
 
-          // Reset curtain to just below top, then drop it in
+          // Flag that the next page load is an internal navigation,
+          // so the splash screen knows to skip itself.
+          sessionStorage.setItem('btb-internal-nav', '1');
+
+          // Reset curtain to top-out-of-view, slide it DOWN to cover page
           gsap.set(curtain, { y: '-100%' });
           gsap.to(curtain, {
             y: '0%',
-            duration: 0.75,
-            ease: 'power2.inOut',
+            duration: 0.85,
+            ease: 'btbEase',
             onComplete() {
               window.location.href = dest.href;
             },
           });
-        }, true); // capture phase so we intercept before other handlers
+        }, true);
       }
     </script>
 
     <script>
-      // No-JS fallback: html gets .no-js by default, removed when JS runs
+      // No-JS fallback
       document.documentElement.classList.remove('no-js');
 
       const REVEAL_SEL = '.reveal, .reveal--left, .reveal--right, .reveal--scale, .reveal--clip';
 
-      const observer = new IntersectionObserver(
+      // ── Immediate reveals ─────────────────────────────────────────────────
+      // Elements with [data-reveal-immediate] should NOT wait for btb-ready.
+      // They animate during the curtain lift (previous behaviour for about-page images).
+      const immediateObs = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
+              immediateObs.unobserve(entry.target);
             }
           });
         },
         { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
       );
+      document.querySelectorAll<HTMLElement>('[data-reveal-immediate]').forEach(el =>
+        immediateObs.observe(el)
+      );
 
-      // Auto-stagger siblings inside [data-reveal-group] — 0.18s feels considered
-      document.querySelectorAll('[data-reveal-group]').forEach((group) => {
-        Array.from(group.querySelectorAll(REVEAL_SEL)).forEach((child, i) => {
-          (child as HTMLElement).style.transitionDelay = `${(i * 0.18).toFixed(2)}s`;
+      // ── Curtain-gated reveals ─────────────────────────────────────────────
+      // All other reveal elements wait for the btb-ready event (curtain lifted).
+      function initRevealObserver() {
+        // Auto-stagger siblings inside [data-reveal-group]
+        document.querySelectorAll('[data-reveal-group]').forEach((group) => {
+          Array.from(group.querySelectorAll(REVEAL_SEL)).forEach((child, i) => {
+            if (!(child as HTMLElement).hasAttribute('data-reveal-immediate'))
+              (child as HTMLElement).style.transitionDelay = `${(i * 0.18).toFixed(2)}s`;
+          });
         });
-      });
 
-      // Observe all reveal elements except those inside the testimonials section
-      document.querySelectorAll<HTMLElement>(REVEAL_SEL).forEach((el) => {
-        if (!el.closest('#testimonials')) {
-          observer.observe(el);
-        }
-      });
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+        );
+
+        document.querySelectorAll<HTMLElement>(REVEAL_SEL).forEach((el) => {
+          // Skip testimonials and elements already handled by the immediate observer
+          if (!el.closest('#testimonials') && !el.hasAttribute('data-reveal-immediate'))
+            observer.observe(el);
+        });
+      }
+
+      // Wait for curtain to lift before triggering above-fold reveals.
+      window.addEventListener('btb-ready', initRevealObserver, { once: true });
     </script>
 
     <script>
@@ -223,7 +271,8 @@ const {
             el.parentNode!.insertBefore(clip, el);
             clip.appendChild(el);
             el.classList.add('lr-inner');
-            el.style.transition = 'transform 1.2s cubic-bezier(0.42,0,0.24,1)';
+            const revealDelayFallback = parseFloat((el.dataset.revealDelay ?? '0')) || 0;
+            el.style.transition = `transform 1.2s cubic-bezier(0.42,0,0.24,1) ${revealDelayFallback.toFixed(2)}s`;
             return clip;
           }
 
@@ -289,6 +338,7 @@ const {
           if (lineGroups.length === 0) return null;
 
           // Rebuild: one lr-clip / lr-inner per line
+          const revealDelay = parseFloat((el.dataset.revealDelay ?? '0')) || 0;
           el.innerHTML = '';
           lineGroups.forEach((words, i) => {
             const clip  = document.createElement('div');
@@ -296,8 +346,10 @@ const {
             const inner = document.createElement('div');
             inner.className = 'lr-inner';
             inner.style.transition =
-              `transform 1.2s cubic-bezier(0.42,0,0.24,1) ${(i * 0.12).toFixed(2)}s`;
-            inner.innerHTML = words.join(' ');
+              `transform 1.2s cubic-bezier(0.42,0,0.24,1) ${(revealDelay + i * 0.12).toFixed(2)}s`;
+            // Remove spurious spaces before punctuation produced by the
+            // atom-based join (e.g. 'art ,' → 'art,').
+            inner.innerHTML = words.join(' ').replace(/ ([,\.;:!?\)])/g, '$1');
             clip.appendChild(inner);
             el.appendChild(clip);
           });
@@ -316,6 +368,9 @@ const {
           !el.closest('#hero') &&
           !el.closest('.footer') &&
           !el.closest(REVEAL_ANCESTOR)
+          // Note: [data-keyword] elements were previously excluded to protect
+          // hover listeners, but those now use event delegation on the parent
+          // so they survive the DOM rebuild. Exclusion is no longer needed.
         );
 
         const lineObserver = new IntersectionObserver(entries => {
@@ -335,12 +390,43 @@ const {
           });
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-        // Fonts must be loaded so line measurements are accurate
+        // ── Two-phase reveal to eliminate the static→disappear flash ─────────
+        //
+        // Problem: if revealElement() (which wraps elements and hides them) only
+        // runs after btb-ready, the raw text is visible as the curtain lifts,
+        // then vanishes, then animates in — a jarring flash.
+        //
+        // Fix:
+        //   Phase 1 — fonts.ready: wrap all targets with revealElement() NOW,
+        //             while the curtain is still covering the page. Text is hidden
+        //             (translateY 110%) before the user ever sees it.
+        //   Phase 2 — btb-ready:  start the lineObserver so in-viewport elements
+        //             get lr-visible and begin their slide-in animation just as
+        //             the curtain finishes lifting.
+        //
+        // btbFired flag handles the race where btb-ready fires before fonts load.
+        let btbFired = false;
+        const onBtbReady = () => { btbFired = true; };
+        window.addEventListener('btb-ready', onBtbReady, { once: true });
+
         (document.fonts?.ready ?? Promise.resolve()).then(() => {
+          // Phase 1: wrap + hide (fonts loaded → accurate offsetTop measurements)
+          const toObserve: HTMLElement[] = [];
           targets.forEach(el => {
             const observed = revealElement(el);
-            if (observed) lineObserver.observe(observed);
+            if (observed) toObserve.push(observed);
           });
+
+          // Phase 2: start observing — immediately if btb-ready already fired,
+          // otherwise wait for it.
+          const startObserving = () =>
+            toObserve.forEach(el => lineObserver.observe(el));
+
+          if (btbFired) {
+            startObserving();
+          } else {
+            window.addEventListener('btb-ready', startObserving, { once: true });
+          }
         });
       }
 
