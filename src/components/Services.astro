@@ -89,7 +89,7 @@ const VIEWER_H = 375;
 <style>
   /* ── Section ──────────────────────────────────────────────────────────── */
   .services {
-    background-color: var(--color-dark-section);
+    background-color: var(--color-forest);
     padding: var(--section-padding-y) 0;
     position: relative;
   }
@@ -126,7 +126,7 @@ const VIEWER_H = 375;
 
   hr.services__divider {
     border: none;
-    border-top: 1px solid #6E4142;
+    border-top: 1px solid rgba(245, 240, 232, 0.12);
     margin: 0;
   }
 
@@ -143,7 +143,7 @@ const VIEWER_H = 375;
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 300;
-    color: #6E4142;
+    color: rgba(245, 240, 232, 0.35);
     min-width: 32px;
     transition: color 0.4s ease;
   }
@@ -157,23 +157,23 @@ const VIEWER_H = 375;
     color: var(--color-cream);
     display: flex;
     align-items: baseline;
-    gap: 9px;
+    gap: 8px;
     flex-wrap: wrap;
     letter-spacing: 0.05em;
     transition: color 0.4s ease;
     overflow: visible;
   }
 
-  .services__item:hover .services__title { color: #6E4142; }
+  .services__item:hover .services__title { color: #8CB7A0; }
 
   .services__beyond-img {
-    height: 60px;
+    height: 51px;
     width: auto;
     display: inline-block;
     vertical-align: baseline;
-    margin: -9px 3px;
+    margin: -7.5px 0;
     position: relative;
-    top: 10px;
+    top: 8.5px;
     /* Same filter function list as the hover state, evaluated to white.
        Matching lists let CSS interpolate each function individually —
        no blue/purple flash from mismatched hue-rotate mid-transition. */
@@ -182,8 +182,9 @@ const VIEWER_H = 375;
   }
 
   .services__item:hover .services__beyond-img {
-    filter: brightness(0) saturate(100%) invert(24%) sepia(23%) saturate(1005%)
-            hue-rotate(314deg) brightness(98%) contrast(92%);
+    /* Render script image as sage green #8CB7A0 on hover */
+    filter: brightness(0) saturate(100%) invert(73%) sepia(15%) saturate(500%)
+            hue-rotate(108deg) brightness(96%) contrast(90%);
   }
 
   .services__category {
@@ -191,7 +192,7 @@ const VIEWER_H = 375;
     font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: 0.15em;
-    color: #6E4142;
+    color: rgba(245, 240, 232, 0.35);
     text-transform: uppercase;
     white-space: nowrap;
     transition: all 0.4s ease;
@@ -257,7 +258,7 @@ const VIEWER_H = 375;
       padding-left: 0;
     }
 
-    .services__beyond-img { height: 44px; }
+    .services__beyond-img { height: 37px; }
 
     /* Viewer disabled on mobile — touch has no hover */
     .services__viewer { display: none; }
