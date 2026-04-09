@@ -8,7 +8,7 @@
 /* --- Design Tokens --- */
 :root {
   /* Colours */
-  --color-forest:        #0a2e1f;
+  --color-forest:        #052715;
   --color-forest-deep:   #061a12;
   --color-forest-mid:    #0d3a27;
   --color-cream:         #f5f0eb;
@@ -16,12 +16,12 @@
   --color-cream-light:   #faf7f3;
   --color-dark-section:  #1c0e0e;
   --color-dark-maroon:   #2a1515;
-  --color-text-dark:     #1a3a2a;
+  --color-text-dark:     #052715;
   --color-text-light:    #e8e0d4;
   --color-text-muted:    #8a7e72;
   --color-text-cream:    #c8bfb2;
   --color-divider-dark:  rgba(232, 224, 212, 0.15);
-  --color-divider-light: rgba(26, 58, 42, 0.1);
+  --color-divider-light: rgba(5, 39, 21, 0.1);
   --color-accent:        rgba(232, 224, 212, 0.6);
 
   /* Typography */

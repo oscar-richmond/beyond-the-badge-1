@@ -36,15 +36,15 @@ const base = import.meta.env.BASE_URL;
 
 <!-- ② CTA bar — sits below the section, aligned to page margins -->
 <div class="cta__bar-outer container">
-  <div class="cta__bar">
+  <a href={`${base}contact`} class="cta__bar">
     <p class="cta__bar-text">Let's build something together.</p>
-    <a href={`${base}contact`} class="cta__bar-btn">
+    <span class="cta__bar-btn">
       <span class="cta__bar-btn-label">Get in touch</span>
       <svg class="cta__bar-btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-    </a>
-  </div>
+    </span>
+  </a>
 </div>
 
 <style>
@@ -83,7 +83,7 @@ const base = import.meta.env.BASE_URL;
 
   .cta__marquee-item {
     font-family: var(--font-serif);
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: 48px;
     font-weight: 500;
     color: var(--color-text-dark);
     line-height: 1;
@@ -129,10 +129,12 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     justify-content: space-between;
     padding: 0 0 0 28px;
-    border: 1px solid rgba(26, 58, 42, 0.18);
+    border: 1px solid #D9D0C8;
     background: transparent;
     box-sizing: border-box;
     cursor: pointer;
+    text-decoration: none;   /* strip <a> underline */
+    color: inherit;          /* prevent browser link-colour shift on hover */
     /* Border transition on hover */
     transition: border-color 0.6s cubic-bezier(0.77, 0, 0.175, 1);
   }
@@ -151,6 +153,7 @@ const base = import.meta.env.BASE_URL;
 
   .cta__bar:hover {
     border-color: #052715;
+    opacity: 1; /* cancel global a:hover { opacity: 0.8 } */
   }
 
   .cta__bar:hover::before {

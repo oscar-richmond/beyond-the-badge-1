@@ -133,17 +133,19 @@ const base = import.meta.env.BASE_URL;
           </p>
 
           <div class="about-bio__expand" id="bio-expand" aria-hidden="true">
-            <div class="about-bio__expand-para" style="--delay:0s">
-              <div class="bio-inner">Having spent over two decades building world-class teams and narratives for some of the most recognisable names in the world, Laura now helps brands navigate the complexities of cultural affinity and strategic growth.</div>
-            </div>
-            <div class="about-bio__expand-para" style="--delay:0.12s">
-              <div class="bio-inner">As Director of Brand Partnerships, Experience &amp; Collections at JLR (Jaguar Land Rover), she led a team of incredible professionals to redefine the cultural strategy for the "House of Brands," curating high-profile collaborations and reimagining global brand experiences for Range Rover, Defender, Discovery &amp; Jaguar. Her corporate tenure was preceded by a successful entrepreneurial career as a Partner at The Brooklyn Brothers and Co-Founder of Golden Goose PR, where she launched over 30 businesses.</div>
-            </div>
-            <div class="about-bio__expand-para" style="--delay:0.24s">
-              <div class="bio-inner">Outside of Beyond The Badge, Laura extends her expertise into the humanitarian sector, where she serves as an External Committee Member for the British Red Cross Donations Acceptance Committee. In this role, she leverages her strategic judgment and experience in risk and governance to help the organization navigate complex ethical decisions regarding donations.</div>
-            </div>
-            <div class="about-bio__expand-para" style="--delay:0.36s">
-              <div class="bio-inner">An award-winning strategist with a Cannes Lions Gold and PR Week Global Awards to her name, Laura's leadership is defined by the principles of empowerment and growth. Through Beyond The Badge, she brings her "big brand" expertise and entrepreneurial agility to help clients build meaningful connections that go far deeper than a logo.</div>
+            <div class="about-bio__expand-inner">
+              <div class="about-bio__expand-para">
+                <div class="bio-inner">Having spent over two decades building world-class teams and narratives for some of the most recognisable names in the world, Laura now helps brands navigate the complexities of cultural affinity and strategic growth.</div>
+              </div>
+              <div class="about-bio__expand-para">
+                <div class="bio-inner">As Director of Brand Partnerships, Experience &amp; Collections at JLR (Jaguar Land Rover), she led a team of incredible professionals to redefine the cultural strategy for the "House of Brands," curating high-profile collaborations and reimagining global brand experiences for Range Rover, Defender, Discovery &amp; Jaguar. Her corporate tenure was preceded by a successful entrepreneurial career as a Partner at The Brooklyn Brothers and Co-Founder of Golden Goose PR, where she launched over 30 businesses.</div>
+              </div>
+              <div class="about-bio__expand-para">
+                <div class="bio-inner">Outside of Beyond The Badge, Laura extends her expertise into the humanitarian sector, where she serves as an External Committee Member for the British Red Cross Donations Acceptance Committee. In this role, she leverages her strategic judgment and experience in risk and governance to help the organization navigate complex ethical decisions regarding donations.</div>
+              </div>
+              <div class="about-bio__expand-para">
+                <div class="bio-inner">An award-winning strategist with a Cannes Lions Gold and PR Week Global Awards to her name, Laura's leadership is defined by the principles of empowerment and growth. Through Beyond The Badge, she brings her "big brand" expertise and entrepreneurial agility to help clients build meaningful connections that go far deeper than a logo.</div>
+              </div>
             </div>
           </div>
 
@@ -312,6 +314,7 @@ const base = import.meta.env.BASE_URL;
     transform: translateX(3px);
     letter-spacing: 0.11em;
     border-color: #052715;
+    opacity: 1; /* cancel global a:hover { opacity: 0.8 } */
   }
 
   .about-images__photos-col {
@@ -468,6 +471,8 @@ const base = import.meta.env.BASE_URL;
     font-style: italic;
     font-weight: 500;
     font-variation-settings: "wght" 500, "HGHT" 1000;
+    line-height: 1.5;      /* wider line box so deep italic descenders (g,y,p) aren't clipped */
+    overflow: visible;     /* safety: never clip ink outside the element box */
     color: #8CB7A0;
     white-space: nowrap;
     opacity: 0;
@@ -821,18 +826,27 @@ const base = import.meta.env.BASE_URL;
     cursor: pointer;
   }
 
+  /* Grid-based height reveal: 0fr→1fr animates proportionally to
+     actual content height — no max-height estimation needed */
   .about-bio__expand {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: grid;
+    grid-template-rows: 0fr;
+    /* Open speed (0.75s × 1.25): this transition fires when is-open is added */
+    transition: grid-template-rows 0.94s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .about-bio__expand.is-open {
-    max-height: 200rem;
+    grid-template-rows: 1fr;
+    /* Close speed: this transition fires when is-open is removed */
+    transition: grid-template-rows 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Required for the 0fr trick: clips overflow at zero height */
+  .about-bio__expand-inner {
+    overflow: hidden;
   }
 
   .about-bio__expand-para {
-    overflow: hidden;
     padding-top: 28px;
   }
 
@@ -840,20 +854,15 @@ const base = import.meta.env.BASE_URL;
     padding-top: 36px;
   }
 
+  /* Text is always fully visible — the grid expansion does the revealing */
   .about-bio__expand-para .bio-inner {
     display: block;
-    transform: translateY(110%);
-    transition: transform 0.85s cubic-bezier(0.42, 0, 0.24, 1) var(--delay, 0s);
     font-family: var(--font-sans);
     font-size: 18px;
     line-height: 32px;
     font-weight: 400;
     letter-spacing: 0;
     color: #052715;
-  }
-
-  .about-bio__expand.is-open .bio-inner {
-    transform: translateY(0);
   }
 </style>
 
@@ -999,6 +1008,7 @@ const base = import.meta.env.BASE_URL;
 
   if (readMoreBtn && bioExpand && btnTextEl) {
     let bioExpanded = false;
+
     readMoreBtn.addEventListener('click', () => {
       bioExpanded = !bioExpanded;
       bioExpand.classList.toggle('is-open', bioExpanded);

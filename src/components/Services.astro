@@ -89,7 +89,7 @@ const VIEWER_H = 375;
 <style>
   /* ── Section ──────────────────────────────────────────────────────────── */
   .services {
-    background-color: var(--color-dark-section);
+    background: transparent;
     padding: var(--section-padding-y) 0;
     position: relative;
   }
@@ -339,6 +339,83 @@ const VIEWER_H = 375;
       gsap.to(viewer, { opacity: 0, duration: 0.3, ease: 'power2.out' });
       // Reset immediately (not in onComplete) so fast re-entry snaps vs slides correctly
       currentIndex = -1;
+    });
+  }
+
+  // ── Scroll-linked body background + Testimonials reveal ─────────────────
+  //
+  // About, Services, and Testimonials all have transparent backgrounds so the
+  // body's backgroundColor IS the full-viewport colour — no section seams.
+  //
+  // Entry  — body goes cream → #1c0e0e as Services enters (over 30% of vh).
+  // Dwell  — body holds maroon while Services is the dominant section.
+  // Exit   — body returns to cream once Testimonials reaches viewport midpoint
+  //          (over 30% of vh). Keyed off Testimonials position, not Services bottom.
+  //
+  // Testimonials reveal — a maroon overlay covers all Testimonials content
+  // while the body is still maroon (exitT == 0 → overlay opacity 1).
+  // As exitT rises, the overlay fades to 0 in perfect sync with the body's
+  // return to cream, so text, images and borders all reveal together.
+  //
+  const bgEl    = document.querySelector<HTMLElement>('.services');
+  const tElem   = document.querySelector<HTMLElement>('#testimonials');
+  const stickyEl = tElem?.querySelector<HTMLElement>('.testimonials-sticky');
+
+  // ── Build overlay once ────────────────────────────────────────────────────
+  let tOverlay: HTMLElement | null = null;
+  if (stickyEl) {
+    const ov = document.createElement('div');
+    ov.setAttribute('aria-hidden', 'true');
+    Object.assign(ov.style, {
+      position:       'absolute',
+      inset:          '0',
+      backgroundColor:'rgb(245,240,235)', // cream — updated every frame in ticker
+      pointerEvents:  'none',
+      zIndex:         '100',
+      willChange:     'opacity',
+      opacity:        '1',
+    });
+    stickyEl.appendChild(ov);
+    tOverlay = ov;
+  }
+
+  if (bgEl) {
+    const CREAM  = { r: 245, g: 240, b: 235 }; // #f5f0eb
+    const MAROON = { r: 28,  g: 14,  b: 14  }; // #1c0e0e
+
+    gsap.ticker.add(() => {
+      const rect  = bgEl.getBoundingClientRect();
+      const tRect = tElem?.getBoundingClientRect();
+      const vh    = window.innerHeight;
+
+      // Entry: starts when Services enters from viewport bottom (rect.top == vh),
+      // completes after 30% of viewport height — reaches maroon fast, long dwell.
+      const entryT = gsap.utils.clamp(0, 1, (vh - rect.top) / (vh * 0.3));
+
+      // Exit: delayed — starts when Testimonials top reaches the viewport midpoint
+      // (tRect.top == vh*0.5), completes over 30% of viewport height.
+      let exitT = 0;
+      if (tRect) {
+        exitT = gsap.utils.clamp(0, 1, (vh * 0.5 - tRect.top) / (vh * 0.3));
+      } else {
+        exitT = gsap.utils.clamp(0, 1, 1 - rect.bottom / (vh * 0.5));
+      }
+
+      const t = Math.max(0, entryT - exitT);
+
+      // ── Body background ────────────────────────────────────────────────────
+      const r = Math.round(CREAM.r + (MAROON.r - CREAM.r) * t);
+      const g = Math.round(CREAM.g + (MAROON.g - CREAM.g) * t);
+      const b = Math.round(CREAM.b + (MAROON.b - CREAM.b) * t);
+      document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
+
+      // ── Testimonials overlay — colour matches body bg every frame so the
+      // Testimonials area always looks identical to Services during the exit.
+      // Opacity fades from 1→0 as exitT rises, revealing the content beneath.
+      if (tOverlay) {
+        tOverlay.style.backgroundColor = `rgb(${r},${g},${b})`;
+        tOverlay.style.opacity = String(1 - exitT);
+      }
     });
   }
 </script>

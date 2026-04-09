@@ -99,7 +99,7 @@ const capabilities = [
   /* ── Section ────────────────────────────────────────────────────────────── */
   .capabilities-section {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh + 48px);
     overflow: hidden;
     background-color: #0a1a14;
     display: flex;
@@ -189,18 +189,10 @@ const capabilities = [
     font-family: var(--font-sans);
     font-size: 0.82rem;
     line-height: 1.65;
-    color: rgba(248, 242, 237, 0.55);
+    color: #ffffff;
     max-width: 240px;
     margin: 0;
     min-height: 0;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.45s ease, transform 0.45s ease;
-  }
-
-  .cap-description.is-visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   /* ── Right: capability list ─────────────────────────────────────────────── */
@@ -208,7 +200,7 @@ const capabilities = [
     list-style: none;
     padding: 0;
     margin: 0;
-    align-self: center;
+    align-self: end;
     /* Items are right-aligned */
     text-align: right;
   }
@@ -274,6 +266,19 @@ const capabilities = [
 
   if (!list) throw new Error('Capabilities list not found');
 
+  // Ensure lr-clip CSS is available (BaseLayout injects it for desktop;
+  // we add it here as a guarantee for this component's dynamic usage).
+  if (!document.querySelector('#cap-lr-css')) {
+    const s = document.createElement('style');
+    s.id = 'cap-lr-css';
+    s.textContent = [
+      '.lr-clip{overflow:hidden;display:block}',
+      '.lr-inner{display:block;transform:translateY(110%);will-change:transform}',
+      '.lr-clip.lr-visible .lr-inner{transform:translateY(0)}',
+    ].join('');
+    document.head.appendChild(s);
+  }
+
   const items = list.querySelectorAll<HTMLElement>('.cap-item');
   let activeItem: HTMLElement | null = null;
   let descTimer: ReturnType<typeof setTimeout> | null = null;
@@ -286,26 +291,64 @@ const capabilities = [
     });
   }
 
-  /* ── Description text swap ────────────────────────────────────────────── */
+  /* ── Description text swap — per-line clip reveal (matches homepage §) ─── */
   function setDescription(text: string | null): void {
     if (!descEl) return;
-
     if (descTimer) clearTimeout(descTimer);
 
-    if (!text) {
-      descEl.classList.remove('is-visible');
-      descTimer = setTimeout(() => { descEl.textContent = ''; }, 450);
-      return;
-    }
+    // Clear immediately so previous lines don't linger
+    descEl.innerHTML = '';
+    if (!text) return;
 
-    // Fade out → swap text → fade back in
-    descEl.classList.remove('is-visible');
+    // ── Step 1: render measure spans so we can read offsetTop ────────────
+    const words = text.split(/\s+/).filter(w => w.length > 0);
+    const measureSpans: HTMLElement[] = [];
+    words.forEach((word, i) => {
+      const s = document.createElement('span');
+      s.style.display = 'inline-block';
+      s.textContent = word;
+      descEl.appendChild(s);
+      measureSpans.push(s);
+      if (i < words.length - 1) descEl.appendChild(document.createTextNode(' '));
+    });
+
+    // Force layout so offsetTop is accurate
+    void descEl.offsetHeight;
+
+    // ── Step 2: group words by visual line ───────────────────────────────
+    const lineGroups: string[][] = [];
+    let currentTop = -9999;
+    let group: string[] = [];
+    measureSpans.forEach(s => {
+      const top = s.offsetTop;
+      if (Math.abs(top - currentTop) > 3) {
+        if (group.length) lineGroups.push(group);
+        group = [];
+        currentTop = top;
+      }
+      group.push(s.textContent || '');
+    });
+    if (group.length) lineGroups.push(group);
+
+    // ── Step 3: rebuild as lr-clip / lr-inner per line ───────────────────
+    descEl.innerHTML = '';
+    lineGroups.forEach((lineWords, i) => {
+      const clip  = document.createElement('div');
+      clip.className = 'lr-clip';
+      const inner = document.createElement('div');
+      inner.className = 'lr-inner';
+      inner.style.transition =
+        `transform 0.6s cubic-bezier(0.42, 0, 0.24, 1) ${(i * 0.06).toFixed(2)}s`;
+      inner.textContent = lineWords.join(' ');
+      clip.appendChild(inner);
+      descEl.appendChild(clip);
+    });
+
+    // ── Step 4: trigger reveal on the next frame ─────────────────────────
     descTimer = setTimeout(() => {
-      descEl.textContent = text;
-      // Force reflow so transition fires
-      void descEl.offsetHeight;
-      descEl.classList.add('is-visible');
-    }, 160);
+      descEl.querySelectorAll<HTMLElement>('.lr-clip')
+        .forEach(clip => clip.classList.add('lr-visible'));
+    }, 16);
   }
 
   /* ── Item hover ───────────────────────────────────────────────────────── */
