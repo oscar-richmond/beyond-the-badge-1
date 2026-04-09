@@ -89,7 +89,7 @@ const VIEWER_H = 375;
 <style>
   /* ── Section ──────────────────────────────────────────────────────────── */
   .services {
-    background-color: var(--color-forest);
+    background-color: var(--color-dark-section);
     padding: var(--section-padding-y) 0;
     position: relative;
   }
@@ -126,7 +126,7 @@ const VIEWER_H = 375;
 
   hr.services__divider {
     border: none;
-    border-top: 1px solid rgba(245, 240, 232, 0.12);
+    border-top: 1px solid #6E4142;
     margin: 0;
   }
 
@@ -143,7 +143,7 @@ const VIEWER_H = 375;
     font-family: var(--font-sans);
     font-size: 0.85rem;
     font-weight: 300;
-    color: rgba(245, 240, 232, 0.35);
+    color: #6E4142;
     min-width: 32px;
     transition: color 0.4s ease;
   }
@@ -164,7 +164,7 @@ const VIEWER_H = 375;
     overflow: visible;
   }
 
-  .services__item:hover .services__title { color: #8CB7A0; }
+  .services__item:hover .services__title { color: #6E4142; }
 
   .services__beyond-img {
     height: 51px;
@@ -182,9 +182,8 @@ const VIEWER_H = 375;
   }
 
   .services__item:hover .services__beyond-img {
-    /* Render script image as sage green #8CB7A0 on hover */
-    filter: brightness(0) saturate(100%) invert(73%) sepia(15%) saturate(500%)
-            hue-rotate(108deg) brightness(96%) contrast(90%);
+    filter: brightness(0) saturate(100%) invert(24%) sepia(23%) saturate(1005%)
+            hue-rotate(314deg) brightness(98%) contrast(92%);
   }
 
   .services__category {
@@ -192,7 +191,7 @@ const VIEWER_H = 375;
     font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: 0.15em;
-    color: rgba(245, 240, 232, 0.35);
+    color: #6E4142;
     text-transform: uppercase;
     white-space: nowrap;
     transition: all 0.4s ease;
