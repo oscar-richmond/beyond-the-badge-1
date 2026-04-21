@@ -13,6 +13,20 @@ import Footer from '../components/Footer.astro';
 
 <BaseLayout>
   <Header />
+
+  <!-- Homepage: header is over cream bg, so at-top colours need to be dark not white -->
+  <style is:global>
+    body:has(#hero) .header.at-top .header__nav-link {
+      color: var(--color-forest, #052715);
+    }
+    body:has(#hero) .header.at-top .header__logo-img {
+      filter: brightness(0.15) sepia(1) hue-rotate(110deg) saturate(6) brightness(1.1);
+    }
+    body:has(#hero) .header.at-top .header__menu-line {
+      background-color: var(--color-forest, #052715);
+    }
+  </style>
+
   <main>
     <Hero />
     <About />

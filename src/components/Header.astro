@@ -1,23 +1,25 @@
 ---
 const base = import.meta.env.BASE_URL;
 const navItems = [
-  { href: `${base}/about`, label: 'About' },
-  { href: '#services', label: 'Services' },
-  { href: `${base}/contact`, label: 'Contact' },
+  { href: import.meta.env.BASE_URL, label: 'Home',    comma: true  },
+  { href: `${base}about`,           label: 'About',   comma: true  },
+  { href: `${base}contact`,         label: 'Contact', comma: false },
 ];
 ---
 
 <header class="header at-top">
   <div class="header__inner">
     <a href={import.meta.env.BASE_URL} class="header__logo" aria-label="Beyond the Badge - Home">
-      <img src={`${import.meta.env.BASE_URL}/logo-monogram.png`} alt="Beyond the Badge" class="header__logo-img" />
+      <img src={`${import.meta.env.BASE_URL}logo-monogram.png`} alt="Beyond the Badge" class="header__logo-img" />
     </a>
 
     <nav class="header__nav" aria-label="Main navigation">
       <ul class="header__nav-list">
         {navItems.map((item) => (
           <li>
-            <a href={item.href} class="header__nav-link">{item.label}</a>
+            <a href={item.href} class="header__nav-link">
+              {item.label}{item.comma && <span class="nav-comma" aria-hidden="true">,</span>}
+            </a>
           </li>
         ))}
       </ul>
@@ -36,7 +38,9 @@ const navItems = [
     <ul class="mobile-nav__list">
       {navItems.map((item) => (
         <li>
-          <a href={item.href} class="mobile-nav__link">{item.label}</a>
+          <a href={item.href} class="mobile-nav__link">
+            {item.label}{item.comma && <span aria-hidden="true">,</span>}
+          </a>
         </li>
       ))}
     </ul>
@@ -107,17 +111,17 @@ const navItems = [
 
   .header__nav-list {
     display: flex;
-    gap: 36px;
+    gap: 8px;
   }
 
   /* State 2 (scrolled) — green links */
   .header__nav-link {
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    font-weight: 400;
+    font-family: var(--font-script);
+    font-style: italic;
+    font-size: 20px;
+    font-weight: 600;
+    font-variation-settings: "wght" 600;
     color: #004f26;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     transition: color 0.3s ease, opacity 0.3s ease;
   }
 
@@ -184,6 +188,34 @@ const navItems = [
     font-size: 2rem;
     color: var(--color-text-light);
     letter-spacing: 0.02em;
+  }
+
+  /* ── 1280px: proportional scale-down ─── */
+  @media (max-width: 1280px) {
+    .header__inner {
+      padding-top:    16px;  /* 18px × 0.90 */
+      padding-bottom: 16px;
+    }
+    .header__logo-img {
+      height: 32px;   /* 36px × 0.90 */
+    }
+    .header__nav-link {
+      font-size: 19px;  /* 20px × 0.94 */
+    }
+  }
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  @media (max-width: 1024px) {
+    .header__inner {
+      padding-top:    14px;  /* 16px × 0.90 */
+      padding-bottom: 14px;
+    }
+    .header__logo-img {
+      height: 29px;   /* 32px × 0.90 */
+    }
+    .header__nav-link {
+      font-size: 18px;  /* 19px × 0.94 */
+    }
   }
 
   @media (max-width: 768px) {

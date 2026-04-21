@@ -3,6 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://oscar-richmond.github.io',
-  base: '/beyond-the-badge-1',
+  site: 'https://beyondthebadge.co.uk', // update once you have your Vercel domain
 });

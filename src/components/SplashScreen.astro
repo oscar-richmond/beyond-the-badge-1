@@ -27,7 +27,7 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <div class="splash-meta">
-      <span class="splash-label">Cultural Brand Partnerships</span>
+      <span class="splash-label">Culture First Brand Agency</span>
       <span class="splash-counter" id="splashCounter">000</span>
     </div>
 
@@ -115,7 +115,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   .splash-label {
-    font-family: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: clamp(9px, 1.05vw, 10.5px);
     font-weight: 400;
     letter-spacing: 0.22em;
@@ -124,12 +124,57 @@ const base = import.meta.env.BASE_URL;
   }
 
   .splash-counter {
-    font-family: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: clamp(9px, 1.05vw, 10.5px);
     font-weight: 400;
     letter-spacing: 0.14em;
     color: rgba(255, 255, 255, 0.35);
     font-variant-numeric: tabular-nums;
+  }
+
+  /* ── 1440px: proportional scale-down from 1728px baseline ─── */
+  @media (max-width: 1440px) {
+    .splash-logo-wrap,
+    .splash-divider-wrap,
+    .splash-meta {
+      width: min(274px, 46.4vw);  /* 304px × 0.90 */
+    }
+    .splash-divider-wrap {
+      margin-top: 25px;  /* 28px × 0.90 */
+    }
+    .splash-meta {
+      margin-top: 13px;  /* 14px × 0.90 */
+    }
+  }
+
+  /* ── 1280px: proportional scale-down from 1440px ─── */
+  @media (max-width: 1280px) {
+    .splash-logo-wrap,
+    .splash-divider-wrap,
+    .splash-meta {
+      width: min(247px, 46.4vw);  /* 274px × 0.90 */
+    }
+    .splash-divider-wrap {
+      margin-top: 22px;  /* 25px × 0.90 */
+    }
+    .splash-meta {
+      margin-top: 12px;  /* 13px × 0.90 */
+    }
+  }
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  @media (max-width: 1024px) {
+    .splash-logo-wrap,
+    .splash-divider-wrap,
+    .splash-meta {
+      width: min(222px, 46.4vw);  /* 247px × 0.90 */
+    }
+    .splash-divider-wrap {
+      margin-top: 20px;  /* 22px × 0.90 */
+    }
+    .splash-meta {
+      margin-top: 11px;  /* 12px × 0.90 */
+    }
   }
 </style>
 
@@ -165,8 +210,18 @@ const base = import.meta.env.BASE_URL;
     document.documentElement.style.overflow = '';
   }
 
+  // Idempotent signal — safe to call from multiple paths.
+  // Sets the global flag and dispatches the event exactly once.
+  function signalSplashDone() {
+    if ((window as any).__splashDone) return;
+    (window as any).__splashDone = true;
+    document.dispatchEvent(new CustomEvent('splashDone'));
+  }
+
   function hideSplash() {
     if (splash) splash.style.display = 'none';
+    // Ensure signal fires even on unexpected early exits
+    signalSplashDone();
   }
 
   if (prefersReduced || isInternalNav || !splash) {
@@ -255,6 +310,9 @@ const base = import.meta.env.BASE_URL;
           //   rAF 2 → browser composites + paints the invisible-content frame
           // Panels only move after this guaranteed paint.
           requestAnimationFrame(() => requestAnimationFrame(() => {
+            // Fire splashDone as panels START moving so hero text begins
+            // animating in sync with the reveal — not 1.1 s later.
+            signalSplashDone();
             gsap.to(panelL, { x: '-101%', duration: 1.1, ease: 'splashOut', onComplete: hideSplash });
             gsap.to(panelR, { x:  '101%', duration: 1.1, ease: 'splashOut' });
           }));

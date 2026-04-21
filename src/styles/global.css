@@ -5,6 +5,30 @@
 /* --- Google Fonts --- */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
+/* --- Self-hosted Awesome Serif Variable Font (woff2, converted from licensed TTF-VF files) ---
+   Upright: wght axis 1–700, hght axis 0–1000
+   Italic:  wght axis 300–700, hght axis 0–1000
+   font-weight ranges must match the axis min/max so the browser maps
+   CSS font-weight correctly onto the variation axis.
+   font-display: swap — Playfair Display shows instantly; swaps in once loaded. */
+@font-face {
+  font-family: 'Awesome Serif VAR';
+  src: url('/fonts/awesome-serif-var.woff2') format('woff2 supports variations'),
+       url('/fonts/awesome-serif-var.woff2') format('woff2');
+  font-weight: 1 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Awesome Serif Italic VAR';
+  src: url('/fonts/awesome-serif-italic-var.woff2') format('woff2 supports variations'),
+       url('/fonts/awesome-serif-italic-var.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* --- Design Tokens --- */
 :root {
   /* Colours */
@@ -24,10 +48,18 @@
   --color-divider-light: rgba(5, 39, 21, 0.1);
   --color-accent:        rgba(232, 224, 212, 0.6);
 
-  /* Typography */
-  --font-script:  'Awesome Serif VAR', 'Playfair Display', georgia, serif;
-  --font-serif:   'Awesome Serif VAR', 'Playfair Display', georgia, serif;
-  --font-sans:    'Inter', system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI',
+  /* Typography
+     Primary:   Awesome Serif VAR (commercial — locally installed on branded machines)
+                'Awesome Serif' (without VAR suffix) is tried next; Safari's native
+                font-family lookup matches the font's Preferred Family name directly
+                whereas Chrome's lookup is lenient enough to find it via 'Awesome Serif VAR'.
+     Web fallback: Playfair Display (Google Fonts — closest editorial serif match)
+     Last resort:  Cormorant Garamond, then Georgia */
+  --font-script: 'Awesome Serif Italic VAR', 'Awesome Serif Italic', 'Awesome Serif',
+                 'Playfair Display', 'Cormorant Garamond', georgia, serif;
+  --font-serif:  'Awesome Serif VAR', 'Awesome Serif',
+                 'Playfair Display', 'Cormorant Garamond', georgia, serif;
+  --font-sans:   'Inter', system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI',
     roboto, oxygen, ubuntu, cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
   /* Spacing */
@@ -35,6 +67,12 @@
   --section-padding-x: 40px;
   --content-max-width: 1648px; /* 1728px viewport - 80px for margins */
   --gutter: clamp(24px, 4vw, 64px);
+
+  /* Label / eyebrow Inter text.
+     clamp() evaluates per-viewport at render time — no media query cascade
+     required, works identically in Safari and Chrome.
+     0.75rem (12px) at ≤1200px viewport, 0.875rem (14px) at ≥1400px. */
+  --font-size-label: clamp(0.75rem, 1vw, 0.875rem);
 
   /* Transitions */
   --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -49,6 +87,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Prevent Safari from synthesising bold/italic on top of variable font axes.
+     Without this, elements using font-variation-settings can appear doubly
+     heavy or slanted in Safari compared with Chrome. */
+  font-synthesis: none;
 }
 
 html {
@@ -60,12 +102,20 @@ html {
 
 body {
   font-family: var(--font-serif);
-  font-weight: 400;
+  /* font-variation-settings MUST be set here (not just font-weight) because
+     inherited font-variation-settings takes precedence over a child element's
+     explicit font-weight per CSS Fonts Level 4. This ensures that all Awesome
+     Serif body text renders at wght≈100 regardless of any font-weight: 400
+     overrides in component CSS. Elements with their own font-variation-settings
+     (e.g. "wght" 700 italic headings) correctly override this via specificity. */
+  font-variation-settings: "wght" 100;
+  font-weight: 100;
   font-size: 18px;
   line-height: 1.6;
   color: var(--color-text-dark);
   background-color: var(--color-cream);
   overflow-x: hidden;
+  font-optical-sizing: auto;
 }
 
 h1,
@@ -75,7 +125,8 @@ h4,
 h5,
 h6 {
   font-family: var(--font-serif);
-  font-weight: 400; /* Awesome Serif typically looks best at 400 or a custom variation weight */
+  font-weight: 300; /* Light by default; specific headings can set heavier weights
+                      via font-variation-settings or font-weight overrides */
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0;
@@ -144,6 +195,7 @@ button {
 
 .font-sans {
   font-family: var(--font-sans);
+  font-variation-settings: normal;
 }
 
 /* ── Scroll Reveals — no-JS fallback ───────────────────────────── */
@@ -208,11 +260,95 @@ button {
   clip-path: inset(0 0 0% 0);
 }
 
+/* --- 1440px compact scaling (proportional scale from 1522px baseline) --- */
+@media (max-width: 1440px) {
+  :root {
+    --section-padding-x: 36px;                        /* 40px × 0.90 */
+    --section-padding-y: clamp(72px, 10.8vh, 144px);  /* clamp(80,12vh,160) × 0.90 */
+  }
+  .footer {
+    padding: 72px 0 36px;  /* 80/40px × 0.90 */
+  }
+  .footer__inner {
+    gap: 72px;             /* 80px × 0.90 */
+  }
+  .footer__top {
+    padding: 54px 0;       /* 60px × 0.90 */
+  }
+}
+
+/* --- 1280px compact scaling (proportional scale from 1440px) --- */
+@media (max-width: 1280px) {
+  :root {
+    --section-padding-x: 32px;                        /* 36px × 0.90 */
+    --section-padding-y: clamp(65px, 9.7vh, 130px);   /* clamp(72,10.8vh,144) × 0.90 */
+  }
+  .footer {
+    padding: 65px 0 32px;  /* 72/36px × 0.90 */
+  }
+  .footer__inner {
+    gap: 65px;             /* 72px × 0.90 */
+  }
+  .footer__top {
+    padding: 49px 0;       /* 54px × 0.90 */
+  }
+}
+
+/* ── 1024px: proportional scale-down from 1280px ─── */
+@media (max-width: 1024px) {
+  :root {
+    --section-padding-x: 29px;                        /* 32px × 0.90 */
+    --section-padding-y: clamp(58px, 8.7vh, 117px);   /* clamp(65,9.7vh,130) × 0.90 */
+    /* --font-size-label handled by clamp() in :root — no override needed */
+  }
+  .footer {
+    padding: 58px 0 29px;  /* 65/32px × 0.90 */
+  }
+  .footer__inner {
+    gap: 59px;             /* 65px × 0.90 */
+  }
+  .footer__top {
+    padding: 44px 0;       /* 49px × 0.90 */
+  }
+  /* Footer bottom: flatten all 6 items into one evenly-spaced flex row.
+     space-evenly puts equal space around every item — phantom 0-width nav
+     boxes (display:contents browser variance) cannot create double-wide gaps. */
+  .footer__bottom {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0;
+  }
+  .footer__nav,
+  .footer__nav-list,
+  .footer__nav-list li,
+  .footer__legal {
+    display: contents;
+  }
+  /* Hide the · separator — not needed in the flat layout */
+  .footer__legal-sep {
+    display: none;
+  }
+  /* Normalise all 6 text nodes: same size, same height, no inherited spacing */
+  .footer__bottom .footer__nav-link,
+  .footer__bottom .footer__legal span {
+    font-size: 0.7rem;
+    line-height: 1;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── Label / eyebrow text: clamp() in :root handles all breakpoints ── */
+}
+
 /* --- Mobile token overrides --- */
 @media (max-width: 480px) {
   :root {
     --section-padding-x: 20px;
     --section-padding-y: clamp(60px, 10vh, 100px);
+    /* --font-size-label handled by clamp() in :root */
   }
 }
 
@@ -270,7 +406,6 @@ button {
 .footer__logo-img {
   width: 120px;
   height: auto;
-  opacity: 1;
   filter: brightness(0) invert(1);
 }
 
@@ -295,6 +430,7 @@ button {
 
 .footer__nav-link {
   font-family: var(--font-sans);
+  font-variation-settings: normal;
   font-size: 0.8rem;
   font-weight: 400;
   color: rgba(245, 240, 232, 0.7);
@@ -320,6 +456,7 @@ button {
 .footer__legal span,
 .footer__legal-sep {
   font-family: var(--font-sans);
+  font-variation-settings: normal;
   font-size: 0.8rem;
   font-weight: 400;
   color: rgba(245, 240, 232, 0.5);
@@ -349,4 +486,30 @@ button {
     width: 280px;
     right: 12px;
   }
+}
+
+/* ── Laura Wood homepage link (global so Astro scoping doesn't block it) ── */
+.about__laura-link {
+  display: inline;
+  text-decoration: none;
+  color: inherit;
+}
+
+.about__laura-link em {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 500;
+  font-variation-settings: "wght" 500, "hght" 0 !important;
+  text-decoration: underline dotted;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 6%;
+  text-decoration-color: var(--color-text-dark);
+  color: var(--color-text-dark);
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  cursor: pointer;
+}
+
+.about__laura-link:hover em {
+  color: #8CB7A0;
+  text-decoration-color: #8CB7A0;
 }

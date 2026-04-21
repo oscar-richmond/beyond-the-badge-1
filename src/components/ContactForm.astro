@@ -22,85 +22,119 @@
             <span class="contact__detail-label">Phone</span>
             <span class="contact__detail-value">+44 (0) 123 456 7890</span>
           </a>
-          <a href="mailto:hello@beyondthebadge.co.uk" class="contact__detail-link">
+          <a href="mailto:hello@beyondthebadge.agency" class="contact__detail-link">
             <span class="contact__detail-label">Email</span>
-            <span class="contact__detail-value">hello@beyondthebadge.co.uk</span>
+            <span class="contact__detail-value">hello@beyondthebadge.agency</span>
           </a>
         </div>
       </div>
 
-      <form
-        class="contact__form reveal--right"
-        style="transition-delay: 0.15s;"
-        action="mailto:hello@beyondthebadge.co.uk"
-        method="POST"
-        enctype="text/plain"
-        id="contact-form"
-        novalidate
-      >
-        <div class="contact__field-row">
-          <div class="contact__field">
-            <label for="contact-name" class="contact__label">Name</label>
+      <!-- Form panel — JS handles state: idle / loading / success / error -->
+      <div class="contact__form-wrap reveal--right" style="transition-delay: 0.15s;">
+
+        <!-- Success panel (hidden until submission succeeds) -->
+        <div class="contact__success-panel" id="contact-success-panel" aria-live="polite" hidden>
+          <span class="contact__success-tick" aria-hidden="true">✓</span>
+          <p class="contact__success-headline">Message received.</p>
+          <p class="contact__success-sub">
+            Thank you for reaching out. We'll be in touch shortly.
+          </p>
+        </div>
+
+        <form
+          class="contact__form"
+          id="contact-form"
+          novalidate
+        >
+          <div class="contact__field-row">
+            <div class="contact__field" id="field-name">
+              <label for="contact-name" class="contact__label">
+                Name <span class="contact__required" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="contact-name"
+                name="name"
+                class="contact__input"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+                aria-required="true"
+                aria-describedby="error-name"
+              />
+              <span class="contact__error" id="error-name" role="alert" aria-live="polite"></span>
+            </div>
+            <div class="contact__field" id="field-email">
+              <label for="contact-email" class="contact__label">
+                Email <span class="contact__required" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                class="contact__input"
+                placeholder="your@email.com"
+                autocomplete="email"
+                required
+                aria-required="true"
+                aria-describedby="error-email"
+              />
+              <span class="contact__error" id="error-email" role="alert" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="contact__field" id="field-company">
+            <label for="contact-company" class="contact__label">
+              Company / Brand <span class="contact__required" aria-hidden="true">*</span>
+            </label>
             <input
               type="text"
-              id="contact-name"
-              name="name"
+              id="contact-company"
+              name="company"
               class="contact__input"
-              placeholder="Your name"
+              placeholder="Company name"
+              autocomplete="organization"
               required
+              aria-required="true"
+              aria-describedby="error-company"
             />
+            <span class="contact__error" id="error-company" role="alert" aria-live="polite"></span>
           </div>
-          <div class="contact__field">
-            <label for="contact-email" class="contact__label">Email</label>
-            <input
-              type="email"
-              id="contact-email"
-              name="email"
-              class="contact__input"
-              placeholder="your@email.com"
+
+          <div class="contact__field" id="field-message">
+            <label for="contact-message" class="contact__label">
+              Message <span class="contact__required" aria-hidden="true">*</span>
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              class="contact__input contact__textarea"
+              placeholder="Tell us about your brand and what you're looking to achieve..."
+              rows="5"
               required
-            />
+              aria-required="true"
+              aria-describedby="error-message"
+            ></textarea>
+            <span class="contact__error" id="error-message" role="alert" aria-live="polite"></span>
           </div>
-        </div>
 
-        <div class="contact__field">
-          <label for="contact-company" class="contact__label">Company / Brand</label>
-          <input
-            type="text"
-            id="contact-company"
-            name="company"
-            class="contact__input"
-            placeholder="Company name"
-          />
-        </div>
+          <div class="contact__form-footer">
+            <p class="contact__privacy">
+              We'll only use your information to respond to your enquiry.
+            </p>
+            <button type="submit" class="contact__submit" id="contact-submit" aria-live="polite">
+              <span class="contact__submit-text">Send message</span>
+              <span class="contact__submit-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
 
-        <div class="contact__field">
-          <label for="contact-message" class="contact__label">Message</label>
-          <textarea
-            id="contact-message"
-            name="message"
-            class="contact__input contact__textarea"
-            placeholder="Tell us about your brand and what you're looking to achieve..."
-            rows="5"
-            required
-          ></textarea>
-        </div>
-
-        <div class="contact__form-footer">
-          <p class="contact__privacy">
-            We'll only use your information to respond to your enquiry.
+          <!-- Network / server error -->
+          <p class="contact__send-error" id="contact-send-error" role="alert" aria-live="polite" hidden>
+            Something went wrong — please try again or email us directly.
           </p>
-          <button type="submit" class="contact__submit" id="contact-submit">
-            <span class="contact__submit-text">Send message</span>
-            <span class="contact__submit-arrow">→</span>
-          </button>
-        </div>
+        </form>
 
-        <div class="contact__success" id="contact-success" aria-live="polite">
-          <span class="contact__success-icon">✓</span>
-          <p>Message sent — we'll be in touch shortly.</p>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </section>
@@ -108,7 +142,7 @@
 <style>
   .contact {
     background-color: var(--color-dark-maroon);
-    padding: var(--section-padding-y) 0;
+    padding: calc(var(--section-padding-y) * 1.5) 0;
   }
 
   .contact__header {
@@ -117,7 +151,8 @@
 
   .contact__tag {
     font-family: var(--font-sans);
-    font-size: 0.72rem;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     font-weight: 500;
     letter-spacing: 0.18em;
     color: rgba(232, 224, 212, 0.45);
@@ -145,10 +180,10 @@
   }
 
   .contact__heading-em {
-    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    font-family: var(--font-script);
     font-style: italic;
     font-weight: 400;
-    font-variation-settings: "wght" 400, "HGHT" 1000;
+    font-variation-settings: "wght" 400, "hght" 1000;
     color: rgba(232, 224, 212, 0.6);
   }
 
@@ -167,6 +202,7 @@
 
   .contact__subtext {
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.9rem;
     line-height: 1.7;
     color: rgba(232, 224, 212, 0.55);
@@ -197,6 +233,7 @@
 
   .contact__detail-label {
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -211,7 +248,14 @@
     transition: color var(--transition-base);
   }
 
-  /* Form */
+  /* ── Form wrap (holds both form and success panel) ─── */
+  .contact__form-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Form ──────────────────────────────────────────── */
   .contact__form {
     display: flex;
     flex-direction: column;
@@ -232,11 +276,18 @@
 
   .contact__label {
     font-family: var(--font-sans);
-    font-size: 0.72rem;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: rgba(232, 224, 212, 0.4);
+  }
+
+  /* Required asterisk — subtle, positioned after label text */
+  .contact__required {
+    color: rgba(145, 99, 100, 0.7);
+    margin-left: 2px;
   }
 
   .contact__input {
@@ -249,13 +300,14 @@
     padding: 12px 0;
     outline: none;
     width: 100%;
-    transition: border-color var(--transition-base);
+    transition: border-color 0.3s ease;
     caret-color: var(--color-cream);
   }
 
   .contact__input::placeholder {
     color: rgba(232, 224, 212, 0.22);
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.9rem;
   }
 
@@ -263,11 +315,37 @@
     border-bottom-color: rgba(232, 224, 212, 0.55);
   }
 
+  /* Error state on input */
+  .contact__input.has-error {
+    border-bottom-color: #916364;
+  }
+
   .contact__textarea {
     resize: vertical;
     min-height: 120px;
     font-family: var(--font-serif);
     line-height: 1.6;
+  }
+
+  /* Per-field error message */
+  .contact__error {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: #916364;
+    min-height: 1em;   /* prevents layout jump */
+    line-height: 1.4;
+    display: block;
+    /* Hidden until populated */
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .contact__error.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .contact__form-footer {
@@ -280,6 +358,7 @@
 
   .contact__privacy {
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.72rem;
     color: rgba(232, 224, 212, 0.3);
     line-height: 1.5;
@@ -291,22 +370,58 @@
     align-items: center;
     gap: 10px;
     font-family: var(--font-sans);
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--color-dark-maroon);
-    background-color: var(--color-cream);
-    border: none;
+    font-variation-settings: normal;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    /* Outlined — same colour as field labels */
+    color: var(--color-cream);
+    background: transparent;
+    border: 1px solid rgba(232, 224, 212, 0.4);
     padding: 14px 28px;
     cursor: pointer;
-    transition: background-color var(--transition-base), transform var(--transition-base);
     white-space: nowrap;
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      letter-spacing 0.4s ease,
+      opacity var(--transition-base);
   }
 
-  .contact__submit:hover {
-    background-color: var(--color-cream-warm);
-    transform: translateY(-1px);
+  /* Cream fill wipes left→right on hover — same mechanic as about page CTAs */
+  .contact__submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-cream);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 1;
+  }
+
+  /* Text + arrow float above the wipe layer */
+  .contact__submit-text,
+  .contact__submit-arrow {
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact__submit:hover:not(:disabled)::before {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  .contact__submit:hover:not(:disabled) {
+    color: var(--color-dark-maroon);
+    letter-spacing: 0.08em;
+  }
+
+  .contact__submit:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 
   .contact__submit-arrow {
@@ -314,39 +429,99 @@
     display: inline-block;
   }
 
-  .contact__submit:hover .contact__submit-arrow {
+  .contact__submit:hover:not(:disabled) .contact__submit-arrow {
     transform: translateX(4px);
   }
 
-  /* Success state */
-  .contact__success {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    color: var(--color-cream);
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    padding: 16px 0;
-    border-top: 1px solid rgba(232, 224, 212, 0.15);
+  /* Loading state — arrow pulses */
+  .contact__submit.is-loading .contact__submit-arrow {
+    animation: arrowPulse 0.8s ease-in-out infinite alternate;
   }
 
-  .contact__success.visible {
+  @keyframes arrowPulse {
+    from { opacity: 0.3; transform: translateX(0); }
+    to   { opacity: 1;   transform: translateX(6px); }
+  }
+
+  /* Network/server send error */
+  .contact__send-error {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: #916364;
+    padding: 14px 0;
+    border-top: 1px solid rgba(145, 99, 100, 0.25);
+    margin-top: -8px;
+  }
+
+  /* ── Success panel ─────────────────────────────────── */
+  .contact__success-panel {
+    display: none;   /* overrides HTML [hidden]; JS sets display:flex on success */
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 48px 0;
+  }
+
+  .contact__success-panel.is-visible {
     display: flex;
   }
 
-  .contact__success-icon {
+  .contact__success-tick {
     font-size: 1.1rem;
     color: #8CB7A0;
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    letter-spacing: 0;
+  }
+
+  .contact__success-headline {
+    font-family: var(--font-script);
+    font-style: italic;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    font-variation-settings: "wght" 400, "hght" 1000;
+    color: var(--color-cream);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .contact__success-sub {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 0.85rem;
+    color: rgba(232, 224, 212, 0.5);
+    line-height: 1.65;
+    max-width: 340px;
+    margin: 0;
   }
 
   /* Responsive */
+  
   @media (max-width: 1024px) {
+
     .contact__body {
       grid-template-columns: 1fr 1.4fr;
     }
+  
+
+    .contact__heading {
+      font-size: clamp(2rem, 4.1vw, 3.71rem);  /* max 3.95rem × 0.94 */
+    }
+    .contact__submit {
+      font-size: 12px;    /* 14px − 2px (user request) */
+      padding: 12px 24px; /* 14px/28px scaled to match smaller type */
+      gap: 9px;           /* 10px scaled proportionally */
+    }
+  
   }
 
+
+  
   @media (max-width: 768px) {
+
     .contact__body {
       grid-template-columns: 1fr;
       gap: 48px;
@@ -369,35 +544,198 @@
     .contact__subtext {
       max-width: 100%;
     }
+  
   }
+
+
+  /* ── 1440px: proportional scale-down from 1522px baseline ─── */
+  
+  @media (max-width: 1440px) {
+
+    .contact__heading {
+      font-size: clamp(2.25rem, 4.7vw, 4.2rem);  /* clamp(2.4rem,5vw,4.5rem) × 0.94 */
+    }
+  
+  }
+
+
+  /* ── 1280px: proportional scale-down from 1440px ─── */
+  
+  @media (max-width: 1280px) {
+
+    .contact__heading {
+      font-size: clamp(2.12rem, 4.4vw, 3.95rem);  /* max 4.2rem × 0.94 */
+    }
+  
+  }
+
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  
 </style>
 
 <script>
-  const form = document.getElementById('contact-form') as HTMLFormElement | null;
-  const successMsg = document.getElementById('contact-success');
+  const form        = document.getElementById('contact-form')    as HTMLFormElement | null;
+  const submitBtn   = document.getElementById('contact-submit')  as HTMLButtonElement | null;
+  const submitText  = submitBtn?.querySelector('.contact__submit-text');
+  const successPanel = document.getElementById('contact-success-panel') as HTMLElement | null;
+  const sendError   = document.getElementById('contact-send-error') as HTMLElement | null;
 
-  // Simple client-side validation before mailto
-  form?.addEventListener('submit', (e) => {
-    const name = (document.getElementById('contact-name') as HTMLInputElement)?.value.trim();
-    const email = (document.getElementById('contact-email') as HTMLInputElement)?.value.trim();
-    const message = (document.getElementById('contact-message') as HTMLTextAreaElement)?.value.trim();
+  // ── Field descriptors ──────────────────────────────────────────────────────
+  const fields = [
+    {
+      id:      'contact-name',
+      errorId: 'error-name',
+      label:   'Name',
+      validate(val: string) {
+        if (!val) return 'Please enter your name.';
+        if (val.length < 2) return 'Name must be at least 2 characters.';
+        return '';
+      },
+    },
+    {
+      id:      'contact-email',
+      errorId: 'error-email',
+      label:   'Email',
+      validate(val: string) {
+        if (!val) return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return 'Please enter a valid email address.';
+        return '';
+      },
+    },
+    {
+      id:      'contact-company',
+      errorId: 'error-company',
+      label:   'Company / Brand',
+      validate(val: string) {
+        if (!val) return 'Please enter your company or brand name.';
+        return '';
+      },
+    },
+    {
+      id:      'contact-message',
+      errorId: 'error-message',
+      label:   'Message',
+      validate(val: string) {
+        if (!val) return 'Please write a message before sending.';
+        if (val.length < 10) return 'Message is a little short — tell us more.';
+        return '';
+      },
+    },
+  ] as const;
 
-    if (!name || !email || !message) {
-      e.preventDefault();
-      // Shake invalid fields
-      [document.getElementById('contact-name'), document.getElementById('contact-email'), document.getElementById('contact-message')].forEach((el) => {
-        if (el && !(el as HTMLInputElement).value.trim()) {
-          el.style.borderBottomColor = '#916364';
-          setTimeout(() => ((el as HTMLElement).style.borderBottomColor = ''), 2000);
-        }
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function setFieldError(fieldDef: typeof fields[number], msg: string) {
+    const input = document.getElementById(fieldDef.id) as HTMLInputElement | HTMLTextAreaElement | null;
+    const errEl = document.getElementById(fieldDef.errorId);
+    if (!input || !errEl) return;
+
+    if (msg) {
+      input.classList.add('has-error');
+      errEl.textContent = msg;
+      errEl.classList.add('visible');
+    } else {
+      input.classList.remove('has-error');
+      errEl.textContent = '';
+      errEl.classList.remove('visible');
+    }
+  }
+
+  function clearAllErrors() {
+    fields.forEach(f => setFieldError(f, ''));
+    if (sendError) sendError.hidden = true;
+  }
+
+  function setLoading(loading: boolean) {
+    if (!submitBtn || !submitText) return;
+    submitBtn.disabled = loading;
+    submitBtn.classList.toggle('is-loading', loading);
+    submitText.textContent = loading ? 'Sending—' : 'Send message';
+  }
+
+  // ── Live validation: clear error as soon as field becomes valid ────────────
+  fields.forEach(fieldDef => {
+    const input = document.getElementById(fieldDef.id) as HTMLInputElement | HTMLTextAreaElement | null;
+    if (!input) return;
+    input.addEventListener('input', () => {
+      const val = input.value.trim();
+      // Only clear the error (don't show new ones mid-typing)
+      if (!fieldDef.validate(val)) setFieldError(fieldDef, '');
+    });
+    input.addEventListener('blur', () => {
+      // Show error on blur if field is non-empty and invalid
+      const val = input.value.trim();
+      if (val) setFieldError(fieldDef, fieldDef.validate(val));
+    });
+  });
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearAllErrors();
+
+    // Collect + validate all fields
+    let hasError = false;
+    const data: Record<string, string> = {};
+
+    fields.forEach(fieldDef => {
+      const input = document.getElementById(fieldDef.id) as HTMLInputElement | HTMLTextAreaElement | null;
+      const val   = input?.value.trim() ?? '';
+      data[fieldDef.id.replace('contact-', '')] = val;
+
+      const err = fieldDef.validate(val);
+      if (err) {
+        setFieldError(fieldDef, err);
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      // Focus first invalid field
+      const firstErr = fields.find(f => {
+        const el = document.getElementById(f.id) as HTMLInputElement | null;
+        return el && f.validate(el.value.trim());
       });
+      if (firstErr) (document.getElementById(firstErr.id) as HTMLElement)?.focus();
       return;
     }
 
-    // Show success after mailto opens
-    setTimeout(() => {
-      successMsg?.classList.add('visible');
-      form?.reset();
-    }, 500);
+    // ── Send via formsubmit.co AJAX ────────────────────────────────────────
+    setLoading(true);
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/oscar@selfhood-studios.com', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept':        'application/json',
+        },
+        body: JSON.stringify({
+          name:    data.name,
+          email:   data.email,
+          company: data.company,
+          message: data.message,
+          // Formsubmit options
+          _subject: `New enquiry from ${data.name} — Beyond the Badge`,
+          _captcha: 'false',
+          _template: 'table',
+        }),
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.success === 'true') {
+        // ── Success ──────────────────────────────────────────────────────────
+        form.style.display = 'none';
+        if (successPanel) successPanel.classList.add('is-visible');
+        form.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch {
+      // ── Network / server error ────────────────────────────────────────────
+      setLoading(false);
+      if (sendError) sendError.hidden = false;
+    }
   });
 </script>

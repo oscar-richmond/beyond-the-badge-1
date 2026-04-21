@@ -4,7 +4,7 @@ interface Props {
 }
 const { cream = false } = Astro.props;
 
-const base = import.meta.env.BASE_URL + '/';
+const base = import.meta.env.BASE_URL;
 const navItems = [
   { href: '/terms', label: 'Terms & Conditions' },
   { href: '/privacy', label: 'Privacy Policy' },
@@ -28,7 +28,7 @@ const navItems = [
     </div>
 
     <div class="footer__bottom">
-      <a href="mailto:info@beyondthebadge.agency" class="footer__nav-link">info@beyondthebadge.agency</a>
+      <a href="mailto:hello@beyondthebadge.agency" class="footer__nav-link">hello@beyondthebadge.agency</a>
 
       <nav class="footer__nav" aria-label="Footer navigation">
         <ul class="footer__nav-list">

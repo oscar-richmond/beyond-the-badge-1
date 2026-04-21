@@ -44,13 +44,13 @@ const base = import.meta.env.BASE_URL;
             <span class="about-images__num-inner" data-state="community">(13)</span>
           </span>
           <div class="about-images__photo" id="about-photo-1">
-            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-3.jpg')`}></div>
-            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}hero-bg.jpg')`}></div>
-            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-3.jpg')`}></div>
-            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-3.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-page-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-art-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-sport-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-film-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-entertainment-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-adventure-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-community-1.jpg')`}></div>
           </div>
         </div>
         <div class="about-images__item reveal--scale" data-reveal-immediate>
@@ -64,13 +64,13 @@ const base = import.meta.env.BASE_URL;
             <span class="about-images__num-inner" data-state="community">(14)</span>
           </span>
           <div class="about-images__photo" id="about-photo-2">
-            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}hero-bg.jpg')`}></div>
-            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-3.jpg')`}></div>
-            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-1.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-page-right-default.jpg')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-art-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-sport-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-film-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-adventure-1.jpg')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-entertainment-2.jpg')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-community-2.jpg')`}></div>
           </div>
         </div>
       </div>
@@ -87,36 +87,36 @@ const base = import.meta.env.BASE_URL;
           playing the corporate playbook, but by showing up with purpose, humility, and
           a point of view.
         </p>
-        <p class="about-statement__tagline">
+        <div class="about-statement__tagline">
           <span class="about-tagline-plain">Less logo.</span>
           <span class="about-tagline-rotating-wrapper" aria-live="polite">
             <span class="about-rotating-phrase">More legacy.</span>
             <span class="about-rotating-phrase">More Partnerships.</span>
             <span class="about-rotating-phrase">More Sponsorship.</span>
           </span>
-        </p>
+        </div>
       </div>
     </section>
 
     <!-- 4. Four-image strip -->
     <section class="about-image-grid" data-reveal-group>
       <div class="about-image-grid__item reveal--scale">
-        <img src={`${base}about-1.jpg`} alt="" loading="lazy" />
+        <img src={`${base}about-grid-1.jpg`} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item reveal--scale">
-        <img src={`${base}about-2.jpg`} alt="" loading="lazy" />
+        <img src={`${base}about-grid-2.jpg`} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item reveal--scale">
         <img src={`${base}hero-bg.jpg`} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item about-image-grid__item--labeled reveal--scale">
         <span class="about-image-grid__index">(01)</span>
-        <img src={`${base}about-3.jpg`} alt="" loading="lazy" />
+        <img src={`${base}about-grid-4.jpg`} alt="" loading="lazy" />
       </div>
     </section>
 
     <!-- 5. Founder bio -->
-    <section class="about-bio">
+    <section class="about-bio" id="founder">
       <div class="about-bio__inner">
         <div class="about-bio__content">
           <h2 class="about-bio__headline">
@@ -215,9 +215,10 @@ const base = import.meta.env.BASE_URL;
     grid-column: 2;
     grid-row: 1;
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     font-weight: 400;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: #052715;
     align-self: start;
@@ -239,8 +240,10 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-hero__text em {
+    font-family: var(--font-script);
     font-style: italic;
-    font-weight: 500;
+    font-weight: 400;
+    font-variation-settings: "wght" 500, "hght" 1000;
     text-decoration: underline dotted;
     text-underline-offset: 5px;
     text-decoration-thickness: 6%;
@@ -273,6 +276,7 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     gap: 8px;
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.08em;
@@ -321,7 +325,7 @@ const base = import.meta.env.BASE_URL;
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 16px;
-    padding: 60px 40px 60px 0;
+    padding: 60px var(--section-padding-x) 60px 0;  /* was hardcoded 40px — now tracks the global padding token */
   }
 
   .about-images__item {
@@ -331,7 +335,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-images__num {
-    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-family: var(--font-serif);
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.05em;
@@ -401,7 +405,7 @@ const base = import.meta.env.BASE_URL;
   /* ── 3. Statement ─────────────────────────────────── */
   .about-statement {
     position: relative;
-    padding: 120px var(--section-padding-x) 180px;
+    padding: var(--section-padding-y) var(--section-padding-x);
     background: var(--color-cream);
   }
 
@@ -426,12 +430,13 @@ const base = import.meta.env.BASE_URL;
 
   .about-statement__text {
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 18px;
     line-height: 32px;
     font-weight: 400;
     letter-spacing: 0;
     color: #052715;
-    margin: 0 0 120px;
+    margin: 0 0 var(--section-padding-y);
     max-width: 952px;
   }
 
@@ -452,31 +457,32 @@ const base = import.meta.env.BASE_URL;
     color: #052715;
   }
 
-  /* Rotating wrapper — fixed height so layout never shifts */
+  /* Rotating wrapper — inline-block with generous height so the phrase
+   * bounding box (incl. deep italic descenders) fits entirely within the
+   * wrapper's stacking context on older WebKit builds. */
   .about-tagline-rotating-wrapper {
     position: relative;
     display: inline-block;
-    height: 1.25em;
+    height: 1.5em;
     min-width: 1px;
     overflow: visible;
     vertical-align: baseline;
-    top: 9px;
+    top: 14px;
   }
 
   .about-rotating-phrase {
     position: absolute;
     left: 7px;
     top: calc(50% - 2px);
-    font-family: 'Awesome Serif Italic VAR', var(--font-serif);
+    transform: translateY(calc(-50% + 10px)); /* initial: slides in from below */
+    font-family: var(--font-script);
     font-style: italic;
     font-weight: 500;
-    font-variation-settings: "wght" 500, "HGHT" 1000;
-    line-height: 1.5;      /* wider line box so deep italic descenders (g,y,p) aren't clipped */
-    overflow: visible;     /* safety: never clip ink outside the element box */
+    font-variation-settings: "wght" 500, "hght" 1000;
+    line-height: 1.5;   /* wider box so descenders (g,y,p) don't clip */
     color: #8CB7A0;
     white-space: nowrap;
     opacity: 0;
-    transform: translateY(calc(-50% + 10px));
   }
 
   /* ── 4. Image strip ───────────────────────────────── */
@@ -521,51 +527,20 @@ const base = import.meta.env.BASE_URL;
     position: absolute;
     bottom: calc(100% + 16px);
     left: 0;
-    font-family: 'Awesome Serif VAR', var(--font-serif);
+    font-family: var(--font-serif);
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.05em;
     color: #004f26;
   }
 
-  /* Image grid responsive */
-  @media (max-width: 900px) {
-    .about-image-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .about-image-grid__item {
-      height: 280px;
-    }
-
-    /* 3rd item spans both columns to keep the 2x feel */
-    .about-image-grid__item:nth-child(4) {
-      grid-column: 1 / -1;
-      height: 320px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .about-image-grid {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    .about-image-grid__item {
-      height: 260px;
-    }
-
-    .about-image-grid__item:nth-child(4) {
-      grid-column: auto;
-      height: 260px;
-    }
-  }
-
   /* ── 5. Founder bio ───────────────────────────────── */
   .about-bio {
     padding: 120px var(--section-padding-x);
     background: var(--color-cream);
+    overflow: hidden;  /* contain the absolutely-positioned portrait so it never
+                         widens the document past the viewport — which would cause
+                         position:fixed elements (nav) to drift rightward */
   }
 
   .about-bio__inner {
@@ -584,7 +559,7 @@ const base = import.meta.env.BASE_URL;
     position: absolute;
     left: calc(100% + 192px);
     top: 140px;
-    width: 312px;
+    width: 329px;
     height: auto;
     transform: rotate(5deg) translateY(20px) scale(0.96);
     opacity: 0;
@@ -608,15 +583,17 @@ const base = import.meta.env.BASE_URL;
     font-weight: 400;
     letter-spacing: 0.05em;
     color: #052715;
-    margin: 0 0 64px;
+    margin: 0 0 32px;
     max-width: 952px;
     text-wrap: pretty;
     hyphens: none;
   }
 
   .about-bio__headline em {
+    font-family: var(--font-script);
     font-style: italic;
-    font-weight: 500;
+    font-weight: 400;
+    font-variation-settings: "wght" 500, "hght" 0;
     text-decoration: underline dotted;
     text-underline-offset: 5px;
     text-decoration-thickness: 6%;
@@ -634,7 +611,8 @@ const base = import.meta.env.BASE_URL;
   }
 
   .about-bio__headline sup {
-    font-family: 'Inter', var(--font-sans);
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.55em;
     font-weight: 600;
     vertical-align: super;
@@ -643,6 +621,7 @@ const base = import.meta.env.BASE_URL;
 
   .about-bio__body {
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 18px;
     line-height: 32px;
     font-weight: 400;
@@ -657,6 +636,7 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
     gap: 8px;
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.08em;
@@ -665,7 +645,7 @@ const base = import.meta.env.BASE_URL;
     border: 1px solid #052715;
     padding: 12px 24px;
     margin-top: 48px;
-    margin-bottom: 180px;
+    margin-bottom: var(--section-padding-y);
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -704,16 +684,34 @@ const base = import.meta.env.BASE_URL;
 
   .about-bio__label {
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     font-weight: 400;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: #052715;
     white-space: nowrap;
   }
 
-  /* ── Responsive: Tablet 768px ─────────────────────── */
+  /* ── Responsive: Tablet ≤900px ───────────────────────── */
   @media (max-width: 900px) {
+    /* Image strip grid */
+    .about-image-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .about-image-grid__item {
+      height: 280px;
+    }
+
+    /* 3rd item spans both columns */
+    .about-image-grid__item:nth-child(4) {
+      grid-column: 1 / -1;
+      height: 320px;
+    }
+
+    /* Images section */
     .about-images {
       grid-template-columns: 1fr;
     }
@@ -731,12 +729,26 @@ const base = import.meta.env.BASE_URL;
     .about-images__photo {
       min-height: 320px;
     }
-
-
   }
 
-  /* ── Responsive: Mobile 480px ─────────────────────── */
+  /* ── Responsive: Mobile ≤480px ─────────────────────── */
   @media (max-width: 480px) {
+    /* Image strip grid */
+    .about-image-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .about-image-grid__item {
+      height: 260px;
+    }
+
+    .about-image-grid__item:nth-child(4) {
+      grid-column: auto;
+      height: 260px;
+    }
+
+    /* Hero */
     .about-hero {
       padding-top: 110px;
       padding-bottom: 60px;
@@ -749,6 +761,7 @@ const base = import.meta.env.BASE_URL;
       margin-top: 16px;
     }
 
+    /* Images section */
     .about-images__photos-col {
       grid-template-columns: 1fr;
     }
@@ -801,7 +814,7 @@ const base = import.meta.env.BASE_URL;
     }
   }
 
-  /* ── Wide screen clamp ────────────────────────────── */
+  /* ── Wide screen clamp ──────────────────────── */
   @media (min-width: 1600px) {
     .about-hero,
     .about-images__cta-col,
@@ -820,7 +833,8 @@ const base = import.meta.env.BASE_URL;
       padding-right: calc((100vw - var(--content-max-width)) / 2 + 40px);
     }
   }
-  /* ── Bio expandable content ──────────────────────── */
+
+  /* ── Bio expandable content ────────────────── */
   button.about-bio__btn {
     background: none;
     cursor: pointer;
@@ -858,11 +872,175 @@ const base = import.meta.env.BASE_URL;
   .about-bio__expand-para .bio-inner {
     display: block;
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 18px;
     line-height: 32px;
     font-weight: 400;
     letter-spacing: 0;
     color: #052715;
+  }
+
+  /* ── 1440px: proportional scale-down from 1522px baseline ─── */
+  @media (max-width: 1440px) {
+    .about-hero__text {
+      font-size: clamp(19px, 2.3vw + 7px, 34px);  /* max 36 → 34px */
+    }
+    .about-statement__tagline {
+      font-size: 34px;   /* 36px × 0.944 */
+    }
+    .about-bio__headline {
+      font-size: clamp(19px, 2.3vw + 7px, 34px);  /* max 36 → 34px */
+    }
+    .about-images__cta-col {
+      padding-bottom: 61px;  /* 68px × 0.90 */
+    }
+    .about-bio__inner {
+      gap: 58px;   /* 64px × 0.90 */
+    }
+    .about-images__photo {
+      height: 396px;  /* 440px × 0.90 */
+    }
+    .about-bio__portrait {
+      /* Target: visual right edge = 1404px (page's standard 36px right margin).
+         DevTools confirmed: .about-bio__content width = 952px, left = 36px from viewport.
+         5° rotation adds ~14.5px to the rendered right bound.
+         CSS right = 1404 − 14.5 = 1389.5px from viewport.
+         left = 1389.5 − 36 (padding) − 288 (width) = 1065.5px ≈ calc(100% + 113px) */
+      width: 288px;
+      left: calc(100% + 113px);
+      right: auto;
+      top: 140px;
+    }
+    .about-statement__watermark {
+      width: 1022px;  /* 1135px × 0.90 */
+    }
+  }
+
+  /* ── 1280px: proportional scale-down from 1440px ─── */
+  @media (max-width: 1280px) {
+    .about-hero__text {
+      font-size: clamp(18px, 2.2vw + 6px, 32px);  /* max 34 → 32px */
+    }
+    .about-statement__tagline {
+      font-size: 32px;   /* 34px × 0.941 */
+    }
+    .about-bio__headline {
+      font-size: clamp(18px, 2.2vw + 6px, 32px);  /* max 34 → 32px */
+    }
+    .about-images__cta-col {
+      padding-bottom: 55px;  /* 61px × 0.90 */
+    }
+    .about-bio__inner {
+      gap: 52px;   /* 58px × 0.90 */
+    }
+    .about-images__photo {
+      height: 356px;  /* 396px × 0.90 */
+    }
+    .about-bio__portrait {
+      /* Target: visual right edge = 1248px (1280 − 32px right margin).
+         .about-bio__content = 952px wide, left = 32px from viewport.
+         5° rotation adds ~13px. CSS right = 1235px.
+         left = 1235 − 32 − 259 = 944px from content = calc(100% − 8px) */
+      width: 259px;   /* 288px × 0.90 */
+      left: calc(100% - 8px);
+    }
+    .about-statement__watermark {
+      width: 920px;  /* 1022px × 0.90 */
+    }
+  }  /* 1022px × 0.90 */
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  @media (max-width: 1024px) {
+    .about-hero__text {
+      font-size: clamp(17px, 2.1vw + 5px, 30px);  /* max 32 → 30px (−6.25%) */
+      max-width: 762px;  /* 952px × 4/5 — text column narrowed by 1/5th */
+    }
+    .about-statement__tagline {
+      font-size: 30px;   /* 32px × 0.94 */
+    }
+    .about-bio__headline {
+      font-size: clamp(17px, 2.1vw + 5px, 30px);  /* max 32 → 30px */
+      max-width: 762px;  /* 952px × 4/5 — text column narrowed by 1/5th */
+    }
+    /* Bio body + expandable: narrow text column, .about-bio__content stays at 952px
+       so the portrait left calc (which uses 100% of the content) remains correct. */
+    .about-bio__body,
+    .about-bio__expand {
+      max-width: 762px;  /* 952px × 4/5 */
+    }
+    .about-images {
+      min-height: 0;  /* base 600px forces section taller than photos — remove so CTA aligns with photo bottom */
+    }
+    .about-images__cta-col {
+      padding-bottom: 60px;  /* matches photos-col padding-bottom — aligns button bottom with photo bottom */
+    }
+    .about-bio__inner {
+      gap: 47px;   /* 52px × 0.90 */
+    }
+    .about-images__photo {
+      height: 280px;  /* 320px → 280px: restores 1440px portrait ratio on narrower 1024px columns */
+    }
+    .about-bio__portrait {
+      /* 100vw-based so position is viewport-relative — independent of how wide
+         the 1fr grid cell actually is (.about-bio__content is narrower than
+         952px at 1024px because the auto "The Founder" column eats into the row).
+         100vw − right-margin(29px) − width(233px) − 5°-rotation(13px) − left-padding(29px) */
+      width: 233px;
+      left: calc(100vw - 304px);
+    }
+    .about-statement__watermark {
+      width: 828px;  /* 920px × 0.90 */
+    }
+    /* Four-image strip: had no prior scaling (still 440px at 1024px). At 1024px
+       the 1fr cols are ~184px wide. Matching 1440px ratio (440/264 = 1.67):
+       184 × 1.67 ≈ 307px. */
+    .about-image-grid__item {
+      height: 307px;  /* 440px baseline scaled to match 1440px portrait ratio */
+    }
+    }
+
+</style>
+
+<!-- About page only: lift ContactForm shade colours for better legibility on maroon -->
+<style is:global>
+  /* ── Field title labels (NAME, EMAIL, COMPANY, MESSAGE) ── */
+  .page-about .contact__label {
+    color: rgba(232, 224, 212, 0.58); /* was 0.40 */
+  }
+
+  /* ── Placeholder fill text (your name, your@email.com …) ── */
+  .page-about .contact__input::placeholder {
+    color: rgba(232, 224, 212, 0.36); /* was 0.22 */
+  }
+
+  /* ── Input underline (resting) ── */
+  .page-about .contact__input {
+    border-bottom-color: rgba(232, 224, 212, 0.28); /* was 0.18 */
+  }
+
+  /* ── Input underline (focused) ── */
+  .page-about .contact__input:focus {
+    border-bottom-color: rgba(232, 224, 212, 0.70); /* was 0.55 */
+  }
+
+  /* ── Section eyebrow tag (GET IN TOUCH) ── */
+  .page-about .contact__tag {
+    color: rgba(232, 224, 212, 0.62); /* was 0.45 */
+  }
+
+  /* ── Contact detail label (Phone / Email) ── */
+  .page-about .contact__detail-label {
+    color: rgba(232, 224, 212, 0.52); /* was 0.35 */
+  }
+
+  /* ── Privacy disclaimer text ── */
+  .page-about .contact__privacy {
+    color: rgba(232, 224, 212, 0.46); /* was 0.30 */
+  }
+
+  /* ── Submit button border ── */
+  .page-about .contact__submit {
+    border-color: rgba(232, 224, 212, 0.58); /* was 0.40 */
   }
 </style>
 
@@ -884,9 +1062,11 @@ const base = import.meta.env.BASE_URL;
   const aboutWrapper = document.querySelector<HTMLElement>('.about-tagline-rotating-wrapper');
 
   if (aboutPhrases.length && aboutWrapper) {
-    // Size wrapper to widest phrase so layout stays stable
+    // Wait for fonts before measuring so the variable font glyphs
+    // (not the fallback font) determine the wrapper width.
+    await document.fonts.ready;
     const maxWidth = Math.max(...aboutPhrases.map(p => p.offsetWidth));
-    aboutWrapper.style.width = `${maxWidth}px`;
+    aboutWrapper.style.width = `${maxWidth + 16}px`; // +16px buffer for italic overhang
 
     let current = 0;
 
@@ -1017,5 +1197,4 @@ const base = import.meta.env.BASE_URL;
     });
   }
 </script>
-
 

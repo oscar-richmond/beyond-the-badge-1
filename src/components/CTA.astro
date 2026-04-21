@@ -30,7 +30,12 @@ const base = import.meta.env.BASE_URL;
   </div>
 
   <div class="cta__image-wrap reveal">
-    <img src={`${base}/cta-image.png`} alt="Campaign image" class="cta__image" />
+    <div class="cta__layer cta__layer--active" style={`background-image: url('${base}cta-slide-1.jpg')`}></div>
+    <div class="cta__layer" style={`background-image: url('${base}cta-slide-2.jpg')`}></div>
+    <div class="cta__layer" style={`background-image: url('${base}cta-slide-3.jpg')`}></div>
+    <div class="cta__layer" style={`background-image: url('${base}cta-slide-4.jpg')`}></div>
+    <div class="cta__layer" style={`background-image: url('${base}cta-slide-5.jpg')`}></div>
+    <div class="cta__layer" style={`background-image: url('${base}cta-slide-6.jpg')`}></div>
   </div>
 </section>
 
@@ -52,7 +57,7 @@ const base = import.meta.env.BASE_URL;
   .cta {
     position: relative;
     background-color: var(--color-cream);
-    padding-top: 24px;
+    padding-top: 53px; /* equalized: bar-outer adds 53px below section, so T must = 53px for symmetry */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,7 +71,7 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     align-items: center;
     z-index: 0;
-    margin-top: -24px;
+    margin-top: 8px; /* shifted down 32px from original -24px */
   }
 
   .cta__marquee {
@@ -96,17 +101,34 @@ const base = import.meta.env.BASE_URL;
     opacity: 0.3;
   }
 
-  /* Image — centred above the marquee */
+  /* Image wrap — fixed size + clip, mirrors .about-images__photo */
   .cta__image-wrap {
     position: relative;
     z-index: 1;
-  }
-
-  .cta__image {
     width: 280px;
     height: 350px;
-    object-fit: cover;
-    display: block;
+    overflow: hidden;
+    background-color: var(--color-cream); /* safety net: never see marquee through layers */
+  }
+
+  /* Layered image system — exact same pattern as About page keyword hover */
+  .cta__layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity   0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+  }
+
+  .cta__layer--active {
+    opacity: 1;
+    transform: scale(1);
   }
 
   /* ── ② Bar — sits below the section ───────────────────────────────────── */
@@ -188,6 +210,7 @@ const base = import.meta.env.BASE_URL;
     margin: 16px 16px 16px 0;
     padding: 0 24px;
     font-family: var(--font-sans);
+    font-variation-settings: normal;
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -222,4 +245,101 @@ const base = import.meta.env.BASE_URL;
     0%   { transform: translateX(0); }
     100% { transform: translateX(calc(-33.33% - 13.3px)); }
   }
+
+  /* ── 1440px: proportional scale-down from 1522px baseline ─── */
+  @media (max-width: 1440px) {
+    .cta {
+      /* Symmetry formula: padding-top = bar-outer extension below section.
+         Extension = padding-bottom(80) + bar-height(85) - abs(margin-top).
+         70px = 80 + 85 - 95. Increasing from 53px baseline gives more room
+         between the image bottom and the CTA strip. */
+      padding-top: 70px;
+    }
+    .cta__bar-outer {
+      margin-top: -95px;  /* was -112px: less overlap = more gap above bar */
+    }
+    .cta__marquee-item {
+      font-size: 45px;      /* 48px × 0.9375 */
+    }
+    .cta__bar-text {
+      font-size: 1.6rem;    /* 1.7rem × 0.941 */
+    }
+    .cta__image-wrap {
+      width:  252px;  /* 280px × 0.90 */
+      height: 315px;  /* 350px × 0.90 */
+    }
+  }
+
+  /* ── 1280px: proportional scale-down from 1440px ─── */
+  @media (max-width: 1280px) {
+    .cta {
+      /* Symmetry check: padding-top(63) + abs(margin-top)(94) = 157
+         = padding-bottom(72) + bar-height(85). Balanced ✓ */
+      padding-top: 63px;  /* 70px × 0.90 */
+    }
+    .cta__bar-outer {
+      margin-top:    -94px;  /* -95px × 0.90 → -85.5, adjusted to keep symmetry */
+      padding-bottom: 72px;  /* 80px × 0.90 */
+    }
+    .cta__marquee-item {
+      font-size: 42px;     /* 45px × 0.933 */
+    }
+    .cta__bar-text {
+      font-size: 1.5rem;   /* 1.6rem × 0.9375 */
+    }
+    .cta__image-wrap {
+      width:  227px;  /* 252px × 0.90 */
+      height: 284px;  /* 315px × 0.90 */
+    }
+  }
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  @media (max-width: 1024px) {
+    .cta {
+      /* Symmetry: padding-top(57) + abs(margin-top)(93) = 150
+         = padding-bottom(65) + bar-height(85). Balanced ✓ */
+      padding-top: 57px;  /* 63px × 0.90 */
+    }
+    .cta__bar-outer {
+      margin-top:    -93px;  /* adjusted to balance: 57 + 93 = 150 = 65 + 85 */
+      padding-bottom: 65px;  /* 72px × 0.90 */
+    }
+    .cta__marquee-item {
+      font-size: 39px;     /* 42px × 0.929 */
+    }
+    .cta__bar-text {
+      font-size: 1.4rem;   /* 1.5rem × 0.933 */
+    }
+    .cta__image-wrap {
+      width:  204px;  /* 227px × 0.90 */
+      height: 256px;  /* 284px × 0.90 */
+    }
+  }
 </style>
+
+<script>
+  const layers = Array.from(
+    document.querySelectorAll<HTMLElement>('.cta__layer')
+  );
+  let current = 0;
+  const TRANSITION_MS = 750; // must match CSS transition duration
+
+  if (layers.length > 1) {
+    setInterval(() => {
+      const prev = layers[current];
+
+      // Advance to next layer
+      current = (current + 1) % layers.length;
+      const next = layers[current];
+
+      // Activate next — it fades IN on top of prev (which stays fully visible)
+      next.classList.add('cta__layer--active');
+
+      // Only deactivate prev AFTER the incoming transition is complete,
+      // so there is never a gap where both layers are partially transparent
+      setTimeout(() => {
+        prev.classList.remove('cta__layer--active');
+      }, TRANSITION_MS);
+    }, 3000);
+  }
+</script>

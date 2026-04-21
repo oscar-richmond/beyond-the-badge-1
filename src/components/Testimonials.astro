@@ -1,35 +1,51 @@
 ---
-const base = import.meta.env.BASE_URL + '/';
+const base = import.meta.env.BASE_URL;
 
 const testimonials = [
   {
-    name: 'Clara Whitlock',
-    title: 'Global Brand Lead, Elara Group',
-    quoteBefore: '\u201cBeyond the Badge took our unshaped ambition and turned it into cultural ',
-    quoteHighlight: 'resonance',
-    quoteAfter: ' \u2014 they didn\u2019t just understand our brand, they understood the cultural spaces we wanted to reach with a level of trust we never thought we\u2019d command.\u201d',
-    image: `${base}about-1.jpg`,
+    name: 'Niamh Bryne',
+    title: 'Artist Manager — Gorillaz, Founder Eleven Management & MMF Chair',
+    quoteBefore: '\u201cWhen we first sat down with Laura Wood and her team at Jaguar Land Rover, we knew we weren\u2019t looking at a standard corporate partnership. Laura didn\u2019t just want a logo on a car; she had the vision to treat our Gorillaz fanbase as a ',
+    quoteHighlight: 'community',
+    quoteAfter: ' of untapped talent.\u201d',
+    image: `${base}testimonial-1.jpg`,
   },
   {
-    name: 'Arthur Bennett',
-    title: 'Creative Director, Studio North',
-    quoteBefore: '\u201cGreat partnerships aren\u2019t built overnight \u2014 they\u2019re built on trust, shared values, and a team that knows exactly how to ',
-    quoteHighlight: 'connect',
-    quoteAfter: ' the right people with the right moments in culture.\u201d',
-    image: `${base}about-2.jpg`,
+    name: 'Dominic Reid OBE',
+    title: 'Formerly Founding CEO of the Invictus Games',
+    quoteBefore: '\u201cLaura has an intelligent and imaginative grasp of the way brands can work with properties that they sponsor to their mutual benefit. She was instrumental in the successful ',
+    quoteHighlight: 'partnership',
+    quoteAfter: ' between Jaguar Land Rover and the Invictus Games. And she brought to bear her creativity and incisiveness to address challenges and deliver better and better solutions. In addition to this, she is a delight to work with.\u201d',
+    image: `${base}testimonial-2.jpg`,
   },
   {
-    name: 'Julian Thorne',
-    title: 'Head of Brand, Meridian',
-    quoteBefore: '\u201cWhat sets Beyond the Badge apart is how deeply they understand ',
+    name: 'Dave Benett',
+    title: 'Photographer (Getty Images / London Evening Standard)',
+    quoteBefore: '\u201cLaura curates cultural moments that matter. Her ability to handle big personalities and even bigger brand expectations with such grace is why she\u2019s so respected in this industry. Whenever Laura is running the show, you just know the end result is going to look world-class and, more importantly, people are actually going to be talking about it. She\u2019s a class act, sharp, professional, and someone who genuinely understands the intersection of brand and ',
     quoteHighlight: 'culture',
-    quoteAfter: '. They don\u2019t chase it \u2014 they\u2019re already there, and they bring you with them.\u201d',
-    image: `${base}about-3.jpg`,
+    quoteAfter: '.\u201d',
+    image: `${base}testimonial-3.jpg`,
+  },
+  {
+    name: 'David Gandy',
+    title: 'Model & Entrepreneur',
+    quoteBefore: '\u201cI have had the pleasure of working with Laura for over 15 years on high-profile events, activations, and partnerships. Throughout this time, I cannot speak highly enough about her unwavering commitment, dedication, and exceptional problem-solving skills. She is never shy of thinking outside the box, and her dynamic, innovative approach has been instrumental in driving the huge successes achieved with the brands she has worked with.\u201d',
+    quoteHighlight: '',
+    quoteAfter: '',
+    image: `${base}testimonial-4.jpg`,
+  },
+  {
+    name: 'Paul Amadi',
+    title: 'Marketing Consultant (former British Red Cross Executive Director of Marketing, Fundraising and Communications)',
+    quoteBefore: '\u201cAs the brand lead for the British Red Cross, our joint strategic challenge was to evolve a 70-year partnership and take it from an established alliance and develop it something that was progressive and modern and a genuine engine for driving real humanitarian impact.\u201d',
+    quoteHighlight: '',
+    quoteAfter: '',
+    image: `${base}testimonial-5.jpg`,
   },
 ];
 ---
 
-<!-- Outer scroll track: 300vh gives 200vh of sticky scroll distance (3 × ~67vh per testimonial) -->
+<!-- Outer scroll track: 500vh gives 400vh of sticky scroll distance (5 × ~80vh per testimonial) -->
 <div class="testimonials-track" id="testimonials">
   <!-- Sticky panel: pins to viewport while track scrolls past -->
   <section class="testimonials-sticky" aria-label="What our friends say">
@@ -71,11 +87,21 @@ const testimonials = [
             <div class={`t-quote${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
               <blockquote>
                 {t.quoteBefore}<em class="t-highlight">{t.quoteHighlight}</em>{t.quoteAfter}
+                {t.quoteParagraph2 && (
+                  <span class="t-quote-p2">{t.quoteParagraph2}</span>
+                )}
               </blockquote>
+              <p class="t-role-credit">{t.title}</p>
               <footer class="t-attribution">
                 <strong class="t-client-name">{t.name}</strong>
                 <span class="t-client-role">{t.title}</span>
               </footer>
+              {i === 0 && (
+                <button class="t-play-btn" id="t-play-btn" aria-label="Play Gorillaz x Jaguar Land Rover campaign video">
+                  <span class="t-play-btn__text">Play Campaign</span>
+                  <span class="t-play-btn__icon" aria-hidden="true">▶</span>
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -85,24 +111,44 @@ const testimonials = [
   </section>
 </div>
 
+<!-- Campaign video modal (Niamh Bryne / Gorillaz × JLR testimonial) -->
+<div class="t-video-modal" id="t-video-modal" aria-hidden="true" role="dialog" aria-label="Campaign video">
+  <div class="t-video-modal__backdrop" id="t-video-modal-backdrop"></div>
+  <div class="t-video-modal__container">
+    <button class="t-video-modal__close" id="t-video-modal-close" aria-label="Close video">✕ Close</button>
+    <div class="t-video-modal__video-wrap">
+      <video
+        id="t-campaign-video"
+        controls
+        playsinline
+        preload="none"
+        aria-label="Gorillaz x Jaguar Land Rover campaign video"
+      >
+        <source src="/campaign-video.webm" type="video/webm" />
+        <source src="/campaign-video.mp4"  type="video/mp4" />
+      </video>
+    </div>
+  </div>
+</div>
+
 <style>
   /* ─── Scroll track (outer, 300vh) ─── */
   .testimonials-track {
-    height: 300vh;
+    height: 500vh;
     background: transparent;
     /* Needed so sticky child has correct offset parent */
     position: relative;
   }
 
-  /* ─── Sticky panel (pins while track scrolls) ─── */
+  /* Sticky panel (pins while track scrolls) */
   .testimonials-sticky {
     position: sticky;
-    top: -24px;
-    height: calc(100vh + 24px);
+    top: 0;
+    height: 100vh;
     background: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center;  /* vertically centred in viewport */
     overflow: hidden;
   }
 
@@ -112,7 +158,8 @@ const testimonials = [
 
   .testimonials__heading {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     font-weight: 400;
     letter-spacing: 0.25em;
     text-transform: uppercase;
@@ -129,7 +176,7 @@ const testimonials = [
   /* ─── Three-column grid ─── */
   .testimonials__body {
     display: grid;
-    grid-template-columns: minmax(140px, 20%) minmax(180px, 26%) 1fr;
+    grid-template-columns: minmax(100px, 12.7%) minmax(180px, 26%) 1fr;
     gap: 0 clamp(32px, 5vw, 72px);
     align-items: start;
   }
@@ -227,7 +274,11 @@ const testimonials = [
   /* ─── Right: quote stage ─── */
   .testimonials__quote-stage {
     position: relative;
-    min-height: 280px;
+    /* Bleed to the right page margin — cancels the container's right padding */
+    margin-right: calc(-1 * var(--section-padding-x));
+    /* Explicit height so position:absolute quotes have a containing block
+       and the stage never reflows when switching testimonials. */
+    height: clamp(360px, 46vh, 540px);
   }
 
   .t-quote {
@@ -241,14 +292,15 @@ const testimonials = [
   .t-quote.is-active {
     opacity: 1;
     pointer-events: auto;
-    position: relative;
+    /* Stay position:absolute — switching active quote must NOT change
+       the stage height or the whole panel would recenter and jump. */
   }
 
   .t-quote blockquote {
     font-family: var(--font-serif);
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 400;
-    line-height: 57px;
+    line-height: 55px;
     letter-spacing: 0.05em;
     color: var(--color-text-dark);
     font-style: normal;
@@ -256,13 +308,32 @@ const testimonials = [
   }
 
   .t-highlight {
-    font-style: italic;
-    font-weight: 500;
-    color: #004f26;
+    font-style: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  /* Second paragraph of a multi-paragraph quote */
+  .t-quote-p2 {
+    display: block;
+    margin-top: 1em;
   }
 
   .t-attribution {
     display: none;
+  }
+
+  /* Credit line: role shown below quote with paragraph-break spacing */
+  .t-role-credit {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #BBB1A7;
+    margin: 28px 0 0;
+    line-height: 1.6;
   }
 
   .t-client-name {
@@ -274,7 +345,8 @@ const testimonials = [
 
   .t-client-role {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
     color: var(--color-text-muted);
   }
 
@@ -324,6 +396,212 @@ const testimonials = [
       padding: 10px 20px 10px 0;
     }
   }
+  /* ─── PLAY CAMPAIGN button (testimonial 0 only) ─── */
+  .t-play-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #052715;
+    background: transparent;
+    border: 1px solid #052715;
+    padding: 14px 24px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      letter-spacing 0.4s ease,
+      border-color 0.4s ease;
+  }
+
+  /* Green fill that wipes in from left on hover */
+  .t-play-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #052715;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+    z-index: 1;
+  }
+
+  .t-play-btn__text,
+  .t-play-btn__icon {
+    position: relative;
+    z-index: 2;
+  }
+
+  .t-play-btn__icon {
+    font-size: 0.7rem;
+  }
+
+  .t-play-btn:hover::before {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  .t-play-btn:hover {
+    color: var(--color-cream);
+    letter-spacing: 0.11em;
+    border-color: #052715;
+  }
+
+  /* ─── Video modal ─── */
+  .t-video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .t-video-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .t-video-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 13, 7, 0.88);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .t-video-modal__container {
+    position: relative;
+    z-index: 1;
+    width: min(90vw, 1400px);
+  }
+
+  .t-video-modal__close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(232, 224, 212, 0.6);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+  }
+
+  .t-video-modal__close:hover {
+    color: var(--color-cream);
+  }
+
+  .t-video-modal__video-wrap {
+    position: relative;
+    background: #000;
+  }
+
+  .t-video-modal__video-wrap video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: none;
+  }
+
+  /* ── 1440px: proportional scale-down from 1522px baseline ─── */
+  @media (max-width: 1440px) {
+    /* padding-top removed — centering handled by justify-content: center */
+    /* Do NOT reduce stage height — blockquote is already at 28px so there is
+       less text; shrinking the stage too would leave no room for the absolutely-
+       positioned play button at bottom: 0 */
+    .testimonials__quote-stage {
+      height: clamp(410px, 50vh, 570px);  /* midpoint between too-close and too-far */
+      margin-right: 0;  /* remove screen-edge bleed — aligns with container and divider */
+    }
+    /* Target blockquote directly — it has explicit 32px/55px so inherited values
+       from .t-quote would be silently overridden without this specificity */
+    .t-quote blockquote {
+      font-size: 28px;    /* 32px reduced further at user request */
+      line-height: 48px;  /* maintains ×1.71 ratio */
+    }
+    .t-name-btn {
+      font-size: 22px;  /* 24px × 0.917 */
+    }
+    .t-video-modal__container {
+      width: min(85vw, 1200px);  /* scales down from baseline min(90vw, 1400px) */
+    }
+  }
+
+  /* ── 1280px: proportional scale-down from 1440px ─── */
+  @media (max-width: 1280px) {
+    /* padding-top removed — centering handled by justify-content: center */
+    .testimonials__quote-stage {
+      height: clamp(369px, 45vh, 513px);  /* clamp(410,50vh,570) × 0.90 */
+    }
+    .t-quote blockquote {
+      font-size: 26px;    /* 28px × 0.929 */
+      line-height: 43px;  /* 48px × 0.90 */
+    }
+    .t-name-btn {
+      font-size: 21px;  /* 22px × 0.955 */
+    }
+    .t-video-modal__container {
+      width: min(85vw, 1100px);  /* scales down from 1200px */
+    }
+    /* Stage becomes tight at short viewport heights — switch play button
+       to normal flow so it can never overlap the credit text above it. */
+    .t-play-btn {
+      position: relative;  /* keeps ::before contained to button; relative = same flow as static */
+      bottom: auto;
+      left: auto;
+      margin-top: 24px;
+      display: inline-flex;
+    }
+  }
+
+  /* ── 1024px: proportional scale-down from 1280px ─── */
+  @media (max-width: 1024px) {
+    /* padding-top removed — centering handled by justify-content: center */
+    .testimonials__quote-stage {
+      height: clamp(332px, 40.5vh, 462px);  /* clamp(369,45vh,513) × 0.90 */
+    }
+    .t-quote blockquote {
+      font-size: 22px;    /* 24px − 2px (user request) */
+      line-height: 36px;  /* 39px scaled proportionally */
+    }
+    .t-name-btn {
+      font-size: 20px;  /* 21px × 0.952 */
+    }
+    .t-video-modal__container {
+      width: min(85vw, 990px);  /* scales down from 1100px */
+    }
+    /* Play button: at 1024px the stage is tight so bottom:0 overlaps the
+       credit text. Return to normal flow so it sits naturally below the
+       t-role-credit paragraph without overlap. */
+    .t-play-btn {
+      position: relative;  /* keeps ::before contained to button; relative = same flow as static */
+      bottom: auto;
+      left: auto;
+      margin-top: 24px;
+      display: inline-flex;
+    }
+  }
+
 </style>
 
 <script>
@@ -333,14 +611,10 @@ const testimonials = [
   const quotes = document.querySelectorAll<HTMLElement>('.t-quote');
   const track  = document.getElementById('testimonials') as HTMLElement;
 
-  const TOTAL = testimonials_count(); // resolved at runtime from DOM
+
   let current  = 0;
   let switching = false;
   let hoverTimer: ReturnType<typeof setTimeout> | null = null;
-
-  function testimonials_count() {
-    return document.querySelectorAll('.t-name-btn').length;
-  }
 
   // ─── Activate a testimonial ───────────────────────────────────────────────
   function activate(i: number) {
@@ -500,8 +774,12 @@ const testimonials = [
 
     // Split all blockquotes once fonts are ready
     (document.fonts?.ready ?? Promise.resolve()).then(() => {
-      document.querySelectorAll<HTMLElement>('.t-quote blockquote')
-        .forEach(bq => splitBq(bq));
+      // Keep references and store originals BEFORE splitting so we can re-split on resize
+      const bqs = Array.from(document.querySelectorAll<HTMLElement>('.t-quote blockquote'));
+      bqs.forEach(bq => {
+        bq.dataset.origHtml = bq.innerHTML;  // snapshot pre-split HTML
+        splitBq(bq);
+      });
 
       // Reveal initial active quote when the section first enters view
       const initialQuote = document.querySelector<HTMLElement>('.t-quote.is-active');
@@ -525,7 +803,6 @@ const testimonials = [
           const el = m.target as HTMLElement;
           if (!el.classList.contains('t-quote')) return;
           if (el.classList.contains('is-active')) {
-            // Slight delay to let the crossfade opacity transition start first
             setTimeout(() => revealQuote(el), 80);
           } else {
             resetQuote(el);
@@ -533,6 +810,63 @@ const testimonials = [
         });
       });
       quoteEls.forEach(q => mutation.observe(q, { attributes: true, attributeFilter: ['class'] }));
+
+      // ── Resize handler: re-split so lines reflow at new viewport width ────────
+      let resizeTimer: ReturnType<typeof setTimeout>;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          // Restore each blockquote to its pre-split state then re-measure
+          bqs.forEach(bq => {
+            if (bq.dataset.origHtml !== undefined) bq.innerHTML = bq.dataset.origHtml;
+            splitBq(bq);
+          });
+
+          // Re-reveal the currently active quote instantly (suppress transition flash)
+          const active = document.querySelector<HTMLElement>('.t-quote.is-active');
+          if (active) {
+            active.querySelectorAll<HTMLElement>('blockquote > .lr-clip').forEach(clip => {
+              clip.style.transition = 'none';
+              clip.classList.add('lr-visible');
+              // Re-enable transitions on the next paint so future tab-switches animate
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => { clip.style.transition = ''; });
+              });
+            });
+          }
+        }, 200); // 200ms debounce — fast enough to feel snappy, slow enough not to thrash
+      });
     });
   }
+
+  // ── Campaign video modal (Niamh Bryne testimonial #0) ───────────────────────────────────
+  const playBtn    = document.getElementById('t-play-btn')           as HTMLButtonElement | null;
+  const videoModal = document.getElementById('t-video-modal')         as HTMLElement      | null;
+  const modalBack  = document.getElementById('t-video-modal-backdrop') as HTMLElement     | null;
+  const modalClose = document.getElementById('t-video-modal-close')   as HTMLButtonElement | null;
+  const campVideo  = document.getElementById('t-campaign-video')      as HTMLVideoElement | null;
+
+  function openModal() {
+    if (!videoModal || !campVideo) return;
+    videoModal.classList.add('is-open');
+    videoModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    campVideo.play();
+  }
+
+  function closeModal() {
+    if (!videoModal || !campVideo) return;
+    videoModal.classList.remove('is-open');
+    videoModal.setAttribute('aria-hidden', 'true');
+    campVideo.pause();
+    campVideo.currentTime = 0;  /* reset to start for next open */
+    document.body.style.overflow = '';
+  }
+
+  playBtn?.addEventListener('click', openModal);
+  modalBack?.addEventListener('click', closeModal);
+  modalClose?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal?.classList.contains('is-open')) closeModal();
+  });
 </script>

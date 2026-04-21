@@ -16,7 +16,7 @@ import Footer from '../components/Footer.astro';
       background-color: var(--color-cream);
     }
     body.page-contact .contact__tag {
-      color: rgba(5, 39, 21, 0.45);
+      color: rgba(5, 39, 21, 0.62); /* was 0.45 */
     }
     body.page-contact .contact__heading {
       color: #052715;
@@ -25,44 +25,58 @@ import Footer from '../components/Footer.astro';
       color: rgba(5, 39, 21, 0.38);
     }
     body.page-contact .contact__subtext {
-      color: rgba(5, 39, 21, 0.55);
+      color: rgba(5, 39, 21, 0.70); /* was 0.55 */
     }
     body.page-contact .contact__detail-label {
-      color: rgba(5, 39, 21, 0.35);
+      color: rgba(5, 39, 21, 0.52); /* was 0.35 */
     }
     body.page-contact .contact__detail-value {
-      color: rgba(5, 39, 21, 0.75);
+      color: rgba(5, 39, 21, 0.88); /* was 0.75 */
     }
     body.page-contact .contact__detail-link:hover .contact__detail-value {
-      color: #052715;
+      color: #052715 !important; /* beat Astro-scoped cream hover from ContactForm.astro */
     }
     body.page-contact .contact__label {
-      color: rgba(5, 39, 21, 0.4);
+      color: rgba(5, 39, 21, 0.58); /* was 0.40 */
     }
     body.page-contact .contact__input {
       color: #052715;
-      border-bottom-color: #052715;
+      border-bottom-color: rgba(5, 39, 21, 0.58); /* was 0.40 */
       caret-color: #052715;
     }
     body.page-contact .contact__input::placeholder {
       color: #052715;
     }
     body.page-contact .contact__input:focus {
-      border-bottom-color: rgba(5, 39, 21, 0.55);
+      border-bottom-color: rgba(5, 39, 21, 0.72); /* was 0.55 */
     }
     body.page-contact .contact__privacy {
-      color: rgba(5, 39, 21, 0.3);
+      color: rgba(5, 39, 21, 0.46); /* was 0.30 */
+    }
+    body.page-contact .contact__required {
+      color: rgba(28, 80, 52, 0.5);
     }
     body.page-contact .contact__submit {
       background-color: #052715;
       color: var(--color-cream);
     }
-    body.page-contact .contact__submit:hover {
+    body.page-contact .contact__submit:hover:not(:disabled) {
       background-color: #052715;
     }
-    body.page-contact .contact__success {
+    /* Success panel */
+    body.page-contact .contact__success-headline {
       color: #052715;
-      border-top-color: rgba(5, 39, 21, 0.15);
+    }
+    body.page-contact .contact__success-sub {
+      color: rgba(5, 39, 21, 0.5);
+    }
+    /* Input placeholder dark override */
+    body.page-contact .contact__input::placeholder {
+      color: rgba(5, 39, 21, 0.46); /* was 0.30 */
+    }
+    /* Send error on cream bg */
+    body.page-contact .contact__send-error {
+      border-top-color: rgba(145, 99, 100, 0.2);
     }
 
     /* ── Footer → forest-green background + cream text ───────────────────── */
@@ -95,12 +109,9 @@ import Footer from '../components/Footer.astro';
     body.page-contact .header__nav-link {
       color: #052715 !important;
     }
-    body.page-contact .header.at-top {
-      background-color: rgba(245, 240, 232, 0.95);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom-color: rgba(0, 79, 38, 0.08);
-    }
+    /* at-top: keep transparent background (same as home/about) so the cream
+       "expanding" header only appears after scrolling. Nav links, logo and
+       hamburger are styled dark so they're readable on the cream background. */
     body.page-contact .header.at-top .header__nav-link {
       color: #052715 !important;
     }
@@ -109,6 +120,25 @@ import Footer from '../components/Footer.astro';
     }
     body.page-contact .header.at-top .header__menu-line {
       background-color: #052715;
+    }
+
+    /* Contact page: cream border in default state, switches after fill retracts */
+    body.page-contact .contact__submit {
+      border-color: var(--color-cream);
+      /* On hover-OUT: wait for cream fill to fully retract (0.55s) before border snaps to cream */
+      transition:
+        color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        letter-spacing 0.4s ease,
+        border-color 0.01s ease 0.55s;
+    }
+    body.page-contact .contact__submit:hover:not(:disabled) {
+      border-color: var(--color-dark-maroon);
+      color: var(--color-dark-maroon);
+      /* On hover-IN: border switches to dark-maroon immediately before fill arrives */
+      transition:
+        color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        letter-spacing 0.4s ease,
+        border-color 0.01s ease 0s;
     }
   </style>
 

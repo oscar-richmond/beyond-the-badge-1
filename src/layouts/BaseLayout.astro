@@ -2,6 +2,8 @@
 import SplashScreen from '../components/SplashScreen.astro';
 import Cursor      from '../components/Cursor.astro';
 
+const base = import.meta.env.BASE_URL;
+
 interface Props {
   title?: string;
   description?: string;
@@ -14,7 +16,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,6 +36,11 @@ const {
     <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon-32.png`} />
     <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}favicon-16.png`} />
     <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}logo-monogram.png`} />
+
+    <!-- Preload self-hosted display fonts so they arrive before first paint -->
+    <link rel="preload" href="/fonts/awesome-serif-var.woff2"        as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/awesome-serif-italic-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
     <title>{title}</title>
   </head>
   <body>
@@ -44,7 +51,15 @@ const {
     <SplashScreen />
 
     <!-- Lightweight page-to-page transition curtain (z-index below splash) -->
-    <div id="btb-curtain" aria-hidden="true"></div>
+    <div id="btb-curtain" aria-hidden="true">
+      <img
+        src={`${base}logo-monogram.png`}
+        alt=""
+        aria-hidden="true"
+        class="btb-curtain__watermark"
+        draggable="false"
+      />
+    </div>
 
     <slot />
 
@@ -53,13 +68,25 @@ const {
       #btb-curtain {
         position: fixed;
         inset: 0;
-        z-index: 9000; /* below splash (9999) */
+        z-index: 9000;
         background-color: #052715;
         pointer-events: none;
         will-change: transform;
-        /* Starts covering the page. JS lifts it to reveal on arrival.
-           On first-load with splash: splash (z:9999) is on top so this is invisible. */
+        overflow: hidden;
         transform: translateY(0);
+      }
+
+      .btb-curtain__watermark {
+        position: absolute;
+        right: -6%;
+        bottom: -8%;
+        height: 90vh;
+        width: auto;
+        opacity: 0.07;
+        filter: brightness(0) invert(1);
+        pointer-events: none;
+        user-select: none;
+        display: block;
       }
     </style>
 
@@ -79,19 +106,18 @@ const {
         // No curtain animation — signal immediately so reveals aren't blocked.
         window.dispatchEvent(new CustomEvent('btb-ready'));
       } else {
-        // ── Page arrival: lift curtain up to reveal the page ─────────────────
+        // ── Page arrival: curtain comes in from top, exits off the bottom ───
         // On first-load WITH splash: splash (z:9999) sits above this (z:9000),
-        // so this lift is invisible — splash handles the reveal instead.
-        // On subsequent internal-nav arrivals: this lift IS the page reveal.
+        // so this is invisible — splash handles the reveal instead.
+        // On subsequent internal-nav arrivals: this slide IS the page reveal.
         gsap.to(curtain, {
-          y: '-100%',
+          y: '100%',
           duration: 0.9,
           ease: 'btbEase',
           delay: 0.05,
           onComplete() {
-            // Signal all reveal systems that the curtain has lifted and the
-            // page is now fully visible. Above-fold elements only animate after
-            // this fires, so the user sees them slide in rather than behind the curtain.
+            // Signal all reveal systems that the curtain has cleared and the
+            // page is now fully visible.
             window.dispatchEvent(new CustomEvent('btb-ready'));
           },
         });
@@ -365,13 +391,12 @@ const {
           !el.closest('#testimonials') &&
           !el.closest('nav') &&
           !el.closest('header') &&
-          !el.closest('#hero') &&
           !el.closest('.footer') &&
           !el.closest(REVEAL_ANCESTOR)
-          // Note: [data-keyword] elements were previously excluded to protect
-          // hover listeners, but those now use event delegation on the parent
-          // so they survive the DOM rebuild. Exclusion is no longer needed.
         );
+
+        // Track which elements have been revealed so we can instantly re-show them on resize
+        const revealed = new Set<HTMLElement>();
 
         const lineObserver = new IntersectionObserver(entries => {
           entries.forEach(entry => {
@@ -385,6 +410,7 @@ const {
               } else {
                 entry.target.classList.add('lr-visible');
               }
+              revealed.add(entry.target as HTMLElement);  // mark as revealed for resize
               lineObserver.unobserve(entry.target);
             }
           });
@@ -410,6 +436,10 @@ const {
         window.addEventListener('btb-ready', onBtbReady, { once: true });
 
         (document.fonts?.ready ?? Promise.resolve()).then(() => {
+          // Snapshot each element's original HTML BEFORE splitting so we can
+          // restore and re-split on resize without losing content.
+          targets.forEach(el => { el.dataset.origHtml = el.innerHTML; });
+
           // Phase 1: wrap + hide (fonts loaded → accurate offsetTop measurements)
           const toObserve: HTMLElement[] = [];
           targets.forEach(el => {
@@ -419,14 +449,62 @@ const {
 
           // Phase 2: start observing — immediately if btb-ready already fired,
           // otherwise wait for it.
-          const startObserving = () =>
-            toObserve.forEach(el => lineObserver.observe(el));
+          // Hero elements are gated on splashDone (not btb-ready) so the user
+          // sees the animation after the splash exits, not hidden beneath it.
+          const heroTargets    = toObserve.filter(el => el.closest('#hero'));
+          const nonHeroTargets = toObserve.filter(el => !el.closest('#hero'));
+
+          const startNonHeroObserving = () =>
+            nonHeroTargets.forEach(el => lineObserver.observe(el));
+
+          const startHeroObserving = () =>
+            heroTargets.forEach(el => lineObserver.observe(el));
 
           if (btbFired) {
-            startObserving();
+            startNonHeroObserving();
           } else {
-            window.addEventListener('btb-ready', startObserving, { once: true });
+            window.addEventListener('btb-ready', startNonHeroObserving, { once: true });
           }
+
+          // Hero reveals: wait for splash to fully exit.
+          // splashDone now fires when panels START moving so timing feels natural.
+          //
+          // Race-condition guard: if splashDone fired BEFORE fonts.ready resolved
+          // (possible on slow font loads), the event listener below would never
+          // trigger. Check the global flag synchronously first.
+          if ((window as any).__splashDone) {
+            startHeroObserving();
+          } else {
+            document.addEventListener('splashDone', startHeroObserving, { once: true });
+          }
+
+          // ── Resize: re-split all targets at the new viewport width ────────────
+          // Elements split at 1522px form wrong line groups at 1440px (or any other
+          // width). On each resize (debounced 200ms) we restore → re-measure →
+          // re-split every target, then instantly re-reveal anything already shown.
+          let resizeTimer: ReturnType<typeof setTimeout>;
+          window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+              targets.forEach(el => {
+                // 1. Restore the clean pre-split HTML
+                if (el.dataset.origHtml !== undefined) el.innerHTML = el.dataset.origHtml;
+                // 2. Re-split at the current viewport width
+                revealElement(el);
+                // 3. If this element was already revealed, show it instantly
+                if (revealed.has(el)) {
+                  el.querySelectorAll<HTMLElement>(':scope > .lr-clip').forEach(clip => {
+                    clip.style.transition = 'none';
+                    clip.classList.add('lr-visible');
+                    // Re-enable transitions on the next paint so future scrolls animate
+                    requestAnimationFrame(() => {
+                      requestAnimationFrame(() => { clip.style.transition = ''; });
+                    });
+                  });
+                }
+              });
+            }, 200); // 200ms debounce — snappy but not thrashing layout
+          });
         });
       }
 
