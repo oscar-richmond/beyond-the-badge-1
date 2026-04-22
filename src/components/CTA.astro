@@ -1,11 +1,18 @@
 ---
 const marqueeItems = [
   "Brand Strategy",
-  "Visual Storytelling",
-  "Social",
-  "Event Partnerships",
-  "Cultural Strategy",
-  "Talent"
+  "Cultural Programming",
+  "Purpose, Impact & Legacy",
+  "Brand Partnerships",
+  "Talent Integration",
+  "Cinematic Product Integration",
+  "Brand Experience",
+  "Lifestyle Licensing",
+  "Collections",
+  "Network & Talent Introductions",
+  "Content & Storytelling",
+  "Community Building",
+  "Trend & Cultural Intelligence",
 ];
 
 const base = import.meta.env.BASE_URL;
@@ -71,7 +78,7 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     align-items: center;
     z-index: 0;
-    margin-top: 8px; /* shifted down 32px from original -24px */
+    margin-top: 32px; /* shifted down to align with vertical centre of the image */
   }
 
   .cta__marquee {
@@ -83,13 +90,13 @@ const base = import.meta.env.BASE_URL;
   .cta__marquee-track {
     display: inline-flex;
     gap: 40px;
-    animation: marquee 40s linear infinite;
+    animation: marquee 85s linear infinite;
   }
 
   .cta__marquee-item {
     font-family: var(--font-serif);
     font-size: 48px;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--color-text-dark);
     line-height: 1;
     white-space: nowrap;
@@ -188,7 +195,8 @@ const base = import.meta.env.BASE_URL;
     z-index: 1;
     font-family: var(--font-serif);
     font-size: 1.7rem;
-    font-weight: 400;
+    font-weight: 200;
+  font-variation-settings: "wght" 200;
     color: var(--color-forest);
     margin: 0;
     transition: color 0.45s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
