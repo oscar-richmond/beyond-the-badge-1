@@ -882,10 +882,9 @@ const storiesData = testimonials.map(t => ({
   .t-fs-modal.is-open { visibility: visible; pointer-events: auto; }
   .t-fs-overlay {
     position: absolute; inset: 0;
-    background: #052715; opacity: 0;
-    transition: opacity 0.4s ease;
+    background: #052715;
+    /* opacity is driven by GSAP — no CSS transition here */
   }
-  .t-fs-modal.is-open .t-fs-overlay { opacity: 1; }
   .t-fs-close {
     position: absolute;
     top: 18px;
@@ -911,10 +910,9 @@ const storiesData = testimonials.map(t => ({
        create a scroll container, so mouse-wheel events propagate correctly to
        the child scroll columns. overflow:hidden would block wheel events. */
     overflow: clip;
-    transform: translateY(28px); opacity: 0;
-    transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.35s ease;
+    /* transform, opacity and transitions are driven by GSAP */
+    will-change: transform, opacity;
   }
-  .t-fs-modal.is-open .t-fs-panel { transform: translateY(0); opacity: 1; }
   .t-fs-body {
     display: grid;
     grid-template-columns: 2fr 3fr;
@@ -1010,6 +1008,11 @@ const storiesData = testimonials.map(t => ({
 
 
 <script>
+  import { gsap } from 'gsap';
+  import { CustomEase } from 'gsap/CustomEase';
+  gsap.registerPlugin(CustomEase);
+  // Site-signature easing — same curve used on page transitions and button fills
+  CustomEase.create('luxury', '.76,0,.24,1');
   // ─── State ───────────────────────────────────────────────────────────────────
   const btns   = document.querySelectorAll<HTMLButtonElement>('.t-name-btn');
   const photos = document.querySelectorAll<HTMLElement>('.t-photo');
@@ -1326,7 +1329,7 @@ const storiesData = testimonials.map(t => ({
   document.addEventListener('astro:before-swap', () => {
     window.removeEventListener('scroll', onScroll);
     document.removeEventListener('keydown', onKeydown);
-    closeFsModal();
+    closeFsModal(true); // instant — page curtain already covers the transition
   }, { once: true });
 
   // ═══ Full-story modal ═════════════════════════════════════════════════════
@@ -1340,6 +1343,11 @@ const storiesData = testimonials.map(t => ({
   const fsImg3    = document.getElementById('t-fs-img3')    as HTMLImageElement | null;
   const fsQuote   = document.getElementById('t-fs-quote')   as HTMLElement | null;
   const fsRight   = document.getElementById('t-fs-right')   as HTMLElement | null;
+  const fsLeft    = document.querySelector<HTMLElement>('.t-fs-left');
+  const fsPanel   = document.querySelector<HTMLElement>('.t-fs-panel');
+
+  // Running timeline reference — killed before each new open/close
+  let fsTl: gsap.core.Timeline | null = null;
 
   type FsStory = { name: string; title: string; paragraphs: string[]; images: string[] };
   let fsStories: FsStory[] = [];
@@ -1350,7 +1358,12 @@ const storiesData = testimonials.map(t => ({
 
   function openFsModal(idx: number) {
     const s = fsStories[idx];
-    if (!s || !fsModal) return;
+    if (!s || !fsModal || !fsPanel) return;
+
+    // Kill any in-progress close animation
+    fsTl?.kill();
+
+    // Populate content
     if (fsName)  fsName.textContent  = s.name;
     if (fsRole)  fsRole.textContent  = s.title;
     if (fsImg1)  { fsImg1.src = s.images[0] ?? '';  fsImg1.alt = s.name; }
@@ -1362,19 +1375,60 @@ const storiesData = testimonials.map(t => ({
         .join('');
     }
     if (fsRight) fsRight.scrollTop = 0;
-    // Also reset the left column scroll in case images were scrolled
-    const fsLeft = document.querySelector<HTMLElement>('.t-fs-left');
-    if (fsLeft) fsLeft.scrollTop = 0;
+    if (fsLeft)  fsLeft.scrollTop  = 0;
+
+    // Set initial animation states before making the modal visible
+    gsap.set(fsPanel,   { opacity: 0, y: 52, scale: 0.97 });
+    gsap.set(fsLeft,    { opacity: 0, x: -28 });
+    gsap.set(fsRight,   { opacity: 0, y: 28 });
+    gsap.set(fsClose,   { opacity: 0 });
+    gsap.set(fsOverlay, { opacity: 0 });
+
+    // Make modal visible (visibility:visible + pointer-events:auto)
     fsModal.setAttribute('aria-hidden', 'false');
     fsModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+
+    // ── Staggered luxury open sequence ──────────────────────────────────────
+    // Dark overlay fades in first, then the cream panel rises with a subtle
+    // scale (depth cue), then columns stagger in from their natural directions.
+    fsTl = gsap.timeline();
+    fsTl
+      .to(fsOverlay, { opacity: 1,                 duration: 0.45, ease: 'power2.out'  }, 0)
+      .to(fsPanel,   { opacity: 1, y: 0, scale: 1, duration: 0.72, ease: 'luxury'      }, 0.04)
+      .to(fsClose,   { opacity: 1,                 duration: 0.30, ease: 'power2.out'  }, 0.30)
+      .to(fsLeft,    { opacity: 1, x: 0,           duration: 0.55, ease: 'power3.out'  }, 0.30)
+      .to(fsRight,   { opacity: 1, y: 0,           duration: 0.55, ease: 'power3.out'  }, 0.42);
   }
 
-  function closeFsModal() {
+  function closeFsModal(instant = false) {
     if (!fsModal) return;
-    fsModal.classList.remove('is-open');
-    fsModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+
+    fsTl?.kill();
+
+    if (instant) {
+      // Page navigation — close immediately, curtain covers it
+      fsModal.classList.remove('is-open');
+      fsModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      gsap.set([fsPanel, fsLeft, fsRight, fsClose, fsOverlay], { clearProps: 'all' });
+      return;
+    }
+
+    // ── Animated close — content out, panel sinks, overlay clears ───────────
+    fsTl = gsap.timeline({
+      onComplete: () => {
+        fsModal!.classList.remove('is-open');
+        fsModal!.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        gsap.set([fsPanel, fsLeft, fsRight, fsClose, fsOverlay], { clearProps: 'all' });
+      },
+    });
+    fsTl
+      .to([fsLeft, fsRight], { opacity: 0,      duration: 0.20, ease: 'power2.in' }, 0)
+      .to(fsClose,           { opacity: 0,      duration: 0.18, ease: 'power2.in' }, 0)
+      .to(fsPanel,           { opacity: 0, y: 36, duration: 0.38, ease: 'power2.in' }, 0.08)
+      .to(fsOverlay,         { opacity: 0,      duration: 0.40, ease: 'power2.in' }, 0.08);
   }
 
   // Bind story buttons — index matches testimonial array order
