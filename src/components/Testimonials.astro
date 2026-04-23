@@ -1438,8 +1438,8 @@ const storiesData = testimonials.map(t => ({
     btn.addEventListener('click', () => openFsModal(idx));
   });
 
-  fsClose?.addEventListener('click', closeFsModal);
-  fsOverlay?.addEventListener('click', closeFsModal);
+  fsClose?.addEventListener('click',   () => closeFsModal());
+  fsOverlay?.addEventListener('click', () => closeFsModal());
 
   document.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape' && fsModal?.classList.contains('is-open')) closeFsModal();
