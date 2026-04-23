@@ -235,11 +235,12 @@ const storiesData = testimonials.map(t => ({
   <div class="t-fs-overlay" id="t-fs-overlay"></div>
   <button type="button" class="t-fs-close" id="t-fs-close">✕ Close</button>
   <div class="t-fs-panel">
+    <!-- B watermark image — bleeds from top-right of the panel -->
+    <img class="t-fs-watermark" src="/b-logo-watermark.png" alt="" aria-hidden="true" />
     <div class="t-fs-body">
-      <!-- Left: role + images + B watermark (scrolls if images overflow) -->
+      <!-- Left: role + images -->
       <!-- data-lenis-prevent: tells Lenis to release wheel events over this column -->
       <div class="t-fs-left" data-lenis-prevent>
-        <div class="t-fs-watermark" aria-hidden="true">B</div>
         <p class="t-fs-role" id="t-fs-role"></p>
         <div class="t-fs-images">
           <div class="t-fs-img-wrap" id="t-fs-img1-wrap">
@@ -925,24 +926,28 @@ const storiesData = testimonials.map(t => ({
        Clipping is handled entirely by the panel using overflow:clip. */
   }
   .t-fs-left {
-    position: relative;    /* containing block for .t-fs-watermark (position:absolute) */
     overflow-y: auto;
-    overflow-x: hidden;   /* contain the B watermark horizontally */
     -webkit-overflow-scrolling: touch;
     min-height: 0;         /* CRITICAL: grid items default to min-height:auto which
                               prevents them being smaller than content, so overflow-y
                               never activates. min-height:0 removes that floor. */
     padding: clamp(28px,3.5vw,64px);
     display: flex; flex-direction: column;
-
   }
   .t-fs-watermark {
-    position: absolute; bottom: -0.12em; left: -0.08em;
-    font-family: var(--font-serif);
-    font-size: clamp(240px,30vw,420px);
-    font-weight: 700; line-height: 1;
-    color: rgba(5,39,21,0.04);
-    pointer-events: none; user-select: none; -webkit-user-select: none;
+    position: absolute;
+    top: -5%;
+    right: -8%;
+    width: clamp(420px, 55vw, 780px);
+    height: auto;
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 0;
+    /* Ensure the image bleeds outside the panel without disrupting layout */
+    display: block;
   }
   .t-fs-role {
     font-family: var(--font-sans); font-variation-settings: normal;
