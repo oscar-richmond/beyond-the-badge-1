@@ -936,8 +936,8 @@ const storiesData = testimonials.map(t => ({
   }
   .t-fs-watermark {
     position: absolute;
-    top: -5%;
-    right: -8%;
+    top: 32px;
+    left: -150px;
     width: clamp(420px, 55vw, 780px);
     height: auto;
     opacity: 0.045;
@@ -946,7 +946,6 @@ const storiesData = testimonials.map(t => ({
     user-select: none;
     -webkit-user-select: none;
     z-index: 0;
-    /* Ensure the image bleeds outside the panel without disrupting layout */
     display: block;
   }
   .t-fs-role {
