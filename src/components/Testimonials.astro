@@ -922,6 +922,8 @@ const storiesData = testimonials.map(t => ({
                                   sizes to content, height:100% on children becomes
                                   circular, and overflow-y:auto never activates. */
     height: 100%;
+    padding-top: 48px;
+    box-sizing: border-box;
     /* No overflow set here — grid container must not intercept wheel events.
        Clipping is handled entirely by the panel using overflow:clip. */
   }
