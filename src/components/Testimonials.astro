@@ -1425,10 +1425,12 @@ const storiesData = testimonials.map(t => ({
       },
     });
     fsTl
-      .to([fsLeft, fsRight], { opacity: 0,      duration: 0.20, ease: 'power2.in' }, 0)
-      .to(fsClose,           { opacity: 0,      duration: 0.18, ease: 'power2.in' }, 0)
-      .to(fsPanel,           { opacity: 0, y: 36, duration: 0.38, ease: 'power2.in' }, 0.08)
-      .to(fsOverlay,         { opacity: 0,      duration: 0.40, ease: 'power2.in' }, 0.08);
+      // Last in, first out — mirrors the open stagger in reverse
+      .to(fsRight,   { opacity: 0, y: 28,            duration: 0.38, ease: 'power3.in'  }, 0)
+      .to(fsLeft,    { opacity: 0, x: -28,            duration: 0.38, ease: 'power3.in'  }, 0.10)
+      .to(fsClose,   { opacity: 0,                   duration: 0.22, ease: 'power2.in'  }, 0.10)
+      .to(fsPanel,   { opacity: 0, y: 52, scale: 0.97, duration: 0.55, ease: 'power2.in'  }, 0.26)
+      .to(fsOverlay, { opacity: 0,                   duration: 0.45, ease: 'power2.in'  }, 0.30);
   }
 
   // Bind story buttons — index matches testimonial array order
