@@ -241,6 +241,7 @@ const storiesData = testimonials.map(t => ({
       <!-- Left: role + images -->
       <!-- data-lenis-prevent: tells Lenis to release wheel events over this column -->
       <div class="t-fs-left" data-lenis-prevent>
+        <p class="t-fs-name" id="t-fs-name"></p>
         <p class="t-fs-role" id="t-fs-role"></p>
         <div class="t-fs-images">
           <div class="t-fs-img-wrap" id="t-fs-img1-wrap">
@@ -950,6 +951,15 @@ const storiesData = testimonials.map(t => ({
     z-index: 0;
     display: block;
   }
+  .t-fs-name {
+    font-family: var(--font-sans); font-variation-settings: normal;
+    font-size: var(--font-size-label, 0.7rem); font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #052715; line-height: 1.8;
+    margin: 0 0 4px;
+    position: relative; z-index: 1;
+    -webkit-font-smoothing: antialiased;
+  }
   .t-fs-role {
     font-family: var(--font-sans); font-variation-settings: normal;
     font-size: var(--font-size-label, 0.7rem); font-weight: 600;
@@ -1324,6 +1334,7 @@ const storiesData = testimonials.map(t => ({
   const fsClose   = document.getElementById('t-fs-close')   as HTMLButtonElement | null;
   const fsOverlay = document.getElementById('t-fs-overlay') as HTMLElement | null;
   const fsRole    = document.getElementById('t-fs-role')    as HTMLElement | null;
+  const fsName    = document.getElementById('t-fs-name')    as HTMLElement | null;
   const fsImg1    = document.getElementById('t-fs-img1')    as HTMLImageElement | null;
   const fsImg2    = document.getElementById('t-fs-img2')    as HTMLImageElement | null;
   const fsImg3    = document.getElementById('t-fs-img3')    as HTMLImageElement | null;
@@ -1340,7 +1351,8 @@ const storiesData = testimonials.map(t => ({
   function openFsModal(idx: number) {
     const s = fsStories[idx];
     if (!s || !fsModal) return;
-    if (fsRole)  fsRole.textContent = s.title;
+    if (fsName)  fsName.textContent  = s.name;
+    if (fsRole)  fsRole.textContent  = s.title;
     if (fsImg1)  { fsImg1.src = s.images[0] ?? '';  fsImg1.alt = s.name; }
     if (fsImg2)  { fsImg2.src = s.images[1] ?? '';  fsImg2.alt = s.name; }
     if (fsImg3)  { fsImg3.src = s.images[2] ?? '';  fsImg3.alt = s.name; }
