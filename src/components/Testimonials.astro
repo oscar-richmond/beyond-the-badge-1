@@ -94,7 +94,7 @@ const testimonials = [
       'Laura has an incredible intuition for connecting the right brands with the right cultural moments and we\u2019re excited to keep building on this legacy together.\u201d',
     ],
     image2: '',
-    images: [],
+    images: [`${base}wenborn-1.webp`, `${base}wenborn-2.webp`, `${base}wenborn-3.webp`, `${base}wenborn-4.webp`, `${base}wenborn-5.webp`],
   },
   {
     name: 'Dave Benett',
@@ -265,6 +265,9 @@ const storiesData = testimonials.map(t => ({
           </div>
           <div class="t-fs-img-wrap" id="t-fs-img4-wrap">
             <img class="t-fs-img" id="t-fs-img4" src="" alt="" loading="lazy" />
+          </div>
+          <div class="t-fs-img-wrap" id="t-fs-img5-wrap">
+            <img class="t-fs-img" id="t-fs-img5" src="" alt="" loading="lazy" />
           </div>
         </div>
       </div>
@@ -1355,6 +1358,7 @@ const storiesData = testimonials.map(t => ({
   const fsImg2    = document.getElementById('t-fs-img2')    as HTMLImageElement | null;
   const fsImg3    = document.getElementById('t-fs-img3')    as HTMLImageElement | null;
   const fsImg4    = document.getElementById('t-fs-img4')    as HTMLImageElement | null;
+  const fsImg5    = document.getElementById('t-fs-img5')    as HTMLImageElement | null;
   const fsQuote   = document.getElementById('t-fs-quote')   as HTMLElement | null;
   const fsRight   = document.getElementById('t-fs-right')   as HTMLElement | null;
   const fsLeft    = document.querySelector<HTMLElement>('.t-fs-left');
@@ -1384,8 +1388,9 @@ const storiesData = testimonials.map(t => ({
     if (fsImg2)  { fsImg2.src = s.images[1] ?? '';  fsImg2.alt = s.name; }
     if (fsImg3)  { fsImg3.src = s.images[2] ?? '';  fsImg3.alt = s.name; }
     if (fsImg4)  { fsImg4.src = s.images[3] ?? '';  fsImg4.alt = s.name; }
+    if (fsImg5)  { fsImg5.src = s.images[4] ?? '';  fsImg5.alt = s.name; }
     // Hide unused image slots so they leave no gap
-    [fsImg1, fsImg2, fsImg3, fsImg4].forEach((img, i) => {
+    [fsImg1, fsImg2, fsImg3, fsImg4, fsImg5].forEach((img, i) => {
       const wrap = document.getElementById(`t-fs-img${i + 1}-wrap`);
       if (wrap) wrap.style.display = (s.images[i] ? '' : 'none');
     });
