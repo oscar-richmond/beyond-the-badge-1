@@ -944,7 +944,6 @@ const storiesData = testimonials.map(t => ({
   }
   .t-fs-left {
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     min-height: 0;         /* CRITICAL: grid items default to min-height:auto which
                               prevents them being smaller than content, so overflow-y
                               never activates. min-height:0 removes that floor. */
@@ -1002,7 +1001,6 @@ const storiesData = testimonials.map(t => ({
   .t-fs-right {
     /* Right column is the scroll container for all quote text */
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     min-height: 0;         /* CRITICAL: same fix as .t-fs-left — removes grid item's
                               default min-height:auto so overflow-y actually activates */
     height: 100%;          /* Explicit height ensures overflow-y:auto has a bound to
@@ -1307,7 +1305,7 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
-  // ── Campaign video modal (Niamh Bryne testimonial #0) ───────────────────────────────────
+  // ── Campaign video modal (Niamh Bryne testimonial #2) ───────────────────────────────────
   const playBtn    = document.getElementById('t-play-btn')           as HTMLButtonElement | null;
   const videoModal = document.getElementById('t-video-modal')         as HTMLElement      | null;
   const modalBack  = document.getElementById('t-video-modal-backdrop') as HTMLElement     | null;

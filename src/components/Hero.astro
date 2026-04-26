@@ -45,7 +45,6 @@
     position: relative;
     /* Offset by nav height so content starts below the fixed header */
     padding-top: 72px;
-    box-sizing: border-box;
   }
 
   /* Ensure text + video sit above the watermark */
@@ -110,7 +109,6 @@
     min-height: 320px;
     padding-left:  calc(var(--section-padding-x, 40px) + max(0px, (100vw - var(--content-max-width, 1648px)) / 2));
     padding-right: calc(var(--section-padding-x, 40px) + max(0px, (100vw - var(--content-max-width, 1648px)) / 2));
-    box-sizing: border-box;
     overflow: hidden;
     will-change: padding;
   }
@@ -138,10 +136,6 @@
 
   /* ── 1440px: proportional scale-down from 1522px baseline ─── */
   @media (max-width: 1440px) {
-    .hero__content-inner {
-      padding-top: 169px;    /* 188px × 0.90 */
-      padding-bottom: 169px;
-    }
     .hero__statement {
       font-size: clamp(20px, 2.5vw + 11px, 34px);  /* max 36 → 34px */
     }
@@ -153,10 +147,6 @@
 
   /* ── 1280px: proportional scale-down from 1440px ─── */
   @media (max-width: 1280px) {
-    .hero__content-inner {
-      padding-top:    152px;  /* 169px × 0.90 */
-      padding-bottom: 152px;
-    }
     .hero__statement {
       font-size: clamp(19px, 2.4vw + 10px, 32px);  /* max 34 → 32px (−5.9%) */
     }
@@ -168,10 +158,6 @@
 
   /* ── 1024px: proportional scale-down from 1280px ─── */
   @media (max-width: 1024px) {
-    .hero__content-inner {
-      padding-top:    137px;  /* 152px × 0.90 */
-      padding-bottom: 137px;
-    }
     .hero__statement {
       font-size: clamp(17px, 2.2vw + 8px, 30px);  /* max 32 → 30px (−6.25%) */
     }
