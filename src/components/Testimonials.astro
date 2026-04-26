@@ -16,7 +16,7 @@ const testimonials = [
       'Laura is one of those rare leaders who can handle the minute details of a technical integration one moment and the strategic demands of a world-first launch the next, all while keeping her team focused and inspired. It was a privilege to have her at the helm during such a defining chapter for the world\u2019s first commercial spaceline.\u201d',
     ],
     image2: '',
-    images: [],
+    images: [`${base}stephen-1.webp`, `${base}stephen-2.webp`, `${base}stephen-3.webp`, `${base}stephen-4.webp`],
   },
   {
     name: 'Dominic Reid OBE',
@@ -262,6 +262,9 @@ const storiesData = testimonials.map(t => ({
           </div>
           <div class="t-fs-img-wrap" id="t-fs-img3-wrap">
             <img class="t-fs-img" id="t-fs-img3" src="" alt="" loading="lazy" />
+          </div>
+          <div class="t-fs-img-wrap" id="t-fs-img4-wrap">
+            <img class="t-fs-img" id="t-fs-img4" src="" alt="" loading="lazy" />
           </div>
         </div>
       </div>
@@ -1351,6 +1354,7 @@ const storiesData = testimonials.map(t => ({
   const fsImg1    = document.getElementById('t-fs-img1')    as HTMLImageElement | null;
   const fsImg2    = document.getElementById('t-fs-img2')    as HTMLImageElement | null;
   const fsImg3    = document.getElementById('t-fs-img3')    as HTMLImageElement | null;
+  const fsImg4    = document.getElementById('t-fs-img4')    as HTMLImageElement | null;
   const fsQuote   = document.getElementById('t-fs-quote')   as HTMLElement | null;
   const fsRight   = document.getElementById('t-fs-right')   as HTMLElement | null;
   const fsLeft    = document.querySelector<HTMLElement>('.t-fs-left');
@@ -1379,6 +1383,12 @@ const storiesData = testimonials.map(t => ({
     if (fsImg1)  { fsImg1.src = s.images[0] ?? '';  fsImg1.alt = s.name; }
     if (fsImg2)  { fsImg2.src = s.images[1] ?? '';  fsImg2.alt = s.name; }
     if (fsImg3)  { fsImg3.src = s.images[2] ?? '';  fsImg3.alt = s.name; }
+    if (fsImg4)  { fsImg4.src = s.images[3] ?? '';  fsImg4.alt = s.name; }
+    // Hide unused image slots so they leave no gap
+    [fsImg1, fsImg2, fsImg3, fsImg4].forEach((img, i) => {
+      const wrap = document.getElementById(`t-fs-img${i + 1}-wrap`);
+      if (wrap) wrap.style.display = (s.images[i] ? '' : 'none');
+    });
     if (fsQuote) {
       fsQuote.innerHTML = s.paragraphs
         .map(p => `<p>${p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`)
