@@ -40,14 +40,16 @@ const lastUpdated = 'April 2026';
 
     <!-- Hero -->
     <section class="legal-hero">
-      <div class="legal-hero__inner">
-        <div class="legal-hero__meta">
-          <span class="legal-eyebrow">Legal</span>
-          <span class="legal-updated">Last updated: {lastUpdated}</span>
+      <div class="container">
+        <div class="legal-hero__inner">
+          <div class="legal-hero__meta">
+            <span class="legal-eyebrow">Legal</span>
+            <span class="legal-updated">Last updated: {lastUpdated}</span>
+          </div>
+          <h1 class="legal-hero__title">Terms &amp;<br />Conditions</h1>
         </div>
-        <h1 class="legal-hero__title">Terms &amp;<br />Conditions</h1>
+        <hr class="legal-hero__rule" />
       </div>
-      <hr class="legal-hero__rule" />
     </section>
 
     <!-- Body -->
@@ -183,7 +185,7 @@ const lastUpdated = 'April 2026';
 
   /* ── Hero ───────────────────────────────────────────────────────────── */
   .legal-hero {
-    padding: 160px var(--section-padding-x) 0;
+    padding-top: 160px;
   }
 
   .legal-hero__inner {
@@ -229,10 +231,11 @@ const lastUpdated = 'April 2026';
     font-family: var(--font-serif);
     font-size: clamp(52px, 7vw, 96px);
     font-weight: 300;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     color: #052715;
     margin: 0;
+    padding-bottom: 0.3em;
   }
 
   .legal-hero__rule {
