@@ -19,6 +19,20 @@ const testimonials = [
     images: [`${base}stephen-1.webp`, `${base}stephen-2.webp`, `${base}stephen-3.webp`, `${base}stephen-4.webp`],
   },
   {
+    name: 'Stephanie Wenborn',
+    title: 'Head of Marketing & Partnerships, EON',
+    quoteBefore: '\u201cTrust and shared vision are the bedrock of any great partnership. Our history with Laura spans three Bond films \u2014 Skyfall, Spectre and No Time To Die \u2014 and that track record made Beyond The Badge the obvious choice for our current and future projects at EON. Laura has an incredible intuition for connecting the right brands with the right ',
+    quoteHighlight: 'cultural moments',
+    quoteAfter: '.\u201d',
+    image: `${base}wenborn-carousel.webp`,
+    paragraphs: [
+      '\u201cTrust and shared vision are the bedrock of any great partnership. Our history with Laura spans three Bond films (Skyfall, Spectre and No Time To Die), and that track record made Beyond The Badge the obvious choice for our current and future projects at EON.',
+      'Laura has an incredible intuition for connecting the right brands with the right cultural moments and we\u2019re excited to keep building on this legacy together.\u201d',
+    ],
+    image2: '',
+    images: [`${base}wenborn-1.webp`, `${base}wenborn-2.webp`, `${base}wenborn-3.webp`, `${base}wenborn-4.webp`, `${base}wenborn-5.webp`],
+  },
+  {
     name: 'Dominic Reid OBE',
     title: 'Formerly Founding CEO of the Invictus Games',
     quoteBefore: '\u201cLaura has an intelligent and imaginative grasp of the way brands can work with properties that they sponsor to their mutual benefit. She was instrumental in the successful ',
@@ -83,20 +97,6 @@ const testimonials = [
     images: [`${base}amadi-1.webp`, `${base}amadi-2.webp`],
   },
   {
-    name: 'Stephanie Wenborn',
-    title: 'Head of Marketing & Partnerships, EON',
-    quoteBefore: '\u201cTrust and shared vision are the bedrock of any great partnership. Our history with Laura spans three Bond films \u2014 Skyfall, Spectre and No Time To Die \u2014 and that track record made Beyond The Badge the obvious choice for our current and future projects at EON. Laura has an incredible intuition for connecting the right brands with the right ',
-    quoteHighlight: 'cultural moments',
-    quoteAfter: '.\u201d',
-    image: `${base}wenborn-carousel.webp`,
-    paragraphs: [
-      '\u201cTrust and shared vision are the bedrock of any great partnership. Our history with Laura spans three Bond films (Skyfall, Spectre and No Time To Die), and that track record made Beyond The Badge the obvious choice for our current and future projects at EON.',
-      'Laura has an incredible intuition for connecting the right brands with the right cultural moments and we\u2019re excited to keep building on this legacy together.\u201d',
-    ],
-    image2: '',
-    images: [`${base}wenborn-1.webp`, `${base}wenborn-2.webp`, `${base}wenborn-3.webp`, `${base}wenborn-4.webp`, `${base}wenborn-5.webp`],
-  },
-  {
     name: 'Dave Benett',
     title: 'Photographer (Getty Images / London Evening Standard)',
     quoteBefore: '\u201cIn my line of work, you see a lot of people who try to \u2018manage\u2019 the room, but Laura Wood is one of the rare few who actually understands the energy of it. Simply put, Laura curates cultural moments that ',
@@ -123,7 +123,7 @@ const storiesData = testimonials.map(t => ({
 }));
 ---
 
-<!-- Outer scroll track: 500vh default (4 collapsed slots × ~125vh each); expanded to 875vh via JS (7 slots × ~125vh each) -->
+<!-- Outer scroll track: 625vh default (5 collapsed slots × ~125vh each); expanded to 875vh via JS (7 slots × ~125vh each) -->
 <div class="testimonials-track" id="testimonials">
   <!-- Sticky panel: pins to viewport while track scrolls past -->
   <section class="testimonials-sticky" aria-label="What our friends say">
@@ -139,7 +139,7 @@ const storiesData = testimonials.map(t => ({
 
         <!-- Left: name list -->
         <div class="testimonials__names">
-          {testimonials.slice(0, 4).map((t, i) => (
+          {testimonials.slice(0, 5).map((t, i) => (
             <button
               type="button"
               class={`t-name-btn${i === 0 ? ' is-active' : ''}`}
@@ -151,11 +151,11 @@ const storiesData = testimonials.map(t => ({
           ))}
 
           <div class="t-names-extra" id="t-names-extra" aria-hidden="true">
-            {testimonials.slice(4).map((t, i) => (
+            {testimonials.slice(5).map((t, i) => (
               <button
                 type="button"
                 class="t-name-btn"
-                data-index={String(i + 4)}
+                data-index={String(i + 5)}
               >
                 <span class="t-arrow" aria-hidden="true">&rarr;</span>
                 <span class="t-name-text">{t.name}</span>
@@ -193,7 +193,7 @@ const storiesData = testimonials.map(t => ({
                 <strong class="t-client-name">{t.name}</strong>
                 <span class="t-client-role">{t.title}</span>
               </footer>
-              {i === 2 ? (
+              {i === 3 ? (
                 <div class="t-btn-row">
                   <button type="button" class="t-story-btn">
                     <span class="t-story-btn__text">The Full Story +</span>
@@ -283,7 +283,7 @@ const storiesData = testimonials.map(t => ({
 <style>
   /* ─── Scroll track (outer, 300vh) ─── */
   .testimonials-track {
-    height: 500vh;
+    height: 625vh;
     background: transparent;
     /* Needed so sticky child has correct offset parent */
     position: relative;
@@ -1060,7 +1060,7 @@ const storiesData = testimonials.map(t => ({
     const progress = scrolled / totalTravel;
     // n matches the number of visible scroll slots — track height is adjusted
     // dynamically on expand/collapse so each slot stays the same size (~125vh).
-    const n   = isExpanded ? 7 : 4;
+    const n   = isExpanded ? 7 : 5;
     const idx = Math.min(n - 1, Math.floor(progress * n));
 
     activate(idx);
@@ -1080,17 +1080,17 @@ const storiesData = testimonials.map(t => ({
     setTimeout(() => { scrollPaused = false; }, 600);
 
     isExpanded = !isExpanded;
-    // Resize track so each slot stays ~125vh: 500vh÷4=125vh, 875vh÷7=125vh.
+    // Resize track so each slot stays ~125vh: 625vh÷5=125vh, 875vh÷7=125vh.
     // Skip on mobile where track height is 'auto' (set by media query).
     if (track && window.innerWidth > 768) {
-      track.style.height = isExpanded ? '875vh' : '500vh';
+      track.style.height = isExpanded ? '875vh' : '625vh';
     }
 
     extraNames?.classList.toggle('is-open', isExpanded);
     extraNames?.setAttribute('aria-hidden', String(!isExpanded));
     moreBtn.setAttribute('aria-expanded', String(isExpanded));
     if (moreText) moreText.textContent = isExpanded ? 'Show fewer' : 'More voices';
-    if (!isExpanded && current >= 4) activate(3);
+    if (!isExpanded && current >= 5) activate(4);
   });
 
   // ─── Manual click / hover (still works when reading the pinned panel) ─────
@@ -1289,7 +1289,7 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
-  // ── Campaign video modal (Niamh Bryne testimonial #2) ───────────────────────────────────
+  // ── Campaign video modal (Niamh Bryne testimonial #3) ────────────────────────────────────
   const playBtn    = document.getElementById('t-play-btn')           as HTMLButtonElement | null;
   const videoModal = document.getElementById('t-video-modal')         as HTMLElement      | null;
   const modalBack  = document.getElementById('t-video-modal-backdrop') as HTMLElement     | null;
