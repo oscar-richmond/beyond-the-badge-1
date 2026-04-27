@@ -6,8 +6,8 @@ const { cream = false } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
 const navItems = [
-  { href: '/terms', label: 'Terms & Conditions' },
-  { href: '/privacy', label: 'Privacy Policy' },
+  { href: `${base}terms`,   label: 'Terms & Conditions' },
+  { href: `${base}privacy`, label: 'Privacy Policy' },
   { href: 'https://www.instagram.com', label: 'Instagram' },
 ];
 ---

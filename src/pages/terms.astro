@@ -1,0 +1,364 @@
+---
+import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lastUpdated = 'April 2026';
+---
+
+<BaseLayout
+  title="Terms &amp; Conditions — Beyond the Badge"
+  description="Terms and conditions for Beyond the Badge. Please read these terms carefully before using our website."
+>
+  <script>
+    document.body.classList.add('page-legal');
+  </script>
+
+  <style is:global>
+    /* ── Header: dark links on cream background ─────────────────────────── */
+    .page-legal .header__nav-link,
+    .page-legal .header.at-top .header__nav-link {
+      color: #052715 !important;
+    }
+    .page-legal .header__logo-img,
+    .page-legal .header:not(.at-top) .header__logo-img {
+      filter: brightness(0) saturate(100%) invert(10%) sepia(60%) saturate(1200%) hue-rotate(118deg) brightness(0.75) !important;
+    }
+    .page-legal .header.at-top .header__logo-img {
+      filter: brightness(0) saturate(100%) invert(10%) sepia(60%) saturate(1200%) hue-rotate(118deg) brightness(0.75) !important;
+    }
+    .page-legal .header__menu-line,
+    .page-legal .header.at-top .header__menu-line {
+      background-color: #052715 !important;
+    }
+  </style>
+
+  <Header />
+
+  <main class="legal-page">
+
+    <!-- Hero -->
+    <section class="legal-hero">
+      <div class="legal-hero__inner">
+        <div class="legal-hero__meta">
+          <span class="legal-eyebrow">Legal</span>
+          <span class="legal-updated">Last updated: {lastUpdated}</span>
+        </div>
+        <h1 class="legal-hero__title">Terms &amp;<br />Conditions</h1>
+      </div>
+      <hr class="legal-hero__rule" />
+    </section>
+
+    <!-- Body -->
+    <article class="legal-body">
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">01</span>
+          <h2 class="legal-section__heading">Introduction</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>Welcome to Beyond The Badge. By accessing or using this website you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our website.</p>
+          <p>These terms apply to all visitors, users, and others who access or use the website located at beyondthebadge.co.uk (the "Site"). Beyond The Badge reserves the right to update these terms at any time without prior notice. Continued use of the Site following any changes constitutes your acceptance of the revised terms.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">02</span>
+          <h2 class="legal-section__heading">Use of the Website</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>You may use this Site only for lawful purposes and in accordance with these Terms. You agree not to use the Site in any way that violates applicable local, national, or international law or regulation.</p>
+          <p>You must not reproduce, duplicate, copy, sell, resell, or exploit any portion of the Site without the express written permission of Beyond The Badge. You agree not to attempt to gain unauthorised access to any part of the Site or its related systems or networks.</p>
+          <p>We reserve the right to withdraw or amend the services we provide on the Site without notice. We will not be liable if for any reason the Site is unavailable at any time or for any period.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">03</span>
+          <h2 class="legal-section__heading">Intellectual Property</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>The Site and its entire contents — including but not limited to text, images, graphics, logos, video, audio, and software — are the property of Beyond The Badge or its content suppliers and are protected by applicable intellectual property laws.</p>
+          <p>The Beyond The Badge name, logo, and all related marks are trademarks of Beyond The Badge. You may not use any of our trademarks without our express prior written consent. Nothing contained on this Site grants any licence or right to use our trademarks.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">04</span>
+          <h2 class="legal-section__heading">Disclaimer of Warranties</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>This Site is provided on an "as is" and "as available" basis without any warranties of any kind, either express or implied. Beyond The Badge does not warrant that the Site will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+          <p>To the fullest extent permitted by law, Beyond The Badge disclaims all warranties, express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">05</span>
+          <h2 class="legal-section__heading">Limitation of Liability</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>To the fullest extent permitted by applicable law, Beyond The Badge and its directors, employees, partners, agents, suppliers, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, use, goodwill, or other intangible losses.</p>
+          <p>This limitation applies regardless of whether Beyond The Badge has been advised of the possibility of such damages and regardless of the theory of liability (contract, tort, negligence, strict liability, or otherwise).</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">06</span>
+          <h2 class="legal-section__heading">Third-Party Links</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>This Site may contain links to third-party websites or services that are not owned or controlled by Beyond The Badge. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party websites or services.</p>
+          <p>We strongly advise you to read the terms and conditions and privacy policy of any third-party site you visit. Inclusion of any link does not imply endorsement of the linked site by Beyond The Badge.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">07</span>
+          <h2 class="legal-section__heading">Governing Law</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>These Terms shall be governed and construed in accordance with the laws of England and Wales, without regard to its conflict of law provisions. Any disputes arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">08</span>
+          <h2 class="legal-section__heading">Changes to These Terms</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>We reserve the right to modify these Terms at any time. We will always post the most current version on this page with an updated date. By continuing to access or use the Site after any revisions become effective, you agree to be bound by the updated terms.</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="legal-section">
+        <div class="legal-section__label">
+          <span class="legal-section__num">09</span>
+          <h2 class="legal-section__heading">Contact Us</h2>
+        </div>
+        <div class="legal-section__content">
+          <p>If you have any questions about these Terms and Conditions, please contact us at:</p>
+          <p><a href="mailto:hello@beyondthebadge.agency" class="legal-email">hello@beyondthebadge.agency</a></p>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <Footer cream />
+
+</BaseLayout>
+
+<style>
+  /* ── Page base ──────────────────────────────────────────────────────── */
+  .legal-page {
+    background: var(--color-cream);
+    min-height: 100vh;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────────────── */
+  .legal-hero {
+    padding: 160px var(--section-padding-x) 0;
+  }
+
+  .legal-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+    padding-bottom: 56px;
+  }
+
+  .legal-hero__meta {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .legal-eyebrow {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #BBB1A7;
+  }
+
+  .legal-updated {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #BBB1A7;
+    white-space: nowrap;
+  }
+
+  .legal-hero__title {
+    grid-column: 1;
+    grid-row: 1;
+    font-family: var(--font-serif);
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: #052715;
+    margin: 0;
+  }
+
+  .legal-hero__rule {
+    border: none;
+    border-top: 1px solid #D9D0C8;
+    margin: 0;
+  }
+
+  /* ── Body ───────────────────────────────────────────────────────────── */
+  .legal-body {
+    padding: 0 var(--section-padding-x) clamp(80px, 12vh, 160px);
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+  }
+
+  /* Internal hr: section dividers */
+  .legal-body hr {
+    border: none;
+    border-top: 1px solid #D9D0C8;
+    margin: 0;
+  }
+
+  /* ── Section ────────────────────────────────────────────────────────── */
+  .legal-section {
+    display: grid;
+    grid-template-columns: clamp(160px, 22%, 280px) 1fr;
+    gap: 0 clamp(32px, 5vw, 72px);
+    padding: clamp(40px, 6vh, 80px) 0;
+  }
+
+  .legal-section__label {
+    padding-top: 4px; /* optical alignment with first line of body text */
+  }
+
+  .legal-section__num {
+    display: block;
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: var(--font-size-label);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: #BBB1A7;
+    margin-bottom: 10px;
+  }
+
+  .legal-section__heading {
+    font-family: var(--font-serif);
+    font-size: clamp(18px, 1.6vw, 24px);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    color: #052715;
+    margin: 0;
+  }
+
+  /* ── Body text ──────────────────────────────────────────────────────── */
+  .legal-section__content p {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 16px;
+    line-height: 1.75;
+    font-weight: 400;
+    color: rgba(5, 39, 21, 0.75);
+    margin: 0 0 1.25em;
+    max-width: 68ch;
+  }
+
+  .legal-section__content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Email link ─────────────────────────────────────────────────────── */
+  .legal-email {
+    font-family: var(--font-sans);
+    font-variation-settings: normal;
+    font-size: 16px;
+    color: #052715;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(5, 39, 21, 0.3);
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .legal-email:hover {
+    opacity: 1;
+    text-decoration-color: #052715;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .legal-hero {
+      padding-top: 110px;
+    }
+
+    .legal-hero__inner {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding-bottom: 40px;
+    }
+
+    .legal-hero__meta {
+      grid-column: 1;
+      grid-row: 2;
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .legal-hero__title {
+      grid-row: 1;
+    }
+
+    .legal-section {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: clamp(32px, 5vh, 56px) 0;
+    }
+
+    .legal-section__label {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .legal-section__num {
+      margin-bottom: 0;
+    }
+  }
+</style>
