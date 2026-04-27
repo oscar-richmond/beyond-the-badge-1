@@ -244,13 +244,13 @@ const storiesData = testimonials.map(t => ({
 <div class="t-fs-modal" id="t-fs-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Full story">
   <div class="t-fs-overlay" id="t-fs-overlay"></div>
   <button type="button" class="t-fs-close" id="t-fs-close">✕ Close</button>
-  <div class="t-fs-panel">
+  <!-- Full-story modal panel (single scroll container) -->
+  <div class="t-fs-panel" data-lenis-prevent>
     <!-- B watermark image — bleeds from top-right of the panel -->
     <img class="t-fs-watermark" src="/b-logo-watermark.png" alt="" aria-hidden="true" />
     <div class="t-fs-body">
       <!-- Left: role + images -->
-      <!-- data-lenis-prevent: tells Lenis to release wheel events over this column -->
-      <div class="t-fs-left" data-lenis-prevent>
+      <div class="t-fs-left">
         <p class="t-fs-name" id="t-fs-name"></p>
         <p class="t-fs-role" id="t-fs-role"></p>
         <div class="t-fs-images">
@@ -271,9 +271,8 @@ const storiesData = testimonials.map(t => ({
           </div>
         </div>
       </div>
-      <!-- Right: full quote (scrolls independently) -->
-      <!-- data-lenis-prevent: tells Lenis to release wheel events over this column -->
-      <div class="t-fs-right" id="t-fs-right" data-lenis-prevent>
+      <!-- Right: full quote -->
+      <div class="t-fs-right" id="t-fs-right">
         <div class="t-fs-quote" id="t-fs-quote"></div>
       </div>
     </div>
@@ -922,31 +921,22 @@ const storiesData = testimonials.map(t => ({
     right: var(--section-padding-x, 48px);
     bottom: 0;
     background: var(--color-cream, #f8f2ed);
-    /* overflow:clip — visually clips content like overflow:hidden but does NOT
-       create a scroll container, so mouse-wheel events propagate correctly to
-       the child scroll columns. overflow:hidden would block wheel events. */
-    overflow: clip;
+    /* Panel is the single scroll container — both columns scroll together */
+    overflow-y: auto;
+    overflow-x: hidden;
     /* transform, opacity and transitions are driven by GSAP */
     will-change: transform, opacity;
   }
   .t-fs-body {
     display: grid;
     grid-template-columns: 2fr 3fr;
-    grid-template-rows: 1fr;   /* CRITICAL: explicit row height breaks the circular
-                                  dependency. Without this, the implicit 'auto' row
-                                  sizes to content, height:100% on children becomes
-                                  circular, and overflow-y:auto never activates. */
-    height: 100%;
+    /* No explicit row height — grid grows to natural content height so both
+       columns size to their tallest child, giving a unified scroll experience */
     padding-top: 96px;
     box-sizing: border-box;
-    /* No overflow set here — grid container must not intercept wheel events.
-       Clipping is handled entirely by the panel using overflow:clip. */
   }
   .t-fs-left {
-    overflow-y: auto;
-    min-height: 0;         /* CRITICAL: grid items default to min-height:auto which
-                              prevents them being smaller than content, so overflow-y
-                              never activates. min-height:0 removes that floor. */
+    /* Normal flow — no independent scroll */
     padding: clamp(28px,3.5vw,64px);
     display: flex; flex-direction: column;
   }
@@ -986,7 +976,6 @@ const storiesData = testimonials.map(t => ({
     display: flex; flex-direction: column;
     gap: 32px;
     position: relative; z-index: 1;
-    /* Images have natural/varying heights; left column scrolls if they overflow */
   }
   .t-fs-img-wrap {
     width: 100%; overflow: hidden;
@@ -999,12 +988,7 @@ const storiesData = testimonials.map(t => ({
   }
   .t-fs-img[src=""] { display: none; }
   .t-fs-right {
-    /* Right column is the scroll container for all quote text */
-    overflow-y: auto;
-    min-height: 0;         /* CRITICAL: same fix as .t-fs-left — removes grid item's
-                              default min-height:auto so overflow-y actually activates */
-    height: 100%;          /* Explicit height ensures overflow-y:auto has a bound to
-                              scroll within (complements min-height:0 on the grid item) */
+    /* Right column — normal flow, scrolls with the panel */
     padding: clamp(28px,4vw,72px) clamp(28px,4.5vw,72px) clamp(40px,5vw,80px);
     box-sizing: border-box;
   }
@@ -1397,8 +1381,7 @@ const storiesData = testimonials.map(t => ({
         .map(p => `<p>${p.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`)
         .join('');
     }
-    if (fsRight) fsRight.scrollTop = 0;
-    if (fsLeft)  fsLeft.scrollTop  = 0;
+    if (fsPanel) fsPanel.scrollTop = 0;
 
     // Set initial animation states before making the modal visible
     gsap.set(fsPanel,   { opacity: 0, y: 52, scale: 0.97 });
