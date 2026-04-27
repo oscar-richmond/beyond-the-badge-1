@@ -1330,6 +1330,17 @@ const storiesData = testimonials.map(t => ({
     closeFsModal(true); // instant — page curtain already covers the transition
   }, { once: true });
 
+  // ── bfcache restoration: force-close any open modal ──────────────────────
+  // If a modal was open when the user navigated away, bfcache freezes that
+  // state. Pressing Back restores it instantly — modal is still "open" and
+  // body.overflow is still hidden. The pageshow handler in BaseLayout clears
+  // the overflow; this handler closes the modals themselves cleanly.
+  window.addEventListener('pageshow', (event) => {
+    if (!(event as PageTransitionEvent).persisted) return;
+    closeFsModal(true);
+    closeModal();
+  });
+
   // ═══ Full-story modal ═════════════════════════════════════════════════════
   const fsModal   = document.getElementById('t-fs-modal')   as HTMLElement | null;
   const fsClose   = document.getElementById('t-fs-close')   as HTMLButtonElement | null;

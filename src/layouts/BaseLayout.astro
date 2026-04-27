@@ -156,6 +156,29 @@ const {
             },
           });
         }, true);
+
+        // ── Back-button fix: bfcache restoration ─────────────────────────────
+        // When navigating away, the curtain is at y:0% (covering the page).
+        // The browser saves this frozen state. Pressing Back restores it instantly
+        // without re-running JS, so the curtain never slides away → stuck on green.
+        // e.persisted===true on pageshow means bfcache; we re-run the exit animation
+        // and clear any body.overflow lock left by an open modal.
+        window.addEventListener('pageshow', (event) => {
+          if (!(event as PageTransitionEvent).persisted || !curtain) return;
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+          gsap.killTweensOf(curtain);
+          gsap.set(curtain, { y: '0%' });
+          gsap.to(curtain, {
+            y: '100%',
+            duration: 0.9,
+            ease: 'btbEase',
+            delay: 0.05,
+            onComplete() {
+              window.dispatchEvent(new CustomEvent('btb-ready'));
+            },
+          });
+        });
       }
     </script>
 
