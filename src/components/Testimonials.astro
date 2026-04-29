@@ -193,12 +193,18 @@ const storiesData = testimonials.map(t => ({
                 <strong class="t-client-name">{t.name}</strong>
                 <span class="t-client-role">{t.title}</span>
               </footer>
-              {i === 3 ? (
+              {(i === 1 || i === 3) ? (
                 <div class="t-btn-row">
                   <button type="button" class="t-story-btn">
                     <span class="t-story-btn__text">The Full Story +</span>
                   </button>
-                  <button type="button" class="t-play-btn" id="t-play-btn" aria-label="Play Gorillaz x Jaguar Land Rover campaign video">
+                  <button
+                    type="button"
+                    class="t-play-btn"
+                    data-video-webm={i === 1 ? `${base}wenborn-campaign.webm` : `${base}campaign-video.webm`}
+                    data-video-mp4={i === 1  ? `${base}wenborn-campaign.mp4`  : `${base}campaign-video.mp4`}
+                    aria-label={i === 1 ? 'Play EON Bond film campaign video' : 'Play Gorillaz × Jaguar Land Rover campaign video'}
+                  >
                     <span class="t-play-btn__text">Play Campaign</span>
                     <span class="t-play-btn__icon" aria-hidden="true">▶</span>
                   </button>
@@ -217,7 +223,7 @@ const storiesData = testimonials.map(t => ({
   </section>
 </div>
 
-<!-- Campaign video modal (Niamh Bryne / Gorillaz × JLR testimonial) -->
+<!-- Campaign video modal — shared by Stephanie Wenborn and Niamh Bryne -->
 <div class="t-video-modal" id="t-video-modal" aria-hidden="true" role="dialog" aria-label="Campaign video">
   <div class="t-video-modal__backdrop" id="t-video-modal-backdrop"></div>
   <div class="t-video-modal__container">
@@ -228,10 +234,11 @@ const storiesData = testimonials.map(t => ({
         controls
         playsinline
         preload="none"
-        aria-label="Gorillaz x Jaguar Land Rover campaign video"
+        aria-label="Campaign video"
       >
-        <source src="/campaign-video.webm" type="video/webm" />
-        <source src="/campaign-video.mp4"  type="video/mp4" />
+        <!-- src attributes are set dynamically by JS from the clicked play button's data-video-* attrs -->
+        <source id="t-campaign-src-webm" src="" type="video/webm" />
+        <source id="t-campaign-src-mp4"  src="" type="video/mp4" />
       </video>
     </div>
   </div>
@@ -1294,19 +1301,26 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
-  // ── Campaign video modal (Niamh Bryne testimonial #3) ────────────────────────────────────
-  const playBtn    = document.getElementById('t-play-btn')           as HTMLButtonElement | null;
-  const videoModal = document.getElementById('t-video-modal')         as HTMLElement      | null;
-  const modalBack  = document.getElementById('t-video-modal-backdrop') as HTMLElement     | null;
-  const modalClose = document.getElementById('t-video-modal-close')   as HTMLButtonElement | null;
-  const campVideo  = document.getElementById('t-campaign-video')      as HTMLVideoElement | null;
+  // ── Campaign video modal (Stephanie Wenborn #1 and Niamh Bryne #3) ─────────────────────
+  // Sources are driven by data-video-webm / data-video-mp4 on each .t-play-btn so the same
+  // modal element serves both testimonials without duplicating markup.
+  const playBtns   = document.querySelectorAll<HTMLButtonElement>('.t-play-btn');
+  const videoModal  = document.getElementById('t-video-modal')          as HTMLElement      | null;
+  const modalBack   = document.getElementById('t-video-modal-backdrop') as HTMLElement      | null;
+  const modalClose  = document.getElementById('t-video-modal-close')    as HTMLButtonElement | null;
+  const campVideo   = document.getElementById('t-campaign-video')       as HTMLVideoElement | null;
+  const campSrcWebm = document.getElementById('t-campaign-src-webm')    as HTMLSourceElement | null;
+  const campSrcMp4  = document.getElementById('t-campaign-src-mp4')     as HTMLSourceElement | null;
 
-  function openModal() {
+  function openModal(webmSrc: string, mp4Src: string) {
     if (!videoModal || !campVideo) return;
+    if (campSrcWebm) campSrcWebm.src = webmSrc;
+    if (campSrcMp4)  campSrcMp4.src  = mp4Src;
+    campVideo.load();                       // reload decoder with new sources
     videoModal.classList.add('is-open');
     videoModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    campVideo.play();
+    campVideo.play().catch(() => {});       // autoplay may be blocked; user can tap ▶
   }
 
   function closeModal() {
@@ -1314,11 +1328,22 @@ const storiesData = testimonials.map(t => ({
     videoModal.classList.remove('is-open');
     videoModal.setAttribute('aria-hidden', 'true');
     campVideo.pause();
-    campVideo.currentTime = 0;  /* reset to start for next open */
+    campVideo.currentTime = 0;
+    // Clear sources to release the video resource
+    if (campSrcWebm) campSrcWebm.src = '';
+    if (campSrcMp4)  campSrcMp4.src  = '';
+    campVideo.load();
     document.body.style.overflow = '';
   }
 
-  playBtn?.addEventListener('click', openModal);
+  playBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      openModal(
+        btn.dataset.videoWebm ?? '',
+        btn.dataset.videoMp4  ?? '',
+      );
+    });
+  });
   modalBack?.addEventListener('click', closeModal);
   modalClose?.addEventListener('click', closeModal);
   // Save keydown reference so it can be removed on cleanup
