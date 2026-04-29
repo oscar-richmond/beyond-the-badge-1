@@ -94,7 +94,7 @@ const testimonials = [
       'Underpinning all of the strategic and evidence-based insight Laura provided was a manifest commitment to the values of the British Red Cross, successfully combined with the need to drive purpose visibility for JLR customers and employees.\u201d',
     ],
     image2: '',
-    images: [`${base}amadi-1.webp`, `${base}amadi-2.webp`],
+    images: [`${base}amadi-1.webp`, `${base}amadi-2.webp`, `${base}amadi-3.webp`],
   },
   {
     name: 'Dave Benett',
@@ -193,7 +193,7 @@ const storiesData = testimonials.map(t => ({
                 <strong class="t-client-name">{t.name}</strong>
                 <span class="t-client-role">{t.title}</span>
               </footer>
-              {(i === 1 || i === 3) ? (
+              {(i === 1 || i === 3 || i === 5) ? (
                 <div class="t-btn-row">
                   <button type="button" class="t-story-btn">
                     <span class="t-story-btn__text">The Full Story +</span>
@@ -201,9 +201,21 @@ const storiesData = testimonials.map(t => ({
                   <button
                     type="button"
                     class="t-play-btn"
-                    data-video-webm={i === 1 ? `${base}wenborn-campaign.webm` : `${base}campaign-video.webm`}
-                    data-video-mp4={i === 1  ? `${base}wenborn-campaign.mp4`  : `${base}campaign-video.mp4`}
-                    aria-label={i === 1 ? 'Play EON Bond film campaign video' : 'Play Gorillaz × Jaguar Land Rover campaign video'}
+                    data-video-webm={
+                      i === 1 ? `${base}wenborn-campaign.webm` :
+                      i === 5 ? ''                              :
+                                `${base}campaign-video.webm`
+                    }
+                    data-video-mp4={
+                      i === 1 ? `${base}wenborn-campaign.mp4` :
+                      i === 5 ? `${base}amadi-campaign.mp4`   :
+                                `${base}campaign-video.mp4`
+                    }
+                    aria-label={
+                      i === 1 ? 'Play EON Bond film campaign video' :
+                      i === 5 ? 'Play JLR — British Red Cross campaign video' :
+                                'Play Gorillaz × Jaguar Land Rover campaign video'
+                    }
                   >
                     <span class="t-play-btn__text">Play Campaign</span>
                     <span class="t-play-btn__icon" aria-hidden="true">▶</span>
