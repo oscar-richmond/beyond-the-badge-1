@@ -127,11 +127,9 @@
       padding-bottom: var(--section-padding-y); /* matches images→Services gap (About pb + Services pt) */
     }
     .hero__text {
-      padding-top: 116px;   /* 36px baseline + 80px extra */
-      padding-bottom: 112px; /* 32px baseline + 80px extra */
-    }
-    .hero__statement {
-      font-size: 30px; /* matches .about__intro at this breakpoint */
+      /* Match Gap 1 & Gap 2: both are 2 × --section-padding-y (~153px at 768px) */
+      padding-top: calc(2 * var(--section-padding-y));
+      padding-bottom: calc(2 * var(--section-padding-y));
     }
     .hero__image-wrapper {
       min-height: 240px;
