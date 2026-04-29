@@ -1139,12 +1139,13 @@ const storiesData = testimonials.map(t => ({
   /* ─── Late-cascade 768px: wins over 1440/1280/1024px blocks above ─── */
   @media (max-width: 768px) {
     .t-quote blockquote {
-      display: block;       /* override display:-webkit-box from base */
+      display: -webkit-box;      /* required for -webkit-line-clamp */
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 8;     /* truncate at 8 lines with ellipsis */
+      overflow: hidden;
       font-size: 22px;
       line-height: 1.65;
       margin-bottom: 10px;
-      -webkit-line-clamp: unset;
-      overflow: visible;
     }
     .t-name-btn  { font-size: 13px; }
     .t-more-btn  { font-size: 13px; }
