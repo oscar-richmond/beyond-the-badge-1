@@ -298,7 +298,11 @@ const storiesData = testimonials.map(t => ({
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    /* overflow:clip — clips visual overflow exactly like overflow:hidden but does
+       NOT create a scroll container. overflow:hidden would cause Lenis to detect
+       this as a scrollable element, yield wheel-event control, and break smooth
+       scroll over the entire testimonials section. */
+    overflow: clip;
     -webkit-font-smoothing: antialiased;
   }
 
