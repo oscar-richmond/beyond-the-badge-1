@@ -248,13 +248,13 @@ const VIEWER_H = 375;
   @media (max-width: 768px) {
     .services__item {
       flex-direction: row;      /* keep category inline — no longer drops below */
-      align-items: flex-start;  /* top-align so category is level with number */
+      align-items: center;      /* vertically centre number, title & category */
       gap: 16px;
       padding: 24px 0;
     }
 
     .services__item-left {
-      align-items: flex-start;  /* number aligns to top of wrapped title */
+      align-items: center;      /* number centres against title height */
       gap: 14px;
       flex: 1;                  /* fill available width, pushing category right */
       min-width: 0;             /* allow title to wrap within its space */
@@ -264,7 +264,6 @@ const VIEWER_H = 375;
       flex-shrink: 0;   /* never shrink — stays at natural width */
       margin-left: 0;
       padding-left: 0;
-      padding-top: 3px; /* optical alignment with number text */
     }
 
     .services__beyond-img { height: 37px; }
