@@ -536,24 +536,26 @@ const storiesData = testimonials.map(t => ({
 
     /* Sticky pin stays: do NOT override position/height here */
     .testimonials-sticky {
-      justify-content: flex-start;
-      padding-top: 40px;
-      overflow: clip; /* clips bleed; descendant scroll containers still scroll */
+      justify-content: center;
+      padding-top: 0;
+      overflow: clip;
     }
 
     /* Tighten header so content has room */
     .testimonials__heading { margin-bottom: 10px; }
     .testimonials__rule    { margin-bottom: 14px; }
 
-    /* Body: flex column — names top, photo, quote below */
+    /* Body: grid — names full-width, photo left (1fr), quote right (2fr) */
     .testimonials__body {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      column-gap: 16px;
+      row-gap: 0;
     }
 
-    /* ── Names: horizontal scrollable row ── */
+    /* ── Names: horizontal scrollable row, full-width across both columns ── */
     .testimonials__names {
+      grid-column: 1 / -1;   /* span both columns */
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
@@ -563,7 +565,7 @@ const storiesData = testimonials.map(t => ({
       -ms-overflow-style: none;
       align-items: center;
       gap: 0;
-      width: 100%;           /* constrain to container so overflow-x scrolls */
+      width: 100%;
       box-sizing: border-box;
       padding-bottom: 10px;
       margin-bottom: 14px;
@@ -575,9 +577,9 @@ const storiesData = testimonials.map(t => ({
     .t-name-btn {
       flex-shrink: 0;
       white-space: nowrap;
-      width: auto;     /* override base width: 100% so buttons sit inline */
+      width: auto;
       font-size: 13px;
-      padding: 4px 14px 4px 0;
+      padding: 4px 10px 4px 0;  /* tightened so More voices fits in viewport */
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -635,24 +637,24 @@ const storiesData = testimonials.map(t => ({
 
     .t-more-line { display: none; }
 
-    /* ── Photo: full width, 3:2 aspect ratio ── */
+    /* ── Photo: left column, stretches to match right column height ── */
     .testimonials__photo-stage {
+      grid-column: 1;
+      align-self: stretch;   /* fill full row height, sized by quote column */
       width: 100%;
-      height: auto;
-      aspect-ratio: 3 / 2;
-      flex-shrink: 0;
+      height: 100%;
+      aspect-ratio: unset;
       overflow: hidden;
-      margin-bottom: 16px;
+      min-height: 180px;     /* safety floor if quote content is short */
     }
 
-    /* ── Quote stage: auto-height — sized by active quote content ── */
+    /* ── Quote stage: right column, auto-sized by content ── */
     .testimonials__quote-stage {
+      grid-column: 2;
       height: auto;
       min-height: 0;
-      width: 100%;
       margin-right: 0;
       position: relative;
-      flex-shrink: 0;
     }
 
     /* Inactive quotes: hidden and out of flow so stage auto-sizes */
@@ -1137,16 +1139,25 @@ const storiesData = testimonials.map(t => ({
   /* ─── Late-cascade 768px: wins over 1440/1280/1024px blocks above ─── */
   @media (max-width: 768px) {
     .t-quote blockquote {
+      display: block;       /* override display:-webkit-box from base */
       font-size: 22px;
-      line-height: 36px;
+      line-height: 1.65;
       margin-bottom: 10px;
-      -webkit-line-clamp: unset; /* remove line clamp — height is auto */
+      -webkit-line-clamp: unset;
       overflow: visible;
     }
     .t-name-btn  { font-size: 13px; }
     .t-more-btn  { font-size: 13px; }
-    /* Quote stage stays auto — no desktop height should override */
+    /* Grid placement overrides — prevent desktop breakpoints from resetting */
+    .testimonials__photo-stage {
+      grid-column: 1;
+      height: 100%;
+      width: 100%;
+      aspect-ratio: unset;
+      min-height: 180px;
+    }
     .testimonials__quote-stage {
+      grid-column: 2;
       height: auto;
       min-height: 0;
       width: 100%;
