@@ -169,6 +169,13 @@
       height: 651px;  /* 723px × 0.90 */
     }
   }
+
+  /* ── 768px: must come AFTER the 1024px block so it wins the cascade ── */
+  @media (max-width: 768px) {
+    .hero__statement {
+      font-size: 30px; /* matches .about__intro — overrides 1024px clamp() */
+    }
+  }
 </style>
 
 <script>
