@@ -530,51 +530,148 @@ const storiesData = testimonials.map(t => ({
     color: var(--color-text-muted);
   }
 
-  /* ─── Mobile: unpin, stack all three ─── */
+  /* ─── Mobile: scroll-pin ACTIVE, horizontal names, stacked content ─── */
   @media (max-width: 768px) {
-    .testimonials-track {
-      height: auto;
-    }
+    /* Track stays 625vh — JS scroll driver remains active */
 
+    /* Sticky pin stays: do NOT override position/height here */
     .testimonials-sticky {
-      position: static;
-      height: auto;
-      padding: var(--section-padding-y) 0;
+      justify-content: flex-start;
+      padding-top: 40px;
+      /* Must be visible so the horizontal names row can scroll */
+      overflow: visible;
     }
 
+    /* Tighten header so content has room */
+    .testimonials__heading { margin-bottom: 10px; }
+    .testimonials__rule    { margin-bottom: 14px; }
+
+    /* Body: flex column — names top, photo, quote below */
     .testimonials__body {
-      grid-template-columns: 1fr;
-      gap: 36px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
-    /* Show all photos and quotes stacked on mobile */
-    .t-photo {
-      position: static;
-      opacity: 1 !important;
+    /* ── Names: horizontal scrollable row ── */
+    .testimonials__names {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      align-items: center;
+      gap: 0;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(5, 39, 21, 0.1);
     }
 
-    .t-quote {
+    .testimonials__names::-webkit-scrollbar { display: none; }
+
+    .t-name-btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+      width: auto;     /* override base width: 100% so buttons sit inline */
+      font-size: 13px;
+      padding: 4px 14px 4px 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Disable text-slide in horizontal layout */
+    .t-name-btn .t-name-text,
+    .t-name-btn.is-active .t-name-text,
+    .t-name-btn:hover .t-name-text { transform: none; }
+
+    /* Arrow: inline rather than absolute */
+    .t-arrow {
       position: static;
-      opacity: 1 !important;
+      transform: none;
+      top: auto;
+      left: auto;
+    }
+
+    /* Extra names expand horizontally */
+    .t-names-extra {
+      display: flex;
+      flex-direction: row;
+      flex-shrink: 0;
+      max-height: none;
+      max-width: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        max-width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity   0.4s ease;
+    }
+
+    .t-names-extra.is-open {
+      max-width: 600px;
+      opacity: 1;
       pointer-events: auto;
     }
 
+    /* Stagger: just opacity, no translateY in horizontal row */
+    .t-names-extra .t-name-btn { transform: none; opacity: 0; }
+    .t-names-extra.is-open .t-name-btn { opacity: 1; transform: none; }
+
+    /* More voices: end of names row */
+    .t-more-btn {
+      flex-shrink: 0;
+      margin-top: 0;
+      margin-left: 10px;
+      padding: 4px 0 4px 10px;
+      align-items: center;
+      border-left: 1px solid rgba(5, 39, 21, 0.12);
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .t-more-line { display: none; }
+
+    /* ── Photo: full width, fixed height, portrait cropped ── */
     .testimonials__photo-stage {
-      aspect-ratio: 4 / 3;
+      width: 100%;
+      height: clamp(160px, 22vh, 220px);
+      aspect-ratio: unset;
+      flex-shrink: 0;
+      overflow: hidden;
+      margin-bottom: 16px;
+      /* t-photo children stay position:absolute for crossfade */
     }
 
+    /* ── Quote stage: below photo, defined height for abs children ── */
     .testimonials__quote-stage {
+      height: clamp(280px, 36vh, 360px); /* explicit so inset:0 on children resolves */
+      width: 100%;                        /* guarantee full width in flex column */
       min-height: 0;
+      margin-right: 0;
+      position: relative;
+      flex-shrink: 0;
     }
 
-    .testimonials__names {
-      flex-direction: row;
-      flex-wrap: wrap;
+    /* t-quote: force full width so inset:0 fills the stage correctly */
+    .t-quote { width: 100%; }
+
+    /* Attribution: show name + role below quote */
+    .t-attribution {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 8px;
     }
 
-    .t-name-btn {
-      padding: 10px 20px 10px 0;
-    }
+    /* Hide role-credit — attribution covers both name and role */
+    .t-role-credit { display: none; }
+
+    /* CTA buttons */
+    .t-story-btn { margin-top: 14px; }
+    .t-btn-row   { margin-top: 14px; flex-wrap: wrap; gap: 8px; }
   }
   /* ─── PLAY CAMPAIGN button (testimonial 0 only) ─── */
   .t-play-btn {
@@ -1025,6 +1122,33 @@ const storiesData = testimonials.map(t => ({
     -webkit-font-smoothing: antialiased;
   }
   :global(.t-fs-quote p:last-child) { margin-bottom: 0; }
+
+  /* ─── Late-cascade 768px: wins over 1440/1280/1024px blocks above ─── */
+  @media (max-width: 768px) {
+    .t-quote blockquote {
+      font-size: 18px;
+      line-height: 30px;
+      margin-bottom: 10px;
+      -webkit-line-clamp: 8;
+    }
+    .t-name-btn  { font-size: 13px; }
+    .t-more-btn  { font-size: 13px; }
+    /* Override desktop quote-stage explicit heights */
+    .testimonials__quote-stage {
+      height: clamp(280px, 36vh, 360px);
+      width: 100%;
+      min-height: 0;
+    }
+    .t-quote { width: 100%; }
+    /* Play button: in-flow inside btn-row */
+    .t-play-btn {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      margin-top: 0;
+    }
+    .t-btn-row .t-play-btn { margin-top: 0; }
+  }
 
 </style>
 
