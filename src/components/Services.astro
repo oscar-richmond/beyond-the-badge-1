@@ -447,9 +447,13 @@ const VIEWER_H = 375;
       const tRect = tElem?.getBoundingClientRect();
       const vh    = window.innerHeight;
 
-      // Entry: starts when Services top reaches viewport midpoint (50% scrolled in),
-      // completes over 15% of viewport height — later start, snappy finish.
-      const entryT = gsap.utils.clamp(0, 1, (vh * 0.5 - rect.top) / (vh * 0.15));
+      // Entry fade timing — scoped by breakpoint:
+      // ≤768px: starts when Services is 50% into viewport, completes over 15% vh (snappy).
+      // >768px:  starts when Services enters viewport bottom, completes over 30% vh (original).
+      const isMobile = window.innerWidth <= 768;
+      const entryT = isMobile
+        ? gsap.utils.clamp(0, 1, (vh * 0.5 - rect.top) / (vh * 0.15))
+        : gsap.utils.clamp(0, 1, (vh - rect.top) / (vh * 0.3));
 
       // Exit: delayed — starts when Testimonials top reaches the viewport midpoint
       // (tRect.top == vh*0.5), completes over 30% of viewport height.
