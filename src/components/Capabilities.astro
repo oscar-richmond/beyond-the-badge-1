@@ -238,6 +238,8 @@ const capabilities = [
     .cap-left {
       order: 2;
       align-self: auto;
+      /* Fixed height prevents reflow when description text changes */
+      min-height: 5.5em;
     }
 
     .cap-list {
@@ -248,9 +250,23 @@ const capabilities = [
     .cap-item {
       font-size: clamp(2rem, 6vw, 3rem);
       opacity: 0.5;
+      cursor: pointer;
     }
 
     .cap-item.is-active {
+      opacity: 1;
+    }
+
+    /* → indicator: hidden by default, visible when active */
+    .cap-item::after {
+      content: '\2192'; /* → */
+      display: inline-block;
+      margin-left: 0.35em;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .cap-item.is-active::after {
       opacity: 1;
     }
   }
@@ -390,11 +406,38 @@ const capabilities = [
   });
 
   /* ── List leave ───────────────────────────────────────────────────────── */
+  // On touch devices the list-leave must not clear the tapped-active state
   list.addEventListener('mouseleave', () => {
+    if (window.innerWidth <= 768) return;
     activeItem?.classList.remove('is-active');
     activeItem = null;
     list.classList.remove('has-hover');
     activateBg(null);
     setDescription(null);
   });
+
+  /* ── Mobile: tap to activate + first item active on load ───────────────────── */
+  if (window.innerWidth <= 768) {
+    // Activate first item by default
+    const firstItem = items[0] as HTMLElement | undefined;
+    if (firstItem) {
+      firstItem.classList.add('is-active');
+      activeItem = firstItem;
+      list.classList.add('has-hover');
+      activateBg(firstItem.dataset.cap ?? null);
+      setDescription(firstItem.dataset.desc ?? null);
+    }
+
+    // Tap activates — identical result to hover on desktop
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        if (activeItem === item) return;
+        activeItem?.classList.remove('is-active');
+        item.classList.add('is-active');
+        activeItem = item;
+        activateBg(item.dataset.cap ?? null);
+        setDescription(item.dataset.desc ?? null);
+      });
+    });
+  }
 </script>
