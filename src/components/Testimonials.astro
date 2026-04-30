@@ -592,13 +592,13 @@ const storiesData = testimonials.map(t => ({
       min-height: 180px;
     }
 
-    /* ── Quote stage: right column (3fr), explicit min-height for abs children ── */
+    /* ── Quote stage: right column, min-height sized for 8-line clamp + attribution + CTA ── */
     .testimonials__quote-stage {
       grid-column: 2;
       grid-row: 1;
       position: relative;
       height: auto;
-      min-height: 440px;   /* fits 8-line clamped quote + attribution + button */
+      min-height: 500px;   /* 8 lines × 28px × 1.65 ≈ 370px + attribution + button */
       margin-right: 0;
     }
 
@@ -615,6 +615,14 @@ const storiesData = testimonials.map(t => ({
     .t-quote.is-active {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    /* 8-line clamp — belt-and-braces alongside late-cascade rule */
+    .t-quote blockquote {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 8;
+      overflow: hidden;
     }
 
     /* Attribution: show name + role below quote */
@@ -1137,7 +1145,7 @@ const storiesData = testimonials.map(t => ({
       grid-column: 2;
       grid-row: 1;
       height: auto;
-      min-height: 440px;
+      min-height: 500px;
       width: 100%;
     }
     /* Quotes: opacity crossfade — elements stay in DOM for JS line-reveal measurement */
