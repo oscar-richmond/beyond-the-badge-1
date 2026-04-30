@@ -628,10 +628,13 @@ const storiesData = testimonials.map(t => ({
     /* Hide role-credit — attribution covers both name and role */
     .t-role-credit { display: none; }
 
-    /* Name: Inter, capitalised */
+    /* Name: Inter, capitalised — same size/colour as role */
     .t-client-name {
       font-family: var(--font-sans);
       font-variation-settings: normal;
+      font-size: var(--font-size-label);
+      font-weight: 400;
+      color: var(--color-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
