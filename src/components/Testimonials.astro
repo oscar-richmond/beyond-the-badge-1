@@ -1448,6 +1448,39 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
+  // ── Mobile (≤768px): truncate each quote to exactly 8 lines ending with closing "
+  if (tMobile) {
+    const MAX_H = 8 * 28 * 1.65; // 8 lines × 28px × 1.65 line-height ≈ 369.6px
+    document.querySelectorAll<HTMLElement>('.t-quote blockquote').forEach(bq => {
+      // Lift clamp to measure full height
+      bq.style.setProperty('display',            'block',   'important');
+      bq.style.setProperty('overflow',           'visible', 'important');
+      bq.style.setProperty('-webkit-line-clamp', 'unset',   'important');
+      const fullH = bq.scrollHeight;
+      bq.style.removeProperty('display');
+      bq.style.removeProperty('overflow');
+      bq.style.removeProperty('-webkit-line-clamp');
+
+      if (fullH <= MAX_H + 2) return; // fits — closing " already present in data
+
+      // Binary-search cutpoint; strip any trailing closing curly-quote first
+      const raw = (bq.textContent || '').replace(/\u201d\s*$/, '').trimEnd();
+      bq.style.setProperty('display',            'block',   'important');
+      bq.style.setProperty('overflow',           'visible', 'important');
+      bq.style.setProperty('-webkit-line-clamp', 'unset',   'important');
+      let lo = 0, hi = raw.length;
+      while (lo < hi - 1) {
+        const mid = (lo + hi) >> 1;
+        bq.textContent = raw.slice(0, mid) + '\u2026\u201d';
+        bq.scrollHeight <= MAX_H + 2 ? (lo = mid) : (hi = mid);
+      }
+      bq.textContent = raw.slice(0, lo).trimEnd() + '\u2026\u201d';
+      bq.style.removeProperty('display');
+      bq.style.removeProperty('overflow');
+      bq.style.removeProperty('-webkit-line-clamp');
+    });
+  }
+
   // ── Campaign video modal (Stephanie Wenborn #1 and Niamh Bryne #3) ─────────────────────
   // Sources are driven by data-video-webm / data-video-mp4 on each .t-play-btn so the same
   // modal element serves both testimonials without duplicating markup.
