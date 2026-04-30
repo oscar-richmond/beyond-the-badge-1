@@ -656,6 +656,45 @@ const storiesData = testimonials.map(t => ({
     /* CTA buttons */
     .t-story-btn { margin-top: 20px; }
     .t-btn-row   { margin-top: 20px; flex-wrap: wrap; gap: 8px; }
+
+    /* ── Show all testimonials: disable scroll-pin, stack quotes ── */
+
+    /* Remove 625vh track so the section scrolls naturally */
+    .testimonials-track { height: auto !important; }
+
+    /* Unstick the panel — becomes normal document flow */
+    .testimonials-sticky {
+      position: static !important;
+      height: auto !important;
+    }
+
+    /* Body: single column, no photo stage */
+    .testimonials__body    { display: block !important; }
+    .testimonials__photo-stage { display: none !important; }
+
+    /* Quote stage: auto height, full width */
+    .testimonials__quote-stage {
+      position: static !important;
+      height: auto !important;
+      min-height: 0 !important;
+      width: 100% !important;
+    }
+
+    /* All quotes visible and in normal flow */
+    .t-quote {
+      position: static !important;
+      inset: auto !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transition: none !important;
+      display: block !important;
+      width: 100% !important;
+      margin-bottom: 48px;
+    }
+    .t-quote:last-child { margin-bottom: 0 !important; }
+
+    /* Hide More voices / Show fewer button */
+    .t-more-btn { display: none !important; }
   }
   /* ─── PLAY CAMPAIGN button (testimonial 0 only) ─── */
   .t-play-btn {
