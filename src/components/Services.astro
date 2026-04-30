@@ -447,9 +447,9 @@ const VIEWER_H = 375;
       const tRect = tElem?.getBoundingClientRect();
       const vh    = window.innerHeight;
 
-      // Entry: starts when Services enters from viewport bottom (rect.top == vh),
-      // completes after 30% of viewport height — reaches maroon fast, long dwell.
-      const entryT = gsap.utils.clamp(0, 1, (vh - rect.top) / (vh * 0.3));
+      // Entry: starts when Services top reaches viewport midpoint (50% scrolled in),
+      // completes over 15% of viewport height — later start, snappy finish.
+      const entryT = gsap.utils.clamp(0, 1, (vh * 0.5 - rect.top) / (vh * 0.15));
 
       // Exit: delayed — starts when Testimonials top reaches the viewport midpoint
       // (tRect.top == vh*0.5), completes over 30% of viewport height.
