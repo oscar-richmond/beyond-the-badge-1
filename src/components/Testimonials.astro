@@ -657,43 +657,10 @@ const storiesData = testimonials.map(t => ({
     .t-story-btn { margin-top: 20px; }
     .t-btn-row   { margin-top: 20px; flex-wrap: wrap; gap: 8px; }
 
-    /* ── Show all testimonials: disable scroll-pin, stack quotes ── */
+    /* All 7 testimonials available in the carousel from the start */
+    .testimonials-track { height: 875vh !important; } /* 7 slots × 125vh */
 
-    /* Remove 625vh track so the section scrolls naturally */
-    .testimonials-track { height: auto !important; }
-
-    /* Unstick the panel — becomes normal document flow */
-    .testimonials-sticky {
-      position: static !important;
-      height: auto !important;
-    }
-
-    /* Body: single column, no photo stage */
-    .testimonials__body    { display: block !important; }
-    .testimonials__photo-stage { display: none !important; }
-
-    /* Quote stage: auto height, full width */
-    .testimonials__quote-stage {
-      position: static !important;
-      height: auto !important;
-      min-height: 0 !important;
-      width: 100% !important;
-    }
-
-    /* All quotes visible and in normal flow */
-    .t-quote {
-      position: static !important;
-      inset: auto !important;
-      opacity: 1 !important;
-      pointer-events: auto !important;
-      transition: none !important;
-      display: block !important;
-      width: 100% !important;
-      margin-bottom: 48px;
-    }
-    .t-quote:last-child { margin-bottom: 0 !important; }
-
-    /* Hide More voices / Show fewer button */
+    /* Hide More voices / Show fewer — all testimonials are already in the carousel */
     .t-more-btn { display: none !important; }
   }
   /* ─── PLAY CAMPAIGN button (testimonial 0 only) ─── */
@@ -1220,7 +1187,7 @@ const storiesData = testimonials.map(t => ({
   let switching    = false;
   let hoverTimer: ReturnType<typeof setTimeout> | null = null;
   let scrollPaused = false; // suspended during sidebar expand/collapse animation
-  let isExpanded   = false; // tracks sidebar expand state — read by onScroll
+  let isExpanded   = window.innerWidth <= 768; // at ≤768px all 7 testimonials are in the carousel by default
 
   // ─── Activate a testimonial ───────────────────────────────────────────────
   function activate(i: number) {
