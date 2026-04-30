@@ -553,104 +553,49 @@ const storiesData = testimonials.map(t => ({
       row-gap: 0;
     }
 
-    /* ── Names: horizontal scrollable row, full-width across both columns ── */
-    .testimonials__names {
-      grid-column: 1 / -1;   /* span both columns */
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      align-items: center;
-      gap: 0;
-      width: 100%;
-      box-sizing: border-box;
-      padding-bottom: 12px;
-      margin-bottom: 24px;   /* more breathing room before content */
-      border-bottom: 1px solid rgba(5, 39, 21, 0.1);
-    }
 
-    .testimonials__names::-webkit-scrollbar { display: none; }
+    /* ── Names: hidden at mobile; display:contents lets More Voices escape into the grid ── */
+    .testimonials__names { display: contents; }
 
-    .t-name-btn {
-      flex-shrink: 0;
-      white-space: nowrap;
-      width: auto;
-      font-size: 13px;
-      padding: 4px 10px 4px 0;  /* tightened so More voices fits in viewport */
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
+    /* Hide all name buttons and extra-names container */
+    .t-name-btn,
+    .t-names-extra,
+    .t-names-extra.is-open { display: none; }
 
-    /* Disable text-slide in horizontal layout */
-    .t-name-btn .t-name-text,
-    .t-name-btn.is-active .t-name-text,
-    .t-name-btn:hover .t-name-text { transform: none; }
-
-    /* Arrow: inline rather than absolute */
-    .t-arrow {
-      position: static;
-      transform: none;
-      top: auto;
-      left: auto;
-    }
-
-    /* Extra names expand horizontally */
-    .t-names-extra {
-      display: flex;
-      flex-direction: row;
-      flex-shrink: 0;
-      max-height: none;
-      max-width: 0;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
-      transition:
-        max-width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity   0.4s ease;
-    }
-
-    .t-names-extra.is-open {
-      max-width: 600px;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Stagger: just opacity, no translateY in horizontal row */
-    .t-names-extra .t-name-btn { transform: none; opacity: 0; }
-    .t-names-extra.is-open .t-name-btn { opacity: 1; transform: none; }
-
-    /* More voices: end of names row */
+    /* ── More voices: repositioned below testimonial content ── */
     .t-more-btn {
-      flex-shrink: 0;
-      margin-top: 0;
-      margin-left: 10px;
-      padding: 4px 0 4px 10px;
+      grid-column: 1 / -1;  /* span both columns */
+      grid-row: 2;          /* below content row */
+      display: flex;
       align-items: center;
-      border-left: 1px solid rgba(5, 39, 21, 0.12);
+      gap: 12px;
+      margin-top: 24px;
+      margin-left: 0;
+      padding: 0;
+      border-left: none;
+      font-size: 14px;
       white-space: nowrap;
-      font-size: 13px;
     }
 
-    .t-more-line { display: none; }
+    .t-more-line { display: block; width: 32px; }
 
-    /* ── Photo: left column, natural height, aligned to top ── */
+
+    /* ── Photo: left column (2fr), top-aligned, portrait ratio ── */
     .testimonials__photo-stage {
       grid-column: 1;
-      align-self: start;     /* natural height from image, not stretched */
+      grid-row: 1;           /* explicit to avoid auto-placement surprises */
+      align-self: start;
       width: 100%;
       height: auto;
-      aspect-ratio: 2 / 3;   /* portrait crop */
+      aspect-ratio: 2 / 3;
       overflow: hidden;
       min-height: 180px;
     }
 
-    /* ── Quote stage: right column, auto-sized by content ── */
+    /* ── Quote stage: right column (3fr), auto-sized by content ── */
     .testimonials__quote-stage {
       grid-column: 2;
+      grid-row: 1;           /* explicit to avoid auto-placement surprises */
       height: auto;
       min-height: 0;
       margin-right: 0;
@@ -1147,11 +1092,23 @@ const storiesData = testimonials.map(t => ({
       line-height: 1.65;
       margin-bottom: 10px;
     }
-    .t-name-btn  { font-size: 13px; }
-    .t-more-btn  { font-size: 13px; }
-    /* Grid placement overrides — prevent desktop breakpoints from resetting */
+    .t-name-btn,
+    .t-names-extra,
+    .t-names-extra.is-open { display: none; }
+    .t-more-btn {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      margin-top: 24px;
+      margin-left: 0;
+      padding: 0;
+      border-left: none;
+      font-size: 14px;
+    }
+    /* Grid placement overrides */
     .testimonials__photo-stage {
       grid-column: 1;
+      grid-row: 1;
       align-self: start;
       height: auto;
       width: 100%;
@@ -1160,6 +1117,7 @@ const storiesData = testimonials.map(t => ({
     }
     .testimonials__quote-stage {
       grid-column: 2;
+      grid-row: 1;
       height: auto;
       min-height: 0;
       width: 100%;
