@@ -592,27 +592,28 @@ const storiesData = testimonials.map(t => ({
       min-height: 180px;
     }
 
-    /* ── Quote stage: right column (3fr), auto-sized by content ── */
+    /* ── Quote stage: right column (3fr), explicit min-height for abs children ── */
     .testimonials__quote-stage {
       grid-column: 2;
-      grid-row: 1;           /* explicit to avoid auto-placement surprises */
-      height: auto;
-      min-height: 0;
-      margin-right: 0;
+      grid-row: 1;
       position: relative;
+      height: auto;
+      min-height: 440px;   /* fits 8-line clamped quote + attribution + button */
+      margin-right: 0;
     }
 
-    /* Inactive quotes: hidden and out of flow so stage auto-sizes */
+    /* Quotes: opacity crossfade — keeps elements in DOM so JS can measure offsetTop */
     .t-quote {
-      position: static;
-      display: none;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      opacity: 1;
+      opacity: 0;
       pointer-events: none;
+      transition: opacity 0.5s ease;
     }
 
     .t-quote.is-active {
-      display: block;
+      opacity: 1;
       pointer-events: auto;
     }
 
@@ -1119,12 +1120,12 @@ const storiesData = testimonials.map(t => ({
       grid-column: 2;
       grid-row: 1;
       height: auto;
-      min-height: 0;
+      min-height: 440px;
       width: 100%;
     }
-    /* Quotes: snap swap (no crossfade on mobile) */
-    .t-quote         { position: static; display: none; }
-    .t-quote.is-active { display: block; }
+    /* Quotes: opacity crossfade — elements stay in DOM for JS line-reveal measurement */
+    .t-quote         { position: absolute; inset: 0; width: 100%; opacity: 0; display: block; }
+    .t-quote.is-active { opacity: 1; }
     /* Play button: in-flow inside btn-row */
     .t-play-btn {
       position: relative;
