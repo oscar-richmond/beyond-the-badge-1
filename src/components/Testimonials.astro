@@ -1166,6 +1166,13 @@ const storiesData = testimonials.map(t => ({
     }
     .t-btn-row .t-play-btn { margin-top: 0; }
   }
+  /* ─── Full-story popup: quote font-size at ≤768px ─── */
+  @media (max-width: 768px) {
+    :global(.t-fs-quote p) {
+      font-size: 28px;
+      line-height: 46px; /* 32px/50px → 28px/46px, same ~1.56 ratio */
+    }
+  }
 
 </style>
 
