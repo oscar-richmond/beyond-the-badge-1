@@ -999,19 +999,50 @@ const base = import.meta.env.BASE_URL;
     }
     }
 
-  /* ── Responsive: ≤768px — body text font size override ─── */
+  /* ── Responsive: ≤768px ─────────────────────────────────────────── */
   @media (max-width: 768px) {
-    /* "We connect brands with the spaces where culture is created…" */
+
+    /* --- Small titles above paragraphs, 16px gap --- */
+
+    /* Hero: collapse grid to flex-column so label can be reordered above h1 */
+    .about-hero {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-hero__label {
+      order: -1;          /* lift "About Us" above the paragraph */
+      margin-bottom: 16px;
+      margin-top: 0;
+    }
+
+    /* Bio: collapse grid to flex-column so label can be reordered above content */
+    .about-bio__inner {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-bio__label {
+      order: -1;          /* lift "The Founder" above the headline */
+      margin-bottom: 16px;
+    }
+
+    /* --- Full-width body text — remove max-width caps --- */
     .about-hero__text {
-      font-size: 30px;
+      max-width: none;
+      font-size: 30px;    /* from previous request */
       line-height: 1.5;
     }
 
-    /* "After 25 years at the intersection of luxury, culture, and communication…" */
+    .about-bio__content  { max-width: none; }
     .about-bio__headline {
-      font-size: 30px;
+      max-width: none;
+      font-size: 30px;    /* from previous request */
       line-height: 1.5;
     }
+    .about-bio__body         { max-width: none; }
+    .about-statement__inner  { max-width: none; }
+    .about-statement__text   { max-width: none; }
   }
 
 </style>
