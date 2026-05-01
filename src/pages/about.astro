@@ -999,6 +999,21 @@ const base = import.meta.env.BASE_URL;
     }
     }
 
+  /* ── Responsive: ≤768px — body text font size override ─── */
+  @media (max-width: 768px) {
+    /* "We connect brands with the spaces where culture is created…" */
+    .about-hero__text {
+      font-size: 30px;
+      line-height: 1.5;
+    }
+
+    /* "After 25 years at the intersection of luxury, culture, and communication…" */
+    .about-bio__headline {
+      font-size: 30px;
+      line-height: 1.5;
+    }
+  }
+
 </style>
 
 <!-- About page only: lift ContactForm shade colours for better legibility on maroon -->
