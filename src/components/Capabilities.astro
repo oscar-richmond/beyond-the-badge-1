@@ -229,20 +229,35 @@ const capabilities = [
 
   /* ── Mobile ─────────────────────────────────────────────────────────────── */
   @media (max-width: 768px) {
+    /* Two-column: list left, description right — mirrors desktop intent */
     .cap-body {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 38%;
       min-height: auto;
-      gap: 48px;
+      gap: 24px;
+      align-items: end;        /* bottom-aligns both columns */
+      padding-top: 40px;
     }
 
+    /* Description: right column, anchored to the bottom, grows upward */
     .cap-left {
+      grid-column: 2;
+      grid-row: 1;
       order: 2;
-      align-self: auto;
-      /* Fixed height prevents reflow when description text changes */
-      min-height: 5.5em;
+      align-self: end;
+      text-align: right;
+      min-height: 0;           /* no fixed height needed — list drives row height */
+      padding-bottom: 4px;
     }
 
+    .cap-description {
+      max-width: none;         /* remove 240px cap — let column width govern */
+      text-align: right;
+    }
+
+    /* List: left column, left-aligned */
     .cap-list {
+      grid-column: 1;
+      grid-row: 1;
       order: 1;
       text-align: left;
     }
@@ -257,17 +272,9 @@ const capabilities = [
       opacity: 1;
     }
 
-    /* → indicator: hidden by default, visible when active */
+    /* No arrow indicator — active state shown by opacity highlight only */
     .cap-item::after {
-      content: '\2192'; /* → */
-      display: inline-block;
-      margin-left: 0.35em;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-
-    .cap-item.is-active::after {
-      opacity: 1;
+      display: none;
     }
   }
 
