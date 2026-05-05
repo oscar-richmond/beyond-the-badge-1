@@ -64,6 +64,15 @@ const VIEWER_H = 375;
         </>
       ))}
     </div>
+
+    {/* Mobile-only image stack: hidden above 390px, shown as vertical squares below */}
+    <div class="services__mobile-gallery" aria-hidden="true">
+      {services.slice(0, 3).map((service) => (
+        <div class="services__mobile-gallery-item">
+          <img src={service.image} alt="" loading="lazy" draggable="false" />
+        </div>
+      ))}
+    </div>
   </div>
 </section>
 
@@ -221,6 +230,11 @@ const VIEWER_H = 375;
     border-radius: 2px;
   }
 
+  /* Mobile-only image gallery — hidden at all breakpoints above 390px */
+  .services__mobile-gallery {
+    display: none;
+  }
+
   /* Strip — no CSS transition; GSAP drives all animation for reliability */
   .services__viewer-strip {
     display: flex;
@@ -318,35 +332,25 @@ const VIEWER_H = 375;
   }
   /* ── 390px ─────────────────────────────────────────────────────────── */
   @media (max-width: 390px) {
-    /* Re-display the viewer as a static stacked image list.
-       On touch devices GSAP never initialises (hover:none guard in JS),
-       so no inline transforms/opacity conflict with these rules. */
-    .services__viewer {
-      display: block;            /* override 768px display:none */
-      position: static;          /* out of fixed flow — sits naturally after the list */
-      width: auto;
-      height: auto;
-      overflow: visible;
-      opacity: 1;
-      pointer-events: none;
-      will-change: auto;
-      z-index: auto;
-      border-radius: 0;
-      padding: 0 var(--section-padding-x);
-      margin-bottom: var(--section-padding-y);
-    }
-
-    .services__viewer-strip {
+    /* Dedicated mobile image stack — hidden at all larger breakpoints */
+    .services__mobile-gallery {
+      display: flex;
       flex-direction: column;
       gap: 16px;
-      will-change: auto;
+      margin-top: 32px;
     }
 
-    .services__viewer-item {
-      width: 100%;               /* full width within the padded viewer */
-      height: auto;
-      aspect-ratio: 1 / 1;      /* square */
-      flex-shrink: 0;
+    .services__mobile-gallery-item {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+
+    .services__mobile-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
   }
 </style>
