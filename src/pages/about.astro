@@ -1049,6 +1049,23 @@ const base = import.meta.env.BASE_URL;
     .about-hero__text em[data-keyword] {
       cursor: pointer;
     }
+
+    /* --- Image grid: 2×2 — bring 4th image into the same row --- */
+    .about-image-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* All 4 items uniform height */
+    .about-image-grid__item {
+      height: 180px;
+    }
+
+    /* Remove the full-width span set by the ≤900px block */
+    .about-image-grid__item:nth-child(4) {
+      grid-column: auto;
+      height: 180px;
+    }
   }
 
 </style>
