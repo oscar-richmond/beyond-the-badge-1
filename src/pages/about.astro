@@ -1079,8 +1079,13 @@ const base = import.meta.env.BASE_URL;
     /* Pin (01) in the 64px padding band, left-aligned with item 1 */
     .about-image-grid__index {
       bottom: auto;
-      top: 44px;                        /* sits in the 64px top-padding space */
+      top: 36px;                        /* sits in the 64px top-padding space */
       left: var(--section-padding-x);   /* aligns with the left edge of item 1 */
+    }
+
+    /* Laura Wood name is tappable on mobile */
+    .about-bio__headline em {
+      cursor: pointer;
     }
   }
 
@@ -1274,16 +1279,29 @@ const base = import.meta.env.BASE_URL;
   const portrait   = document.querySelector<HTMLElement>('.about-bio__portrait');
 
   if (bioContent && portrait) {
+    let portraitPinned = false; // tracks tap-active state at ≤768px
+
     bioContent.addEventListener('mouseover', (e) => {
       if ((e.target as Element).closest('.about-bio__headline em')) {
         portrait.classList.add('is-visible');
       }
     });
+
     bioContent.addEventListener('mouseout', (e) => {
+      // On mobile, tap state is sticky — don't hide on mouseout
+      if (window.innerWidth <= 768) return;
       const em = (e.target as Element).closest('.about-bio__headline em');
       if (em && !em.contains(e.relatedTarget as Node)) {
         portrait.classList.remove('is-visible');
       }
+    });
+
+    // Mobile: tap Laura Wood to show portrait; tap again to hide
+    bioContent.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) return;
+      if (!(e.target as Element).closest('.about-bio__headline em')) return;
+      portraitPinned = !portraitPinned;
+      portrait.classList.toggle('is-visible', portraitPinned);
     });
   }
   // ── Read more / Read less toggle ──────────────────────────────────────────
