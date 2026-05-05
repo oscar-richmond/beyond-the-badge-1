@@ -9,6 +9,7 @@ const testimonials = [
     quoteHighlight: 'pioneering spirit',
     quoteAfter: '. Laura Wood was the driving force that made that vision a reality in the partnership between Virgin Galactic and JLR.\u201d',
     image: `${base}stephen-carousel.webp`,
+    mobileImage: `${base}stephen-mobile.jpg`,
     paragraphs: [
       '\u201cOur ambition for partnerships at Virgin Galactic was simple \u2014 we wanted it to go further than a sponsorship; we wanted to work with a brand that shared our DNA for exploration and pioneering spirit. Laura Wood was the driving force that made that vision a reality in the partnership between Virgin Galactic and JLR.',
       'Working with Laura was a masterclass in how to manage a partnership of this scale. She was responsible for weaving Land Rover into the very fabric of our operations \u2014 from the fleet of vehicles that towed our spaceships to the runway, to the high-stakes activations that brought our future astronauts together. She never saw it as a simple branding exercise; she understood that every touchpoint had to feel authentic to the mission.',
@@ -25,6 +26,7 @@ const testimonials = [
     quoteHighlight: 'cultural moments',
     quoteAfter: '.\u201d',
     image: `${base}wenborn-carousel.webp`,
+    mobileImage: `${base}wenborn-mobile.jpg`,
     paragraphs: [
       '\u201cTrust and shared vision are the bedrock of any great partnership. Our history with Laura spans three Bond films (Skyfall, Spectre and No Time To Die), and that track record made Beyond The Badge the obvious choice for our current and future projects at EON.',
       'Laura has an incredible intuition for connecting the right brands with the right cultural moments and we\u2019re excited to keep building on this legacy together.\u201d',
@@ -39,6 +41,7 @@ const testimonials = [
     quoteHighlight: 'partnership',
     quoteAfter: ' between Jaguar Land Rover and the Invictus Games. And she brought to bear her creativity and incisiveness to address challenges and deliver better and better solutions. In addition to this, she is a delight to work with.\u201d',
     image: `${base}testimonial-2.jpg`,
+    mobileImage: `${base}dominic-mobile.jpg`,
     paragraphs: [
       '\u201cLaura has an intelligent and imaginative grasp of the way brands can work with properties that they sponsor to their mutual benefit.',
       'She was instrumental in the successful partnership between Jaguar Land Rover and the Invictus Games. And she brought to bear her creativity and incisiveness to address challenges and deliver better and better solutions. In addition to this, she is a delight to work with.\u201d',
@@ -53,6 +56,7 @@ const testimonials = [
     quoteHighlight: 'community of untapped talent',
     quoteAfter: '.\u201d',
     image: `${base}testimonial-1.jpg`,
+    mobileImage: `${base}niamh-mobile.jpg`,
     paragraphs: [
       '\u201cWhen we first sat down with Laura Wood and her team at Jaguar Land Rover, we weren\u2019t looking at a standard corporate partnership. Laura didn\u2019t just want a logo on a car; she had the vision to treat our Gorillaz fanbase as a community of untapped talent.',
       'With a brief to promote the brand new Jaguar Formula E Race team \u2014 to plug a vital skills gap and find the next generation of world-class software engineers \u2014 we had to access that community where they were in culture.',
@@ -71,6 +75,7 @@ const testimonials = [
     quoteHighlight: '',
     quoteAfter: '',
     image: `${base}testimonial-4.jpg`,
+    mobileImage: `${base}gandy-mobile.jpg`,
     paragraphs: [
       '\u201cI have had the pleasure of working with Laura for over 15 years on high-profile events, activations, and partnerships. Throughout this time, I cannot speak highly enough about her unwavering commitment, dedication, and exceptional problem-solving skills. She is never shy of thinking outside the box, and her dynamic, innovative approach has been instrumental in driving the huge successes achieved with the brands she has worked with.',
       'On a personal level, Laura is one of the kindest, most thoughtful, and considerate people I have ever had the pleasure to meet and work with. Her professionalism combined with her genuine kindness makes her an invaluable partner in any project.\u201d',
@@ -85,6 +90,7 @@ const testimonials = [
     quoteHighlight: 'partnership working',
     quoteAfter: '.\u201d',
     image: `${base}testimonial-5.jpg`,
+    mobileImage: `${base}amadi-mobile.jpg`,
     paragraphs: [
       '\u201cWorking with Laura on the Jaguar Land Rover \u2014 British Red Cross charity brand partnership was an 8-year demonstration of strategic insight, dynamism, an exemplary commitment to partnership working and the recognition of the importance of value alignment, all of which (and more) Laura provided on a daily basis.',
       'A key driver to her success was that Laura always saw herself as the custodian of a long-established partnership which had the capability to achieve increasing cut through.',
@@ -103,6 +109,7 @@ const testimonials = [
     quoteHighlight: 'matter',
     quoteAfter: '.\u201d',
     image: `${base}testimonial-3.jpg`,
+    mobileImage: `${base}benett-mobile.jpg`,
     paragraphs: [
       '\u201cIn my line of work, you see a lot of people who try to \u2018manage\u2019 the room, but Laura Wood is one of the rare few who actually understands the energy of it. We\u2019ve worked together across countless high-profile events and launches over two incredible decades \u2014 from cutting her teeth with her agency Golden Goose PR to becoming a globally respected director at JLR.',
       'Laura has that rare combination of professional steel and genuine warmth. She understands that the perfect shot isn\u2019t just about the person in front of the lens; it\u2019s about the atmosphere, the timing, and the narrative she\u2019s spent months building behind the scenes.',
@@ -173,7 +180,8 @@ const storiesData = testimonials.map(t => ({
         <div class="testimonials__photo-stage">
           {testimonials.map((t, i) => (
             <div class={`t-photo${i === 0 ? ' is-active' : ''}`} data-index={String(i)}>
-              <img src={t.image} alt={t.name} />
+          <img class="t-photo__img--desktop" src={t.image} alt={t.name} />
+              <img class="t-photo__img--mobile" src={(t as any).mobileImage} alt={t.name} loading="lazy" />
             </div>
           ))}
         </div>
@@ -445,6 +453,9 @@ const storiesData = testimonials.map(t => ({
     filter: none;
     display: block;
   }
+
+  /* Mobile-specific portrait — hidden above 390px */
+  .t-photo__img--mobile { display: none; }
 
   /* ─── Right: quote stage ─── */
   .testimonials__quote-stage {
@@ -1192,7 +1203,7 @@ const storiesData = testimonials.map(t => ({
       gap: 0;
     }
 
-    /* Photo: full width, fixed 270px height, object-fit:cover */
+    /* Photo: full width, fixed 238px height, object-fit:cover */
     .testimonials__photo-stage {
       width: 100%;
       height: 238px;
@@ -1200,6 +1211,10 @@ const storiesData = testimonials.map(t => ({
       min-height: unset;
       overflow: hidden;
     }
+
+    /* Swap carousel portraits: hide desktop image, show mobile image */
+    .t-photo__img--desktop { display: none; }
+    .t-photo__img--mobile  { display: block; }
 
     /* Quote stage: full width, explicit height so position:absolute
        crossfade children have a stable containing block — nothing
