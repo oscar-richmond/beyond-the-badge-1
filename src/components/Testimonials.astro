@@ -83,7 +83,7 @@ const testimonials = [
     title: 'Marketing Consultant (former British Red Cross Executive Director of Marketing, Fundraising and Communications)',
     quoteBefore: '\u201cWorking with Laura on the Jaguar Land Rover \u2014 British Red Cross partnership was an 8-year demonstration of strategic insight, dynamism, and an exemplary commitment to ',
     quoteHighlight: 'partnership working',
-    quoteAfter: '. A key driver to her success was that Laura always saw herself as the custodian of a long-established partnership with the capability to achieve increasing cut through.\u201d',
+    quoteAfter: '.\u201d',
     image: `${base}testimonial-5.jpg`,
     paragraphs: [
       '\u201cWorking with Laura on the Jaguar Land Rover \u2014 British Red Cross charity brand partnership was an 8-year demonstration of strategic insight, dynamism, an exemplary commitment to partnership working and the recognition of the importance of value alignment, all of which (and more) Laura provided on a daily basis.',
@@ -1220,6 +1220,12 @@ const storiesData = testimonials.map(t => ({
       line-height: 30px !important;
       -webkit-line-clamp: 8;
       margin-bottom: 12px;
+    }
+
+    /* Paul Amadi (index 5): one line fewer — quote is shorter so it
+       ends naturally with closing ” rather than hitting the clamp */
+    .t-quote[data-index="5"] blockquote {
+      -webkit-line-clamp: 7;
     }
 
     /* Attribution spacing */
