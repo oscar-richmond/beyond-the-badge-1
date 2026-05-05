@@ -323,6 +323,37 @@ const base = import.meta.env.BASE_URL;
       height: 256px;  /* 284px × 0.90 */
     }
   }
+
+  /* ── 390px: stack CTA bar text above button ─────────────────────────── */
+  @media (max-width: 390px) {
+    /* Bar: switch to column so text sits above button */
+    .cta__bar {
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;          /* override fixed 85px */
+      padding: 24px 20px;    /* uniform padding replaces the desktop 0 0 0 28px */
+      gap: 20px;
+    }
+
+    .cta__bar-text {
+      font-size: 1.4rem;     /* comfortable on 332px content width */
+    }
+
+    /* Button: full width, centred label, no inherited desktop margin */
+    .cta__bar-btn {
+      width: 100%;
+      height: 52px;
+      margin: 0;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    /* Bar-outer: ease off the negative overlap since bar is now taller */
+    .cta__bar-outer {
+      margin-top: -40px;
+      padding-bottom: 40px;
+    }
+  }
 </style>
 
 <script>
