@@ -188,13 +188,13 @@
       display: none;
     }
 
-    /* Fix watermark aspect ratio: global img{max-width:100%;height:auto}
-       was capping width to 390px while the 1024px block's height:651px
-       remained → severe vertical squish. Switch to width-driven sizing
-       and override max-width so the ratio is correct. */
+    /* The 1024px block already sets width:645px;height:651px — the correct
+       proportions for the 1016×1024px PNG. The only thing causing the squish
+       is global img{max-width:100%} capping width to 390px while height:651px
+       remained. Adding max-width:none restores the original large size + ratio. */
     .hero__watermark {
-      width: 220px;
-      height: auto;
+      width: 645px;
+      height: 651px;
       max-width: none;
     }
   }
