@@ -454,8 +454,9 @@ const storiesData = testimonials.map(t => ({
     display: block;
   }
 
-  /* Mobile-specific portrait — hidden above 390px */
-  .t-photo__img--mobile { display: none; }
+  /* Mobile-specific portrait — hidden above 390px.
+     Uses img.class to match specificity of the .t-photo img rule above. */
+  .t-photo img.t-photo__img--mobile { display: none; }
 
   /* ─── Right: quote stage ─── */
   .testimonials__quote-stage {
@@ -1213,8 +1214,8 @@ const storiesData = testimonials.map(t => ({
     }
 
     /* Swap carousel portraits: hide desktop image, show mobile image */
-    .t-photo__img--desktop { display: none; }
-    .t-photo__img--mobile  { display: block; }
+    .t-photo img.t-photo__img--desktop { display: none; }
+    .t-photo img.t-photo__img--mobile  { display: block; }
 
     /* Quote stage: full width, explicit height so position:absolute
        crossfade children have a stable containing block — nothing
