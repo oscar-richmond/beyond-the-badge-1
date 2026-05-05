@@ -200,13 +200,12 @@ const navItems = [
     pointer-events: all;
   }
 
-  /* B watermark — right-anchored, vertically centred */
+  /* B watermark — 2× size, top-left anchored at 48px from viewport edges */
   .mobile-nav__watermark {
     position: absolute;
-    right: -80px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 72vw;
+    left: 48px;
+    top: 48px;
+    width: 144vw;
     height: auto;
     opacity: 0.09;
     filter: brightness(0) invert(1);
@@ -266,10 +265,11 @@ const navItems = [
   }
 
   .mobile-nav__contact-link {
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-variation-settings: normal;
+    font-style: normal;
+    font-weight: 300;
     font-size: 0.9rem;
-    font-weight: 400;
     color: rgba(245, 240, 232, 0.7);
     text-decoration: none;
     transition: color 0.2s ease;
