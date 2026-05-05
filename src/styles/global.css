@@ -541,8 +541,9 @@ button {
 /* ── 390px: footer watermark — up 80px, right 64px ─────────────────────── */
 @media (max-width: 390px) {
   .footer__watermark {
-    bottom: -10px;   /* prev -110px + 100px up */
-    right: -116px;   /* prev -52px  −  64px right */
+    width: 840px;    /* 560px × 1.5 */
+    bottom: -10px;
+    right: -116px;
   }
 }
 
