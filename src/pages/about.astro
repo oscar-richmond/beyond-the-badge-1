@@ -1050,21 +1050,37 @@ const base = import.meta.env.BASE_URL;
       cursor: pointer;
     }
 
-    /* --- Image grid: 2×2 — bring 4th image into the same row --- */
+    /* --- Image grid: 2×2, square cells, (01) label above top-left image --- */
     .about-image-grid {
+      position: relative;             /* re-anchors (01) label relative to the grid */
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
-    /* All 4 items uniform height */
+    /* Square cells — aspect-ratio drives height, not a fixed px value */
     .about-image-grid__item {
-      height: 180px;
+      height: auto;
+      aspect-ratio: 1 / 1;
     }
 
-    /* Remove the full-width span set by the ≤900px block */
+    /* Remove full-width span; same square sizing as other items */
     .about-image-grid__item:nth-child(4) {
       grid-column: auto;
-      height: 180px;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Break the item's positioned-ancestor chain so (01) re-anchors to the grid */
+    .about-image-grid__item--labeled {
+      position: static;
+      overflow: hidden;
+    }
+
+    /* Pin (01) in the 64px padding band, left-aligned with item 1 */
+    .about-image-grid__index {
+      bottom: auto;
+      top: 44px;                        /* sits in the 64px top-padding space */
+      left: var(--section-padding-x);   /* aligns with the left edge of item 1 */
     }
   }
 
