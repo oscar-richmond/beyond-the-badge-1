@@ -191,11 +191,14 @@
     /* The 1024px block already sets width:645px;height:651px — the correct
        proportions for the 1016×1024px PNG. The only thing causing the squish
        is global img{max-width:100%} capping width to 390px while height:651px
-       remained. Adding max-width:none restores the original large size + ratio. */
+       remained. Adding max-width:none restores the original large size + ratio.
+       Also reposition from right-anchored to left-aligned with content margin. */
     .hero__watermark {
       width: 645px;
       height: 651px;
       max-width: none;
+      right: auto;                          /* cancel the inherited right value */
+      left: var(--section-padding-x, 29px); /* align left edge with page margin */
     }
   }
 </style>
