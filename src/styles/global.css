@@ -555,3 +555,17 @@ button {
   }
 }
 
+/* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────────── */
+@media (max-width: 430px) {
+  .footer {
+    overflow: visible;
+  }
+
+  .footer__watermark {
+    width: 640px;
+    right: -30px;
+    bottom: -120px;
+    top: auto;
+  }
+}
+

@@ -198,4 +198,16 @@
       aspect-ratio: 1 / 1; /* square */
     }
   }
+
+  /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
+  @media (max-width: 430px) {
+    .about__image-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .about__image-item {
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+  }
 </style>
