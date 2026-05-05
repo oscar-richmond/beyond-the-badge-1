@@ -542,7 +542,7 @@ button {
 @media (max-width: 390px) {
   .footer__watermark {
     width: 1260px;   /* 840px × 1.5 */
-    bottom: -10px;
+    bottom: -74px;   /* -10px − 64px down */
     right: -116px;
   }
 }
