@@ -356,25 +356,22 @@ const VIEWER_H = 375;
     }
   }
 
-  /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
+  /* ── 450px: Pro Max spacing + gap controls ────────────────────────── */
   @media (max-width: 450px) {
-    .services__category {
-      display: none;
+    /* Gap 2: about_pb=0 so this 120px is the full cap-image→OUR APPROACH gap */
+    /* Gap 3: 120px scroll space from last services divider to testimonials  */
+    .services {
+      padding-top: 120px;
+      padding-bottom: 120px;
     }
 
-    .services__title {
-      flex-wrap: nowrap;
-      font-size: 20px;
-    }
+    /* Cancel the 768px rule that adds calc(2 × section-padding-y) above header */
+    .services__header { margin-top: 0; }
 
-    .services__beyond-img {
-      height: 28px;
-      top: 5.5px;
-    }
-
-    .services__mobile-gallery {
-      display: none;
-    }
+    .services__category { display: none; }
+    .services__title { flex-wrap: nowrap; font-size: 20px; }
+    .services__beyond-img { height: 28px; top: 5.5px; }
+    .services__mobile-gallery { display: none; }
   }
 </style>
 

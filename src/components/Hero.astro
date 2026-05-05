@@ -203,11 +203,12 @@
     }
   }
 
-  /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
+  /* ── 450px: Pro Max spacing + gap controls ────────────────────────── */
   @media (max-width: 450px) {
-    .hero__statement br {
-      display: none;
-    }
+    /* Gap 1: zero hero bottom padding; About padding-top owns the 120px */
+    .hero { padding-bottom: 0; }
+
+    .hero__statement br { display: none; }
 
     .hero__watermark {
       width: 484px;
