@@ -332,25 +332,26 @@ const VIEWER_H = 375;
   }
   /* ── 390px ─────────────────────────────────────────────────────────── */
   @media (max-width: 390px) {
-    /* Dedicated mobile image stack — hidden at all larger breakpoints */
+    /* Hide right-side category labels (PARTNERSHIPS, STORYTELLING, etc.) */
+    .services__category {
+      display: none;
+    }
+
+    /* Keep the full title on one line — reduce font-size so
+       "(01) Influence [Beyond] expectation" fits in ~276px */
+    .services__title {
+      flex-wrap: nowrap;
+      font-size: 20px;
+    }
+
+    /* Scale the script image to match the smaller font */
+    .services__beyond-img {
+      height: 28px;
+    }
+
+    /* Hide the image stack below the table at this breakpoint */
     .services__mobile-gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 32px;
-    }
-
-    .services__mobile-gallery-item {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-    }
-
-    .services__mobile-gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      display: none;
     }
   }
 </style>
