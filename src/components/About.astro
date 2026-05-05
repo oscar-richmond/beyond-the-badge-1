@@ -183,4 +183,19 @@
       height: 320px;  /* 356px × 0.90 */
     }
   }
+  /* ── 390px ─────────────────────────────────────────────────────────── */
+  /* The 1024px block (below) comes later in the cascade and overrides the
+     480px block's grid-template-columns:1fr back to 3 columns at 390px.
+     This 390px block re-asserts the correct single-column layout and
+     makes each image square. */
+  @media (max-width: 390px) {
+    .about__image-grid {
+      grid-template-columns: 1fr;   /* 1 column — overrides 1024px 3-column rule */
+    }
+
+    .about__image-item {
+      height: auto;       /* override fixed px heights from 480px + 1024px blocks */
+      aspect-ratio: 1 / 1; /* square */
+    }
+  }
 </style>
