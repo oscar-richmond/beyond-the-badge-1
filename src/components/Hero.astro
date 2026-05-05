@@ -179,6 +179,25 @@
       font-size: 30px; /* matches .about__intro — overrides 1024px clamp() */
     }
   }
+
+  /* ── 390px ─────────────────────────────────────────────────────────── */
+  @media (max-width: 390px) {
+    /* Remove forced line-break between "cultural" and "relevance" so the
+       text wraps naturally to the container width instead of breaking early */
+    .hero__statement br {
+      display: none;
+    }
+
+    /* Fix watermark aspect ratio: global img{max-width:100%;height:auto}
+       was capping width to 390px while the 1024px block's height:651px
+       remained → severe vertical squish. Switch to width-driven sizing
+       and override max-width so the ratio is correct. */
+    .hero__watermark {
+      width: 220px;
+      height: auto;
+      max-width: none;
+    }
+  }
 </style>
 
 <script>
