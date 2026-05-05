@@ -556,7 +556,7 @@ button {
 }
 
 /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────────── */
-@media (max-width: 430px) {
+@media (max-width: 450px) {
   .footer {
     overflow: visible;
   }
