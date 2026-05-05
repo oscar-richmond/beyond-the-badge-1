@@ -316,6 +316,39 @@ const VIEWER_H = 375;
       height: 37px;   /* 41px × 0.90 */
     }
   }
+  /* ── 390px ─────────────────────────────────────────────────────────── */
+  @media (max-width: 390px) {
+    /* Re-display the viewer as a static stacked image list.
+       On touch devices GSAP never initialises (hover:none guard in JS),
+       so no inline transforms/opacity conflict with these rules. */
+    .services__viewer {
+      display: block;            /* override 768px display:none */
+      position: static;          /* out of fixed flow — sits naturally after the list */
+      width: auto;
+      height: auto;
+      overflow: visible;
+      opacity: 1;
+      pointer-events: none;
+      will-change: auto;
+      z-index: auto;
+      border-radius: 0;
+      padding: 0 var(--section-padding-x);
+      margin-bottom: var(--section-padding-y);
+    }
+
+    .services__viewer-strip {
+      flex-direction: column;
+      gap: 16px;
+      will-change: auto;
+    }
+
+    .services__viewer-item {
+      width: 100%;               /* full width within the padded viewer */
+      height: auto;
+      aspect-ratio: 1 / 1;      /* square */
+      flex-shrink: 0;
+    }
+  }
 </style>
 
 <script>
