@@ -230,13 +230,14 @@ const navItems = [
     opacity: 1;
   }
 
-  /* B watermark — 2× size, top-left anchored at 48px from viewport edges */
+  /* B watermark — sized by height so the letterform fills the overlay */
   .mobile-nav__watermark {
     position: absolute;
     left: 48px;
     top: 48px;
     height: 140vh;       /* size by height so the full B letterform fills the overlay */
     width: auto;
+    max-width: none;     /* override global img{max-width:100%} which would distort the ratio */
     opacity: 0.10;
     filter: brightness(0) invert(1);
     pointer-events: none;
