@@ -35,6 +35,9 @@ const navItems = [
 <!-- Mobile nav overlay -->
 <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
 
+  <!-- Close (X) button — top-right of the overlay -->
+  <button class="mobile-nav__close" aria-label="Close menu">&#x2715;</button>
+
   <!-- Background B watermark -->
   <img
     src={`${base}logo-monogram.png`}
@@ -96,6 +99,12 @@ const navItems = [
   /* Slide out on scroll down */
   .header.nav-hidden {
     transform: translateY(-100%);
+  }
+
+  /* Hidden while mobile nav overlay is open */
+  .header.menu-open {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .header__inner {
@@ -198,6 +207,27 @@ const navItems = [
   .mobile-nav.active {
     opacity: 1;
     pointer-events: all;
+  }
+
+  /* Close button — top-right of the overlay */
+  .mobile-nav__close {
+    position: absolute;
+    top: 28px;
+    right: var(--section-padding-x);
+    z-index: 2;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #f5f0e8;
+    font-size: 1.4rem;
+    line-height: 1;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+  }
+
+  .mobile-nav__close:hover {
+    opacity: 1;
   }
 
   /* B watermark — 2× size, top-left anchored at 48px from viewport edges */
@@ -347,60 +377,58 @@ const navItems = [
 </style>
 
 <script>
-  const header = document.querySelector('.header');
-  const menuBtn = document.querySelector('.header__menu-btn');
+  const header    = document.querySelector('.header');
+  const menuBtn   = document.querySelector('.header__menu-btn');
   const mobileNav = document.getElementById('mobile-nav');
   const mobileLinks = document.querySelectorAll('.mobile-nav__link');
+  const closeBtn  = document.querySelector('.mobile-nav__close');
 
   // Hide on scroll down, reveal on scroll up — plus at-top state
   let lastScrollY = window.scrollY;
 
   const updateNav = () => {
-    const currentScrollY = window.scrollY;
+    // Don’t touch the header while the mobile nav is open
+    if (mobileNav?.classList.contains('active')) return;
 
-    // Slide behaviour
+    const currentScrollY = window.scrollY;
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
       header?.classList.add('nav-hidden');
     } else {
       header?.classList.remove('nav-hidden');
     }
-
-    // At-top transparent state
     if (currentScrollY < 10) {
       header?.classList.add('at-top');
     } else {
       header?.classList.remove('at-top');
     }
-
     lastScrollY = currentScrollY;
   };
 
   window.addEventListener('scroll', updateNav, { passive: true });
-  updateNav(); // Set correct state on load
+  updateNav();
 
-  // Mobile menu toggle
+  function openMenu() {
+    mobileNav?.classList.add('active');
+    menuBtn?.setAttribute('aria-expanded', 'true');
+    mobileNav?.setAttribute('aria-hidden', 'false');
+    header?.classList.add('menu-open');    // hide the beige bar
+  }
+
+  function closeMenu() {
+    mobileNav?.classList.remove('active');
+    menuBtn?.setAttribute('aria-expanded', 'false');
+    mobileNav?.setAttribute('aria-hidden', 'true');
+    header?.classList.remove('menu-open'); // restore the bar
+    updateNav();                           // re-sync scroll state
+  }
+
   menuBtn?.addEventListener('click', () => {
-    const isOpen = mobileNav?.classList.toggle('active');
-    menuBtn.setAttribute('aria-expanded', String(isOpen));
-    mobileNav?.setAttribute('aria-hidden', String(!isOpen));
-
-    const lines = menuBtn.querySelectorAll('.header__menu-line');
-    if (isOpen) {
-      lines[0].style.transform = 'rotate(45deg) translate(3px, 3px)';
-      lines[1].style.transform = 'rotate(-45deg) translate(3px, -3px)';
-    } else {
-      lines[0].style.transform = '';
-      lines[1].style.transform = '';
-    }
+    mobileNav?.classList.contains('active') ? closeMenu() : openMenu();
   });
 
+  closeBtn?.addEventListener('click', closeMenu);
+
   mobileLinks.forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileNav?.classList.remove('active');
-      menuBtn?.setAttribute('aria-expanded', 'false');
-      mobileNav?.setAttribute('aria-hidden', 'true');
-      const lines = menuBtn?.querySelectorAll('.header__menu-line');
-      lines?.forEach((l) => ((l as HTMLElement).style.transform = ''));
-    });
+    link.addEventListener('click', closeMenu);
   });
 </script>
