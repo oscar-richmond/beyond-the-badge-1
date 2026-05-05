@@ -538,12 +538,20 @@ button {
   text-decoration-color: #8CB7A0;
 }
 
-/* ── 390px: footer watermark — up 80px, right 64px ─────────────────────── */
+/* ── 390px: footer watermark ──────────────────────────────────────────────── */
 @media (max-width: 390px) {
+  /* Let the B bleed outside the footer box — body overflow-x:hidden
+     prevents horizontal scroll; this unblocks the clipping that was
+     making all size increases invisible */
+  .footer {
+    overflow: visible;
+  }
+
   .footer__watermark {
-    width: 2520px;   /* 1260px × 2 */
-    bottom: -34px;   /* -74px + 40px up */
-    right: -116px;
+    width: 640px;     /* wider than viewport so B fills the right half */
+    right: -30px;     /* anchored near right edge, bleeds slightly */
+    bottom: -120px;   /* bleeds off the bottom */
+    top: auto;
   }
 }
 
