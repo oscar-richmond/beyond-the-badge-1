@@ -33,20 +33,12 @@
 :root {
   /* Colours */
   --color-forest:        #052715;
-  --color-forest-deep:   #061a12;
-  --color-forest-mid:    #0d3a27;
-  --color-cream:         #f5f0eb;
-  --color-cream-warm:    #f8f4ef;
-  --color-cream-light:   #faf7f3;
   --color-dark-section:  #1c0e0e;
   --color-dark-maroon:   #2a1515;
+  --color-cream:         #f5f0eb;
   --color-text-dark:     #052715;
-  --color-text-light:    #e8e0d4;
   --color-text-muted:    #8a7e72;
-  --color-text-cream:    #c8bfb2;
-  --color-divider-dark:  rgba(232, 224, 212, 0.15);
   --color-divider-light: rgba(5, 39, 21, 0.1);
-  --color-accent:        rgba(232, 224, 212, 0.6);
 
   /* Typography
      Primary:   Awesome Serif VAR (commercial — locally installed on branded machines)
@@ -66,7 +58,6 @@
   --section-padding-y: clamp(80px, 12vh, 160px);
   --section-padding-x: 40px;
   --content-max-width: 1648px; /* 1728px viewport - 80px for margins */
-  --gutter: clamp(24px, 4vw, 64px);
 
   /* Label / eyebrow Inter text.
      clamp() evaluates per-viewport at render time — no media query cascade
@@ -552,17 +543,7 @@ button {
   text-decoration-color: #8CB7A0;
 }
 
-/* ── 390px: footer watermark ──────────────────────────────────────────────── */
-@media (max-width: 390px) {
-  /* overflow:hidden remains from the 768px block — this clips the watermark
-     at the footer boundary so it doesn't extend into the body scroll area */
-  .footer__watermark {
-    width: 640px;     /* wider than viewport so B fills the right half */
-    right: -30px;     /* anchored near right edge, bleeds slightly */
-    bottom: -60px;    /* bleeds within the footer, clipped at its edge */
-    top: auto;
-  }
-}
+
 
 /* ── 500px: covers iPhone Pro Max and similar ────────────────────────────── */
 @media (max-width: 500px) {
