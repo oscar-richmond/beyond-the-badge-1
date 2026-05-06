@@ -432,15 +432,14 @@ const capabilities = [
   /* ════════════════════════════════════════════════════════════════════════
      SCROLL-PIN CAROUSEL  ·  ≤430px only
      ────────────────────────────────────────────────────────────────────────
-     Uses position:fixed (not sticky) toggled by the GSAP ticker — the same
-     getBoundingClientRect() pattern as the Services background transition.
-     Fixed positioning is guaranteed on mobile Safari regardless of any
-     ancestor overflow settings that might break position:sticky.
+     Pure position:absolute approach — no position:fixed or sticky.
+     Every frame the GSAP ticker sets section.style.top = scrolled,
+     where scrolled = -wRect.top (how far the wrapper has scrolled above
+     the viewport). This keeps section.top - wRect.top = 0, so the section
+     visually stays at the viewport top throughout the pinned zone.
 
-     Wrapper = tall spacer that provides the scroll height.
-     Section  = absolutely positioned at wrapper top normally;
-                switched to position:fixed while the wrapper occupies the
-                viewport; snapped back to absolute at wrapper bottom after.
+     No fixed positioning = no Safari bug where html{overflow:clip} causes
+     fixed elements to position relative to the document, not the viewport.
   ════════════════════════════════════════════════════════════════════════ */
   if (window.innerWidth <= 430 && section) {
 
@@ -448,15 +447,16 @@ const capabilities = [
     const totalExtra     = SCROLL_PER_CAP * (items.length - 1);
     const vh             = window.innerHeight;
 
-    // ── 1. Wrapper: provides scroll height so the page "holds" while pinned ─
+    // ── 1. Wrapper: provides the scroll height spacer ──────────────────────
     const wrapper = document.createElement('div');
     wrapper.id    = 'capScrollWrapper';
+    // Height = one viewport (section's natural size) + extra scroll space
     wrapper.style.cssText = `position:relative;height:${vh + totalExtra}px;`;
     section.parentNode!.insertBefore(wrapper, section);
     wrapper.appendChild(section);
 
-    // ── 2. Section: starts absolute at top of wrapper ─────────────────────
-    // (removed from normal flow via absolute so wrapper height is the spacer)
+    // ── 2. Section: always position:absolute within wrapper ───────────────
+    // `top` is updated every frame to simulate pinning.
     section.style.position  = 'absolute';
     section.style.top       = '0';
     section.style.left      = '0';
@@ -464,34 +464,19 @@ const capabilities = [
     section.style.height    = `${vh}px`;
     section.style.minHeight = 'unset';
 
-    // ── 3. GSAP ticker: toggle fixed/absolute and advance categories ───────
-    let isPinned           = false;
+    // ── 3. GSAP ticker: live-update top offset + advance categories ────────
+    // scrolled = how many px of the wrapper have passed above the viewport.
+    // Setting top = scrolled makes the section appear viewport-fixed:
+    //   section visual top = wRect.top + top = -scrolled + scrolled = 0  ✓
     let currentScrollIndex = 0;
 
     gsap.ticker.add(() => {
       const wRect   = wrapper.getBoundingClientRect();
-      const scrolled = Math.max(0, -wRect.top); // px scrolled into wrapper
+      const scrolled = Math.max(0, -wRect.top);
 
-      // Pin: wrapper has entered viewport from top AND hasn't fully exited bottom
-      const shouldPin = wRect.top <= 0 && wRect.bottom > vh;
-
-      if (shouldPin && !isPinned) {
-        // Snap to fixed — viewport-relative, full width
-        section.style.position = 'fixed';
-        section.style.top      = '0';
-        section.style.left     = '0';
-        section.style.right    = '0';
-        isPinned = true;
-      } else if (!shouldPin && isPinned) {
-        // Unpin — place section at correct end of wrapper
-        section.style.position = 'absolute';
-        section.style.left     = '0';
-        section.style.right    = '0';
-        section.style.top      = wRect.top > 0
-          ? '0'                          // wrapper hasn't entered yet
-          : `${totalExtra}px`;           // wrapper has fully passed
-        isPinned = false;
-      }
+      // Clamp: before wrapper enters → top = 0; after it exits → top = totalExtra
+      const pinnedTop = Math.min(totalExtra, scrolled);
+      section.style.top = `${pinnedTop}px`;
 
       // Map scroll progress → active category
       const progress  = Math.min(1, scrolled / totalExtra);
