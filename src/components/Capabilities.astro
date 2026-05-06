@@ -40,8 +40,8 @@ const capabilities = [
   },
 ];
 
-const SCROLL_PER_CAP = 260; // px of scroll per category on mobile
-const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 1300px
+const SCROLL_PER_CAP = 400; // px of scroll per category on mobile
+const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 2000px
 ---
 
 <!--
@@ -432,8 +432,8 @@ const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 1300px
      No DOM manipulation at runtime.
   ════════════════════════════════════════════════════════════════════════ */
   if (window.innerWidth <= 500 && wrapper) {
-    const SCROLL_PER_CAP = 260;
-    const totalExtra     = SCROLL_PER_CAP * (items.length - 1); // 1300
+    const SCROLL_PER_CAP = 400;
+    const totalExtra     = SCROLL_PER_CAP * (items.length - 1); // 2000
 
     let currentScrollIndex = 0;
 
