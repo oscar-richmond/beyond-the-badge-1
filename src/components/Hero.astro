@@ -134,6 +134,9 @@
     }
     .hero__image-wrapper {
       min-height: 240px;
+      /* Full-bleed on mobile — no expand animation (see JS below) */
+      padding-left:  0 !important;
+      padding-right: 0 !important;
     }
   }
 
@@ -222,27 +225,38 @@
   (() => {
     // ── Image padding scroll expansion ──────────────────────────────────
     const wrapper = document.getElementById('heroImageWrapper') as HTMLElement | null;
-    if (!wrapper) return;
+    // ── Image padding scroll expansion (desktop only) ────────────────────
+    // On mobile the video is full-bleed from the start — no animation.
+    // This also avoids a race condition where getComputedStyle reads the
+    // desktop padding (80px) before the mobile media query resolves,
+    // making the video flash tiny on first load.
+    if (window.innerWidth <= 768) {
+      if (wrapper) {
+        wrapper.style.paddingLeft  = '0';
+        wrapper.style.paddingRight = '0';
+      }
+    } else {
+      if (!wrapper) return;
+      let maxPadding = parseFloat(getComputedStyle(wrapper).paddingLeft) || 80;
+      const EXPAND_OVER_PX = 220;
 
-    let maxPadding = parseFloat(getComputedStyle(wrapper).paddingLeft) || 80;
-    const EXPAND_OVER_PX = 220;
+      function update() {
+        const progress = Math.min(1, window.scrollY / EXPAND_OVER_PX);
+        const padding = maxPadding * (1 - progress);
+        wrapper!.style.paddingLeft  = padding + 'px';
+        wrapper!.style.paddingRight = padding + 'px';
+      }
 
-    function update() {
-      const progress = Math.min(1, window.scrollY / EXPAND_OVER_PX);
-      const padding = maxPadding * (1 - progress);
-      wrapper!.style.paddingLeft  = padding + 'px';
-      wrapper!.style.paddingRight = padding + 'px';
-    }
+      window.addEventListener('resize', () => {
+        wrapper!.style.paddingLeft  = '';
+        wrapper!.style.paddingRight = '';
+        maxPadding = parseFloat(getComputedStyle(wrapper!).paddingLeft) || 80;
+        update();
+      });
 
-    window.addEventListener('resize', () => {
-      wrapper!.style.paddingLeft  = '';
-      wrapper!.style.paddingRight = '';
-      maxPadding = parseFloat(getComputedStyle(wrapper!).paddingLeft) || 80;
+      window.addEventListener('scroll', update, { passive: true });
       update();
-    });
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
+    }
 
     // ── prefers-reduced-motion + autoplay-blocked handling ──────────────
     // Some browsers (Safari, Firefox) block autoplay when the OS
