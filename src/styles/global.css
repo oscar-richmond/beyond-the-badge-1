@@ -112,10 +112,12 @@ body {
   line-height: 1.6;
   color: var(--color-text-dark);
   background-color: var(--color-cream);
-  /* overflow-x is handled by html { overflow-x: clip } above —
-     setting it here too would make body a scroll container (spec:
-     overflow-x != visible forces overflow-y to auto), which breaks
-     position:sticky. */
+  /* overflow-x: clip does NOT trigger the overflow-y: auto propagation
+     (the spec rule applies only to values that are neither 'visible' nor 'clip').
+     Using clip (not hidden) prevents horizontal drift without creating a
+     scroll container, so position:sticky still works. */
+  overflow-x: clip;
+  width: 100%;
   font-optical-sizing: auto;
 }
 
