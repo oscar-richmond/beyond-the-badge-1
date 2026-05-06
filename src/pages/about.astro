@@ -1092,7 +1092,8 @@ const base = import.meta.env.BASE_URL;
     /* Statement watermark: 1.7× the 1024px size (828px × 1.7 ≈ 1408px) */
     .about-statement__watermark {
       width: 1408px;
-      top: -40px; /* nudge up so the larger B sits centred behind the paragraph */
+      top: 0px;      /* was -40px; moved down 40px */
+      right: -28px;  /* was ~20px (padding-x); moved right 48px */
     }
   }
 
