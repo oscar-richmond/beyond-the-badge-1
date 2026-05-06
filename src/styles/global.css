@@ -98,23 +98,22 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Prevent any element from making the page scroll horizontally.
+     overflow-x:clip (not hidden) so position:sticky still works. */
+  overflow-x: clip;
+  width: 100%;
 }
 
 body {
   font-family: var(--font-serif);
-  /* font-variation-settings MUST be set here (not just font-weight) because
-     inherited font-variation-settings takes precedence over a child element's
-     explicit font-weight per CSS Fonts Level 4. This ensures that all Awesome
-     Serif body text renders at wght≈100 regardless of any font-weight: 400
-     overrides in component CSS. Elements with their own font-variation-settings
-     (e.g. "wght" 700 italic headings) correctly override this via specificity. */
   font-variation-settings: "wght" 100;
   font-weight: 100;
   font-size: 18px;
   line-height: 1.6;
   color: var(--color-text-dark);
   background-color: var(--color-cream);
-  overflow-x: hidden;
+  overflow-x: clip;   /* belt-and-braces with html overflow-x:clip above */
+  width: 100%;
   font-optical-sizing: auto;
 }
 
