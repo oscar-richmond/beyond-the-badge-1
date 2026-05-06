@@ -1089,14 +1089,13 @@ const base = import.meta.env.BASE_URL;
       cursor: pointer;
     }
 
-    /* Statement watermark: 1.8× current size, top-left corner held in place.
-       Switch from right: to left: so scaling extends rightward, not leftward.
-       left = 100% − (old_right_abs + old_width) = 100% − (28 + 1408) = 100% − 1380px */
+    /* Statement watermark: 1.8× size. Right-anchored so the B (right portion
+       of the image) stays visible within the viewport. */
     .about-statement__watermark {
-      width: 2534px;   /* 1408px × 1.8 */
+      width: 2534px;  /* 1408px × 1.8 */
       top: 0px;
-      right: auto;
-      left: calc(100% - 1380px);
+      right: -28px;
+      left: auto;
     }
   }
 
