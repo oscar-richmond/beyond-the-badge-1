@@ -1089,14 +1089,9 @@ const base = import.meta.env.BASE_URL;
       cursor: pointer;
     }
 
-    /* Statement watermark: 1.5× size, left edge held fixed, then +40px down +48px right.
-       To keep left edge: new_right = old_right - (new_width - old_width) = -28 - 1267 = -1295px
-       Then +48px right: -1295 - 48 = -1343px */
+    /* Statement watermark: hidden on mobile */
     .about-statement__watermark {
-      width: 3801px;   /* 2534px × 1.5 */
-      top: 40px;       /* +40px down */
-      right: -1343px;
-      left: auto;
+      display: none;
     }
   }
 
