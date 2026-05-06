@@ -1235,51 +1235,69 @@ const base = import.meta.env.BASE_URL;
     });
   }
 
-  function resetToDefault() {
-    photoContainers.forEach(photo => {
-      photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
-        if (layer.dataset.state === 'default') layer.classList.add('is-active');
-        else layer.classList.remove('is-active');
-      });
-    });
-    numContainers.forEach(num => {
-      const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
-      const dflt    = num.querySelector<HTMLElement>('.about-images__num-inner[data-state="default"]');
-      if (current && current !== dflt) { current.classList.remove('is-visible'); current.classList.add('is-exiting'); }
-      if (dflt && !dflt.classList.contains('is-visible')) { dflt.classList.add('is-visible'); }
-      if (current && current !== dflt) current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
-    });
+  function resetToDefault() { swapToKeyword('default'); }
+
+  // ── Auto-cycle through all keyword states every 2 seconds ────────────
+  // Order: default → art → sport → film → entertainment → adventure → community → default…
+  const CYCLE_STATES = ['default', 'art', 'sport', 'film', 'entertainment', 'adventure', 'community'];
+  let cycleIdx  = 0;
+  let autoTimer: ReturnType<typeof setInterval> | null = null;
+
+  function startCycle(fromIdx = cycleIdx) {
+    stopCycle();
+    cycleIdx = fromIdx;
+    autoTimer = setInterval(() => {
+      cycleIdx = (cycleIdx + 1) % CYCLE_STATES.length;
+      swapToKeyword(CYCLE_STATES[cycleIdx]);
+    }, 2000);
   }
+
+  function stopCycle() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  // Start cycling 1s after load so the default image has a moment to settle
+  setTimeout(() => startCycle(0), 1000);
 
   // Delegated: listen on the h1, check if the event target is a keyword em
   if (heroText) {
     let mobileTapKeyword = ''; // tracks which keyword is tap-active at ≤768px
 
+    // Desktop hover: pause cycle and show the hovered keyword
     heroText.addEventListener('mouseover', (e) => {
-      const em = (e.target as Element).closest<HTMLElement>('em[data-keyword]');
-      if (em && heroText.contains(em)) swapToKeyword(em.dataset.keyword!);
-    });
-
-    heroText.addEventListener('mouseout', (e) => {
-      // On mobile, tap state is sticky — don't reset on mouseout
       if (window.innerWidth <= 768) return;
       const em = (e.target as Element).closest<HTMLElement>('em[data-keyword]');
-      // Only reset when leaving a keyword em (not moving between child nodes of it)
-      if (em && !em.contains(e.relatedTarget as Node)) resetToDefault();
+      if (em && heroText.contains(em)) {
+        stopCycle();
+        swapToKeyword(em.dataset.keyword!);
+      }
     });
 
-    // Mobile: tap to activate; re-tap the same word to reset
+    // Desktop: mouse leaves heroText entirely → reset to default and resume cycle
+    heroText.addEventListener('mouseleave', () => {
+      if (window.innerWidth <= 768) return;
+      cycleIdx = 0;
+      resetToDefault();
+      startCycle(0);
+    });
+
+    // Mobile: tap to activate; re-tap the same word to reset to default
     heroText.addEventListener('click', (e) => {
       if (window.innerWidth > 768) return;
       const em = (e.target as Element).closest<HTMLElement>('em[data-keyword]');
       if (!em || !heroText.contains(em)) return;
       const keyword = em.dataset.keyword!;
+      const idx = CYCLE_STATES.indexOf(keyword);
       if (mobileTapKeyword === keyword) {
+        // Re-tap active word → reset to default, restart cycle from beginning
         resetToDefault();
         mobileTapKeyword = '';
+        startCycle(0);
       } else {
         swapToKeyword(keyword);
         mobileTapKeyword = keyword;
+        // Restart cycle from this keyword so next auto-advance is the following one
+        startCycle(idx);
       }
     });
   }
