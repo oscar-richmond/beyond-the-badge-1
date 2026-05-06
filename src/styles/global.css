@@ -112,8 +112,10 @@ body {
   line-height: 1.6;
   color: var(--color-text-dark);
   background-color: var(--color-cream);
-  overflow-x: clip;   /* belt-and-braces with html overflow-x:clip above */
-  width: 100%;
+  /* overflow-x is handled by html { overflow-x: clip } above —
+     setting it here too would make body a scroll container (spec:
+     overflow-x != visible forces overflow-y to auto), which breaks
+     position:sticky. */
   font-optical-sizing: auto;
 }
 
