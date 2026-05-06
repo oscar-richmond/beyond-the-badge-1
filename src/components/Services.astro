@@ -482,30 +482,22 @@ const VIEWER_H = 375;
   //
   // Testimonials reveal — a maroon overlay covers all Testimonials content
   // while the body is still maroon (exitT == 0 → overlay opacity 1).
-  // As exitT rises, the overlay fades to 0 in perfect sync with the body's
-  // return to cream, so text, images and borders all reveal together.
+  // ── Scroll-linked body background, Services fade, Testimonials fade ─────
+  //
+  // Both sections have transparent backgrounds — body.backgroundColor IS
+  // the full-viewport colour. Content in each section has its opacity driven
+  // by the same t/exitT variables as the background, so nothing ever appears
+  // on a background colour it doesn't match.
+  //
+  // Services  : opacity = t      (0 = cream bg, 1 = maroon bg)
+  // Testimonials: opacity = exitT (0 = maroon phase, 1 = cream phase)
   //
   const bgEl    = document.querySelector<HTMLElement>('.services');
   const tElem   = document.querySelector<HTMLElement>('#testimonials');
   const stickyEl = tElem?.querySelector<HTMLElement>('.testimonials-sticky');
 
-  // ── Build overlay once ────────────────────────────────────────────────────
-  let tOverlay: HTMLElement | null = null;
-  if (stickyEl) {
-    const ov = document.createElement('div');
-    ov.setAttribute('aria-hidden', 'true');
-    Object.assign(ov.style, {
-      position:       'absolute',
-      inset:          '0',
-      backgroundColor:'rgb(245,240,235)', // cream — updated every frame in ticker
-      pointerEvents:  'none',
-      zIndex:         '100',
-      willChange:     'opacity',
-      opacity:        '1',
-    });
-    stickyEl.appendChild(ov);
-    tOverlay = ov;
-  }
+  // Pre-apply will-change so the browser promotes both to GPU layers
+  if (stickyEl) stickyEl.style.willChange = 'opacity';
 
   if (bgEl) {
     const CREAM  = { r: 245, g: 240, b: 235 }; // #f5f0eb
@@ -541,19 +533,15 @@ const VIEWER_H = 375;
       const b = Math.round(CREAM.b + (MAROON.b - CREAM.b) * t);
       document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
 
-      // ── Services content fades in/out with the background ─────────────────
-      // At t=0 (cream bg): section is fully transparent — elements blend into
-      // the cream background, no white-on-grey clash.
-      // At t=1 (maroon bg): section is fully opaque at their CSS colours.
+      // ── Services: fade with t ──────────────────────────────────────────────
+      // t=0 (cream bg) → invisible; t=1 (maroon bg) → fully visible.
+      // Works for both entry (t rising) and exit (t falling).
       bgEl.style.opacity = String(t);
 
-      // ── Testimonials overlay — colour matches body bg every frame so the
-      // Testimonials area always looks identical to Services during the exit.
-      // Opacity fades from 1→0 as exitT rises, revealing the content beneath.
-      if (tOverlay) {
-        tOverlay.style.backgroundColor = `rgb(${r},${g},${b})`;
-        tOverlay.style.opacity = String(1 - exitT);
-      }
+      // ── Testimonials: fade with exitT ──────────────────────────────────────
+      // exitT=0 (still maroon bg) → invisible; exitT=1 (back to cream) → visible.
+      // Mirrors the services approach: content matches background, then fades in.
+      if (stickyEl) stickyEl.style.opacity = String(exitT);
     });
   }
 </script>
