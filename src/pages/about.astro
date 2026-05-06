@@ -1009,12 +1009,13 @@ const base = import.meta.env.BASE_URL;
       display: flex;
       flex-direction: column;
       gap: 0;             /* base has gap:32px — zero it so only label margin controls spacing */
+      padding-bottom: 72px; /* base 96px − 24px = 72px: reduces gap to Get in touch button */
     }
 
     .about-hero__label {
       order: -1;          /* lift "About Us" above the paragraph */
       margin-bottom: 16px;
-      margin-top: 0;
+      margin-top: 32px;   /* +32px breathing room above ABOUT US on mobile */
     }
 
     /* Bio: collapse grid to flex-column so label can be reordered above content */
