@@ -717,7 +717,7 @@ const base = import.meta.env.BASE_URL;
     }
 
     .about-images__cta-col {
-      padding: 40px var(--section-padding-x) 0;
+      padding: 16px var(--section-padding-x) 0; /* reduced from 40px — closes gap to hero */
       align-items: flex-start;
     }
 
@@ -758,7 +758,7 @@ const base = import.meta.env.BASE_URL;
     .about-hero__label {
       grid-row: 2;
       grid-column: 1;
-      margin-top: 16px;
+      margin-top: 48px; /* +32px above ABOUT US on mobile */
     }
 
     /* Images section */
