@@ -554,31 +554,24 @@ button {
 
 /* ── 390px: footer watermark ──────────────────────────────────────────────── */
 @media (max-width: 390px) {
-  /* Let the B bleed outside the footer box — body overflow-x:hidden
-     prevents horizontal scroll; this unblocks the clipping that was
-     making all size increases invisible */
-  .footer {
-    overflow: visible;
-  }
-
+  /* overflow:hidden remains from the 768px block — this clips the watermark
+     at the footer boundary so it doesn't extend into the body scroll area */
   .footer__watermark {
     width: 640px;     /* wider than viewport so B fills the right half */
     right: -30px;     /* anchored near right edge, bleeds slightly */
-    bottom: -120px;   /* bleeds off the bottom */
+    bottom: -60px;    /* bleeds within the footer, clipped at its edge */
     top: auto;
   }
 }
 
-/* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────────── */
+/* ── 500px: covers iPhone Pro Max and similar ────────────────────────────── */
 @media (max-width: 500px) {
-  .footer {
-    overflow: visible;
-  }
-
+  /* No overflow:visible override — footer keeps overflow:hidden from 768px block
+     so the watermark is clipped at the footer's bottom edge, not below it */
   .footer__watermark {
     width: 640px;
     right: -30px;
-    bottom: -120px;
+    bottom: -60px;    /* bleeds within footer, clipped at footer boundary */
     top: auto;
   }
 }
