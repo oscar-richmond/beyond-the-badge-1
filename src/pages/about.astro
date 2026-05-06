@@ -1211,16 +1211,26 @@ const base = import.meta.env.BASE_URL;
   function swapToKeyword(keyword: string) {
     photoContainers.forEach(photo => {
       photo.querySelectorAll<HTMLElement>('.about-images__layer').forEach(layer => {
-        if (layer.dataset.state === 'default') layer.classList.remove('is-active');
-        else if (layer.dataset.state === keyword) layer.classList.add('is-active');
+        // Deactivate everything first, then activate only the target keyword
+        if (layer.dataset.state === keyword) {
+          layer.classList.add('is-active');
+        } else {
+          layer.classList.remove('is-active');
+        }
       });
     });
     numContainers.forEach(num => {
       const current = num.querySelector<HTMLElement>('.about-images__num-inner.is-visible');
       const next    = num.querySelector<HTMLElement>(`.about-images__num-inner[data-state="${keyword}"]`);
-      if (current) { current.classList.remove('is-visible'); current.classList.add('is-exiting'); }
-      if (next)    { next.classList.add('is-visible'); }
-      if (current) current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
+      if (current && current !== next) {
+        current.classList.remove('is-visible');
+        current.classList.add('is-exiting');
+        current.addEventListener('transitionend', () => current.classList.remove('is-exiting'), { once: true });
+      }
+      if (next) {
+        next.classList.remove('is-exiting'); // clear any stale exit state
+        next.classList.add('is-visible');
+      }
     });
   }
 
