@@ -117,8 +117,9 @@ const {
           ease: 'btbEase',
           delay: 0.05,
           onComplete() {
-            // Signal all reveal systems that the curtain has cleared and the
-            // page is now fully visible.
+            // Hide completely so iOS Safari's address-bar shrink can't make
+            // the curtain peek in at the bottom of the viewport.
+            curtain!.style.visibility = 'hidden';
             window.dispatchEvent(new CustomEvent('btb-ready'));
           },
         });
@@ -147,6 +148,7 @@ const {
           sessionStorage.setItem('btb-internal-nav', '1');
 
           // Reset curtain to top-out-of-view, slide it DOWN to cover page
+          curtain!.style.visibility = 'visible'; // restore before sliding in
           gsap.set(curtain, { y: '-100%' });
           gsap.to(curtain, {
             y: '0%',
@@ -168,6 +170,7 @@ const {
           if (!(event as PageTransitionEvent).persisted || !curtain) return;
           document.body.style.overflow = '';
           document.documentElement.style.overflow = '';
+          curtain.style.visibility = 'visible'; // restore before re-running exit
           gsap.killTweensOf(curtain);
           gsap.set(curtain, { y: '0%' });
           gsap.to(curtain, {
@@ -176,6 +179,7 @@ const {
             ease: 'btbEase',
             delay: 0.05,
             onComplete() {
+              curtain.style.visibility = 'hidden';
               window.dispatchEvent(new CustomEvent('btb-ready'));
             },
           });
