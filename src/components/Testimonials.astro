@@ -1190,7 +1190,7 @@ const storiesData = testimonials.map(t => ({
   @media (max-width: 390px) {
     /* Tighten sticky panel vertical padding so everything fits in 100vh */
     .testimonials-sticky {
-      padding: 16px 0;
+      padding: 120px 0 16px; /* Gap 3: heading 120px from viewport top */
     }
 
     /* Reduce header / rule spacing */
@@ -1276,7 +1276,7 @@ const storiesData = testimonials.map(t => ({
   /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
   @media (max-width: 500px) {
     .testimonials-sticky {
-      padding: 16px 0;
+      padding: 120px 0 16px;
     }
 
     .testimonials__heading { margin-bottom: 12px; }
