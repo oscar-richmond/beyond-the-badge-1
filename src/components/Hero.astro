@@ -124,10 +124,7 @@
   @media (max-width: 768px) {
     .hero {
       padding-top: 60px;
-      padding-bottom: var(--section-padding-y);
-      /* Transparent at mobile so the GSAP body background transition shows
-         through the hero's bottom padding — eliminates the hard colour seam
-         at the hero/about boundary. Body always starts as cream on load. */
+      padding-bottom: 0;          /* Gap 1: About owns the 120px top padding */
       background: transparent;
     }
     .hero__text {

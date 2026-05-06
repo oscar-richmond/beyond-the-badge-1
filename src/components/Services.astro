@@ -260,6 +260,13 @@ const VIEWER_H = 375;
 
   /* ── Mobile ───────────────────────────────────────────────────────────── */
   @media (max-width: 768px) {
+    /* Gap 2: about_pb=0, so services_pt=120px is the full cap-image→OUR APPROACH gap */
+    /* Gap 3: 120px of breathing room after the last services row divider              */
+    .services {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+
     .services__item {
       flex-direction: row;      /* keep category inline — no longer drops below */
       align-items: center;      /* vertically centre number, title & category */
@@ -285,8 +292,8 @@ const VIEWER_H = 375;
     /* Viewer disabled on mobile — touch has no hover */
     .services__viewer { display: none; }
 
-    /* Extra gap above heading at this breakpoint only */
-    .services__header { margin-top: calc(var(--section-padding-y) * 2); }
+    /* Cancel the double-padding rule — gap is now owned by services padding-top */
+    .services__header { margin-top: 0; }
   }
 
   /* ── 1440px: proportional scale-down from 1522px baseline ─── */

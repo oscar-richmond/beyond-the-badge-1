@@ -123,6 +123,13 @@
   }
 
   @media (max-width: 768px) {
+    /* Gap 1: zero hero pb means this 120px is the full video→paragraph gap */
+    /* Gap 2 prep: zero bottom so Services padding-top owns that gap        */
+    .about {
+      padding-top: 120px;
+      padding-bottom: 0;
+    }
+
     .about__image-grid {
       grid-template-columns: 1fr 1fr;
       max-width: 100%;
