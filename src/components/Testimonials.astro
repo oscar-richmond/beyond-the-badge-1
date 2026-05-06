@@ -1186,6 +1186,48 @@ const storiesData = testimonials.map(t => ({
     }
   }
 
+  /* ─── Full-story modal: mobile single-column restack ≤768px ─────────── */
+  /* Order: quote (full width) → name & role → images                       */
+  @media (max-width: 768px) {
+    /* Switch grid → single-column flex */
+    .t-fs-body {
+      display: flex;
+      flex-direction: column;
+      padding-top: 56px;
+      padding-bottom: 48px;
+    }
+
+    /* Quote comes first — full width of panel */
+    .t-fs-right {
+      order: 1;
+      padding: 0 24px 32px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Name + role + images come second */
+    .t-fs-left {
+      order: 2;
+      padding: 0 24px 32px;
+      width: 100%;
+      box-sizing: border-box;
+      /* Flex column already set on parent; inherit */
+      flex-direction: column;
+    }
+
+    /* Images: keep vertical stack */
+    .t-fs-images {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Slightly smaller quote text on narrow screens */
+    :global(.t-fs-quote p) {
+      font-size: 22px;
+      line-height: 36px;
+    }
+  }
+
   /* ── 390px: single-column stacked testimonial layout ──────────────── */
   @media (max-width: 390px) {
     /* Tighten sticky panel vertical padding so everything fits in 100vh */
