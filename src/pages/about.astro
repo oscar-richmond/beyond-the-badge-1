@@ -1089,11 +1089,14 @@ const base = import.meta.env.BASE_URL;
       cursor: pointer;
     }
 
-    /* Statement watermark: 1.7× the 1024px size (828px × 1.7 ≈ 1408px) */
+    /* Statement watermark: 1.8× current size, top-left corner held in place.
+       Switch from right: to left: so scaling extends rightward, not leftward.
+       left = 100% − (old_right_abs + old_width) = 100% − (28 + 1408) = 100% − 1380px */
     .about-statement__watermark {
-      width: 1408px;
-      top: 0px;      /* was -40px; moved down 40px */
-      right: -28px;  /* was ~20px (padding-x); moved right 48px */
+      width: 2534px;   /* 1408px × 1.8 */
+      top: 0px;
+      right: auto;
+      left: calc(100% - 1380px);
     }
   }
 
