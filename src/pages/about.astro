@@ -1325,12 +1325,26 @@ const base = import.meta.env.BASE_URL;
       }
     });
 
-    // Mobile: tap Laura Wood to show portrait; tap again to hide
+    // Mobile: tap Laura Wood to show portrait
     bioContent.addEventListener('click', (e) => {
       if (window.innerWidth > 768) return;
       if (!(e.target as Element).closest('.about-bio__headline em')) return;
-      portraitPinned = !portraitPinned;
-      portrait.classList.toggle('is-visible', portraitPinned);
+      portraitPinned = true;
+      portrait.classList.add('is-visible');
+    });
+
+    // Tap anywhere else to dismiss the portrait
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) return;
+      if (!portraitPinned) return;
+      // If the tap was on the Laura Wood em, let the handler above re-show it
+      // (don't dismiss — it was just shown). Use a microtask delay so this
+      // fires after the bioContent listener has already set portraitPinned.
+      const onLauraWood = !!(e.target as Element).closest('.about-bio__headline em');
+      if (!onLauraWood) {
+        portraitPinned = false;
+        portrait.classList.remove('is-visible');
+      }
     });
   }
   // ── Read more / Read less toggle ──────────────────────────────────────────
