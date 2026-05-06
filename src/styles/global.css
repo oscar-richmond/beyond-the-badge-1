@@ -471,6 +471,17 @@ button {
   /* Clip the oversized watermark at the footer's bottom edge */
   .footer {
     overflow: hidden;
+    padding: 48px 0 32px; /* was 80px 0 40px — too tall on mobile */
+  }
+
+  /* Tighten the gap between logo section and bottom links */
+  .footer__inner {
+    gap: 32px; /* was 80px */
+  }
+
+  /* Reduce logo area vertical padding */
+  .footer__top {
+    padding: 24px 0; /* was 60px 0 */
   }
 
   /* Switch from 3-col grid to flex so nav + legal share one row */
