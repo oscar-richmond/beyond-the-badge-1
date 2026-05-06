@@ -101,6 +101,9 @@ const VIEWER_H = 375;
     background: transparent;
     padding: var(--section-padding-y) 0;
     position: relative;
+    /* Opacity driven by GSAP ticker in sync with body background transition.
+       will-change promotes to GPU layer for smooth compositing. */
+    will-change: opacity;
   }
 
   .services__header {
@@ -537,6 +540,12 @@ const VIEWER_H = 375;
       const g = Math.round(CREAM.g + (MAROON.g - CREAM.g) * t);
       const b = Math.round(CREAM.b + (MAROON.b - CREAM.b) * t);
       document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
+
+      // ── Services content fades in/out with the background ─────────────────
+      // At t=0 (cream bg): section is fully transparent — elements blend into
+      // the cream background, no white-on-grey clash.
+      // At t=1 (maroon bg): section is fully opaque at their CSS colours.
+      bgEl.style.opacity = String(t);
 
       // ── Testimonials overlay — colour matches body bg every frame so the
       // Testimonials area always looks identical to Services during the exit.
