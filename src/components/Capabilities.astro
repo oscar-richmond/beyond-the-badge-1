@@ -39,63 +39,82 @@ const capabilities = [
     description: 'Curating narrative-driven collections and drops designed to tell a story.',
   },
 ];
+
+const SCROLL_PER_CAP = 260; // px of scroll per category on mobile
+const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 1300px
 ---
 
-<section class="capabilities-section" id="capabilities">
+<!--
+  cap-scroll-wrapper provides the scroll height for the mobile pin.
+  At ≤500px (CSS): wrapper is tall, section is position:sticky inside it.
+  Above 500px:     wrapper is display:contents — no layout effect.
+-->
+<div id="capScrollWrapper" class="cap-scroll-wrapper">
 
-  <!-- Background image layers — crossfades via GSAP -->
-  <div
-    class="cap-bg"
-    data-cap="default"
-    style={`background-image: url('${base}images/capabilities/cap-01.jpg')`}
-  ></div>
-  {capabilities.map((c) => (
+  <section class="capabilities-section" id="capabilities">
+
+    <!-- Background image layers — crossfades via GSAP -->
     <div
       class="cap-bg"
-      data-cap={c.key}
-      style={`background-image: url('${base}images/capabilities/${c.img}')`}
+      data-cap="default"
+      style={`background-image: url('${base}images/capabilities/cap-01.jpg')`}
     ></div>
-  ))}
+    {capabilities.map((c) => (
+      <div
+        class="cap-bg"
+        data-cap={c.key}
+        style={`background-image: url('${base}images/capabilities/${c.img}')`}
+      ></div>
+    ))}
 
-  <!-- Dark scrim -->
-  <div class="cap-overlay"></div>
+    <!-- Dark scrim -->
+    <div class="cap-overlay"></div>
 
-  <!-- ── Content ─────────────────────────────────────────────────────────── -->
-  <div class="cap-content container">
+    <!-- ── Content ──────────────────────────────────────────────────────── -->
+    <div class="cap-content container">
 
-    <!-- Eyebrow row -->
-    <div class="cap-header">
-      <p class="cap-eyebrow">The Categories We're Redefining</p>
-      <hr class="cap-rule" />
-    </div>
-
-    <!-- Two-column body -->
-    <div class="cap-body">
-
-      <!-- Left: description text (bottom-pinned) -->
-      <div class="cap-left">
-        <p class="cap-description" id="capDescription"></p>
+      <!-- Eyebrow row -->
+      <div class="cap-header">
+        <p class="cap-eyebrow">The Categories We're Redefining</p>
+        <hr class="cap-rule" />
       </div>
 
-      <!-- Right: capability list -->
-      <ul class="cap-list" id="capList">
-        {capabilities.map((c) => (
-          <li
-            class="cap-item"
-            data-cap={c.key}
-            data-desc={c.description}
-          >
-            {c.label}
-          </li>
-        ))}
-      </ul>
+      <!-- Two-column body -->
+      <div class="cap-body">
 
+        <!-- Left: description text -->
+        <div class="cap-left">
+          <p class="cap-description" id="capDescription"></p>
+        </div>
+
+        <!-- Right: capability list -->
+        <ul class="cap-list" id="capList">
+          {capabilities.map((c) => (
+            <li
+              class="cap-item"
+              data-cap={c.key}
+              data-desc={c.description}
+            >
+              {c.label}
+            </li>
+          ))}
+        </ul>
+
+      </div>
     </div>
-  </div>
 
-</section>
+  </section>
 
-<style>
+</div>
+
+<style define:vars={{ totalExtra: `${TOTAL_EXTRA}px` }}>
+  /* ── Scroll-pin wrapper ─────────────────────────────────────────────────── */
+  /* At ≤500px the wrapper is a tall spacer; the section is sticky inside it. */
+  /* Above 500px it's display:contents — invisible to layout. */
+  .cap-scroll-wrapper {
+    display: contents; /* no layout effect above 500px */
+  }
+
   /* ── Section ────────────────────────────────────────────────────────────── */
   .capabilities-section {
     position: relative;
@@ -148,9 +167,7 @@ const capabilities = [
   }
 
   /* ── Eyebrow row ────────────────────────────────────────────────────────── */
-  .cap-header {
-    margin-bottom: 0;
-  }
+  .cap-header { margin-bottom: 0; }
 
   .cap-eyebrow {
     font-family: var(--font-sans);
@@ -166,7 +183,7 @@ const capabilities = [
   .cap-rule {
     border: none;
     border-top: 1px solid rgba(248, 242, 237, 0.2);
-    margin: 0 0 0 0;
+    margin: 0;
   }
 
   /* ── Body grid ──────────────────────────────────────────────────────────── */
@@ -174,7 +191,6 @@ const capabilities = [
     display: grid;
     grid-template-columns: 28% 1fr;
     gap: 0;
-    /* Pin description to bottom of the left column */
     align-items: end;
     min-height: 55vh;
     padding-top: 40px;
@@ -200,7 +216,6 @@ const capabilities = [
   /* ── Right: capability list ─────────────────────────────────────────────── */
   .cap-list {
     align-self: end;
-    /* Items are right-aligned */
     text-align: right;
   }
 
@@ -218,43 +233,38 @@ const capabilities = [
     will-change: opacity;
   }
 
-  .cap-list.has-hover .cap-item:not(.is-active) {
-    opacity: 0.2;
-  }
+  .cap-list.has-hover .cap-item:not(.is-active) { opacity: 0.2; }
 
   .cap-item.is-active {
     opacity: 1;
     color: #ffffff;
   }
 
-  /* ── Mobile ─────────────────────────────────────────────────────────────── */
+  /* ── Mobile layout (768px) ──────────────────────────────────────────────── */
   @media (max-width: 768px) {
-    /* Two-column: list left, description right — mirrors desktop intent */
     .cap-body {
       grid-template-columns: 1fr 38%;
       min-height: auto;
       gap: 24px;
-      align-items: end;        /* bottom-aligns both columns */
+      align-items: end;
       padding-top: 40px;
     }
 
-    /* Description: right column, anchored to the bottom, grows upward */
     .cap-left {
       grid-column: 2;
       grid-row: 1;
       order: 2;
       align-self: end;
       text-align: right;
-      min-height: 0;           /* no fixed height needed — list drives row height */
+      min-height: 0;
       padding-bottom: 4px;
     }
 
     .cap-description {
-      max-width: none;         /* remove 240px cap — let column width govern */
+      max-width: none;
       text-align: right;
     }
 
-    /* List: left column, left-aligned */
     .cap-list {
       grid-column: 1;
       grid-row: 1;
@@ -268,50 +278,51 @@ const capabilities = [
       cursor: pointer;
     }
 
-    .cap-item.is-active {
-      opacity: 1;
+    .cap-item.is-active { opacity: 1; }
+    .cap-item::after    { display: none; }
+  }
+
+  /* ── Scroll-pin carousel (≤500px) ───────────────────────────────────────── */
+  /* Wrapper becomes a tall spacer; section is position:sticky inside it.     */
+  /* JS reads scroll progress from the wrapper and advances categories.        */
+  @media (max-width: 500px) {
+    .cap-scroll-wrapper {
+      display: block;   /* back to block so it has layout */
+      position: relative;
+      /* var(--totalExtra) = 1300px, injected via define:vars */
+      height: calc(100vh + var(--totalExtra));
     }
 
-    /* No arrow indicator — active state shown by opacity highlight only */
-    .cap-item::after {
-      display: none;
+    .capabilities-section {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: unset; /* override the base calc(100vh + 48px) */
     }
   }
 
-  /* ── 1440px: proportional scale-down from 1522px baseline ─── */
+  /* ── Desktop scale-downs ────────────────────────────────────────────────── */
   @media (max-width: 1440px) {
-    .cap-item {
-      font-size: clamp(1.8rem, 3vw, 3rem);  /* clamp(1.9rem,3.2vw,3.2rem) × 0.94 */
-    }
+    .cap-item { font-size: clamp(1.8rem, 3vw, 3rem); }
   }
-
-  /* ── 1280px: proportional scale-down from 1440px ─── */
   @media (max-width: 1280px) {
-    .cap-item {
-      font-size: clamp(1.7rem, 2.8vw, 2.82rem);  /* max 3rem × 0.94 */
-    }
+    .cap-item { font-size: clamp(1.7rem, 2.8vw, 2.82rem); }
   }
-
-  /* ── 1024px: proportional scale-down from 1280px ─── */
   @media (max-width: 1024px) {
-    .cap-item {
-      font-size: clamp(1.85rem, 2.85vw, 2.9rem);  /* 2.65rem + 4px (user request) */
-    }
+    .cap-item { font-size: clamp(1.85rem, 2.85vw, 2.9rem); }
   }
 </style>
 
 <script>
   import gsap from 'gsap';
 
-  const section = document.querySelector<HTMLElement>('.capabilities-section');
-  const list    = document.getElementById('capList') as HTMLElement | null;
-  const descEl  = document.getElementById('capDescription') as HTMLElement | null;
+  const wrapper = document.getElementById('capScrollWrapper') as HTMLElement | null;
+  const list    = document.getElementById('capList')          as HTMLElement | null;
+  const descEl  = document.getElementById('capDescription')   as HTMLElement | null;
   const bgs     = document.querySelectorAll<HTMLElement>('.cap-bg');
 
   if (!list) throw new Error('Capabilities list not found');
 
-  // Ensure lr-clip CSS is available (BaseLayout injects it for desktop;
-  // we add it here as a guarantee for this component's dynamic usage).
   if (!document.querySelector('#cap-lr-css')) {
     const s = document.createElement('style');
     s.id = 'cap-lr-css';
@@ -327,23 +338,19 @@ const capabilities = [
   let activeItem: HTMLElement | null = null;
   let descTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /* ── Background crossfade (CSS class toggle) ──────────────────────────── */
+  /* ── Background crossfade ─────────────────────────────────────────────── */
   function activateBg(key: string | null): void {
     const target = key ?? 'default';
-    bgs.forEach((bg) => {
-      bg.classList.toggle('is-active', bg.dataset.cap === target);
-    });
+    bgs.forEach((bg) => bg.classList.toggle('is-active', bg.dataset.cap === target));
   }
 
   /* ── Description text swap — per-line clip reveal ────────────────────── */
   function setDescription(text: string | null): void {
     if (!descEl) return;
     if (descTimer) clearTimeout(descTimer);
-
     descEl.innerHTML = '';
     if (!text) return;
 
-    // Step 1: render measure spans
     const words = text.split(/\s+/).filter(w => w.length > 0);
     const measureSpans: HTMLElement[] = [];
     words.forEach((word, i) => {
@@ -354,10 +361,8 @@ const capabilities = [
       measureSpans.push(s);
       if (i < words.length - 1) descEl.appendChild(document.createTextNode(' '));
     });
+    void descEl.offsetHeight;
 
-    void descEl.offsetHeight; // force layout
-
-    // Step 2: group words by visual line
     const lineGroups: string[][] = [];
     let currentTop = -9999;
     let group: string[] = [];
@@ -365,35 +370,30 @@ const capabilities = [
       const top = s.offsetTop;
       if (Math.abs(top - currentTop) > 3) {
         if (group.length) lineGroups.push(group);
-        group = [];
-        currentTop = top;
+        group = []; currentTop = top;
       }
       group.push(s.textContent || '');
     });
     if (group.length) lineGroups.push(group);
 
-    // Step 3: rebuild as lr-clip / lr-inner per line
     descEl.innerHTML = '';
     lineGroups.forEach((lineWords, i) => {
       const clip  = document.createElement('div');
       clip.className = 'lr-clip';
       const inner = document.createElement('div');
       inner.className = 'lr-inner';
-      inner.style.transition =
-        `transform 0.6s cubic-bezier(0.42, 0, 0.24, 1) ${(i * 0.06).toFixed(2)}s`;
+      inner.style.transition = `transform 0.6s cubic-bezier(0.42,0,0.24,1) ${(i*0.06).toFixed(2)}s`;
       inner.textContent = lineWords.join(' ');
       clip.appendChild(inner);
       descEl.appendChild(clip);
     });
 
-    // Step 4: trigger reveal
     descTimer = setTimeout(() => {
-      descEl.querySelectorAll<HTMLElement>('.lr-clip')
-        .forEach(clip => clip.classList.add('lr-visible'));
+      descEl.querySelectorAll<HTMLElement>('.lr-clip').forEach(c => c.classList.add('lr-visible'));
     }, 16);
   }
 
-  /* ── Shared activate helper ───────────────────────────────────────────── */
+  /* ── Shared activate ──────────────────────────────────────────────────── */
   function activateItem(item: HTMLElement): void {
     if (item === activeItem) return;
     activeItem?.classList.remove('is-active');
@@ -404,12 +404,9 @@ const capabilities = [
     setDescription(item.dataset.desc ?? null);
   }
 
-  /* ── Item hover (desktop) ─────────────────────────────────────────────── */
-  items.forEach((item) => {
-    item.addEventListener('mouseenter', () => activateItem(item));
-  });
+  /* ── Desktop hover ────────────────────────────────────────────────────── */
+  items.forEach(item => item.addEventListener('mouseenter', () => activateItem(item)));
 
-  /* ── List leave (desktop only) ────────────────────────────────────────── */
   list.addEventListener('mouseleave', () => {
     if (window.innerWidth <= 768) return;
     activeItem?.classList.remove('is-active');
@@ -419,71 +416,32 @@ const capabilities = [
     setDescription(null);
   });
 
-  /* ── Mobile: tap to activate + first item active on load ─────────────── */
+  /* ── Mobile: tap + first-item default ────────────────────────────────── */
   if (window.innerWidth <= 768) {
-    const firstItem = items[0] as HTMLElement | undefined;
-    if (firstItem) activateItem(firstItem);
-
-    items.forEach((item) => {
-      item.addEventListener('click', () => activateItem(item));
-    });
+    const first = items[0] as HTMLElement | undefined;
+    if (first) activateItem(first);
+    items.forEach(item => item.addEventListener('click', () => activateItem(item)));
   }
 
   /* ════════════════════════════════════════════════════════════════════════
-     SCROLL-PIN CAROUSEL  ·  ≤430px only
+     SCROLL-PIN CAROUSEL  ·  ≤500px only
      ────────────────────────────────────────────────────────────────────────
-     Pure position:absolute approach — no position:fixed or sticky.
-     Every frame the GSAP ticker sets section.style.top = scrolled,
-     where scrolled = -wRect.top (how far the wrapper has scrolled above
-     the viewport). This keeps section.top - wRect.top = 0, so the section
-     visually stays at the viewport top throughout the pinned zone.
-
-     No fixed positioning = no Safari bug where html{overflow:clip} causes
-     fixed elements to position relative to the document, not the viewport.
+     The wrapper is already in the HTML template + CSS makes it the tall
+     scroll spacer and the section position:sticky. JS only reads scroll
+     progress from wrapper.getBoundingClientRect() and advances categories.
+     No DOM manipulation at runtime.
   ════════════════════════════════════════════════════════════════════════ */
-  if (window.innerWidth <= 430 && section) {
+  if (window.innerWidth <= 500 && wrapper) {
+    const SCROLL_PER_CAP = 260;
+    const totalExtra     = SCROLL_PER_CAP * (items.length - 1); // 1300
 
-    const SCROLL_PER_CAP = 260; // px of scroll per category (5 transitions = 1300px)
-    const totalExtra     = SCROLL_PER_CAP * (items.length - 1);
-    const vh             = window.innerHeight;
-
-    // ── 1. Wrapper: provides the scroll height spacer ──────────────────────
-    const wrapper = document.createElement('div');
-    wrapper.id    = 'capScrollWrapper';
-    // Height = one viewport (section's natural size) + extra scroll space
-    wrapper.style.cssText = `position:relative;height:${vh + totalExtra}px;`;
-    section.parentNode!.insertBefore(wrapper, section);
-    wrapper.appendChild(section);
-
-    // ── 2. Section: always position:absolute within wrapper ───────────────
-    // `top` is updated every frame to simulate pinning.
-    section.style.position  = 'absolute';
-    section.style.top       = '0';
-    section.style.left      = '0';
-    section.style.right     = '0';
-    section.style.height    = `${vh}px`;
-    section.style.minHeight = 'unset';
-
-    // ── 3. GSAP ticker: live-update top offset + advance categories ────────
-    // scrolled = how many px of the wrapper have passed above the viewport.
-    // Setting top = scrolled makes the section appear viewport-fixed:
-    //   section visual top = wRect.top + top = -scrolled + scrolled = 0  ✓
     let currentScrollIndex = 0;
 
     gsap.ticker.add(() => {
       const wRect   = wrapper.getBoundingClientRect();
       const scrolled = Math.max(0, -wRect.top);
-
-      // Clamp: before wrapper enters → top = 0; after it exits → top = totalExtra
-      const pinnedTop = Math.min(totalExtra, scrolled);
-      section.style.top = `${pinnedTop}px`;
-
-      // Map scroll progress → active category
-      const progress  = Math.min(1, scrolled / totalExtra);
-      const targetIdx = Math.min(
-        items.length - 1,
-        Math.floor(progress * items.length)
-      );
+      const progress = Math.min(1, scrolled / totalExtra);
+      const targetIdx = Math.min(items.length - 1, Math.floor(progress * items.length));
 
       if (targetIdx !== currentScrollIndex) {
         currentScrollIndex = targetIdx;
