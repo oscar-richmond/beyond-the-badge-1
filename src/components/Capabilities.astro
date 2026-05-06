@@ -303,9 +303,10 @@ const capabilities = [
 <script>
   import gsap from 'gsap';
 
-  const list        = document.getElementById('capList') as HTMLElement | null;
-  const descEl      = document.getElementById('capDescription') as HTMLElement | null;
-  const bgs         = document.querySelectorAll<HTMLElement>('.cap-bg');
+  const section = document.querySelector<HTMLElement>('.capabilities-section');
+  const list    = document.getElementById('capList') as HTMLElement | null;
+  const descEl  = document.getElementById('capDescription') as HTMLElement | null;
+  const bgs     = document.querySelectorAll<HTMLElement>('.cap-bg');
 
   if (!list) throw new Error('Capabilities list not found');
 
@@ -326,7 +327,7 @@ const capabilities = [
   let activeItem: HTMLElement | null = null;
   let descTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /* ── Background crossfade (CSS class toggle — mirrors About page) ─────── */
+  /* ── Background crossfade (CSS class toggle) ──────────────────────────── */
   function activateBg(key: string | null): void {
     const target = key ?? 'default';
     bgs.forEach((bg) => {
@@ -334,16 +335,15 @@ const capabilities = [
     });
   }
 
-  /* ── Description text swap — per-line clip reveal (matches homepage §) ─── */
+  /* ── Description text swap — per-line clip reveal ────────────────────── */
   function setDescription(text: string | null): void {
     if (!descEl) return;
     if (descTimer) clearTimeout(descTimer);
 
-    // Clear immediately so previous lines don't linger
     descEl.innerHTML = '';
     if (!text) return;
 
-    // ── Step 1: render measure spans so we can read offsetTop ────────────
+    // Step 1: render measure spans
     const words = text.split(/\s+/).filter(w => w.length > 0);
     const measureSpans: HTMLElement[] = [];
     words.forEach((word, i) => {
@@ -355,10 +355,9 @@ const capabilities = [
       if (i < words.length - 1) descEl.appendChild(document.createTextNode(' '));
     });
 
-    // Force layout so offsetTop is accurate
-    void descEl.offsetHeight;
+    void descEl.offsetHeight; // force layout
 
-    // ── Step 2: group words by visual line ───────────────────────────────
+    // Step 2: group words by visual line
     const lineGroups: string[][] = [];
     let currentTop = -9999;
     let group: string[] = [];
@@ -373,7 +372,7 @@ const capabilities = [
     });
     if (group.length) lineGroups.push(group);
 
-    // ── Step 3: rebuild as lr-clip / lr-inner per line ───────────────────
+    // Step 3: rebuild as lr-clip / lr-inner per line
     descEl.innerHTML = '';
     lineGroups.forEach((lineWords, i) => {
       const clip  = document.createElement('div');
@@ -387,33 +386,30 @@ const capabilities = [
       descEl.appendChild(clip);
     });
 
-    // ── Step 4: trigger reveal on the next frame ─────────────────────────
+    // Step 4: trigger reveal
     descTimer = setTimeout(() => {
       descEl.querySelectorAll<HTMLElement>('.lr-clip')
         .forEach(clip => clip.classList.add('lr-visible'));
     }, 16);
   }
 
-  /* ── Item hover ───────────────────────────────────────────────────────── */
+  /* ── Shared activate helper ───────────────────────────────────────────── */
+  function activateItem(item: HTMLElement): void {
+    if (item === activeItem) return;
+    activeItem?.classList.remove('is-active');
+    item.classList.add('is-active');
+    activeItem = item;
+    list.classList.add('has-hover');
+    activateBg(item.dataset.cap ?? null);
+    setDescription(item.dataset.desc ?? null);
+  }
+
+  /* ── Item hover (desktop) ─────────────────────────────────────────────── */
   items.forEach((item) => {
-    item.addEventListener('mouseenter', () => {
-      if (activeItem === item) return;
-
-      // Deactivate previous
-      activeItem?.classList.remove('is-active');
-
-      // Activate current
-      item.classList.add('is-active');
-      activeItem = item;
-
-      list.classList.add('has-hover');
-      activateBg(item.dataset.cap ?? null);
-      setDescription(item.dataset.desc ?? null);
-    });
+    item.addEventListener('mouseenter', () => activateItem(item));
   });
 
-  /* ── List leave ───────────────────────────────────────────────────────── */
-  // On touch devices the list-leave must not clear the tapped-active state
+  /* ── List leave (desktop only) ────────────────────────────────────────── */
   list.addEventListener('mouseleave', () => {
     if (window.innerWidth <= 768) return;
     activeItem?.classList.remove('is-active');
@@ -423,28 +419,66 @@ const capabilities = [
     setDescription(null);
   });
 
-  /* ── Mobile: tap to activate + first item active on load ───────────────────── */
+  /* ── Mobile: tap to activate + first item active on load ─────────────── */
   if (window.innerWidth <= 768) {
-    // Activate first item by default
     const firstItem = items[0] as HTMLElement | undefined;
-    if (firstItem) {
-      firstItem.classList.add('is-active');
-      activeItem = firstItem;
-      list.classList.add('has-hover');
-      activateBg(firstItem.dataset.cap ?? null);
-      setDescription(firstItem.dataset.desc ?? null);
-    }
+    if (firstItem) activateItem(firstItem);
 
-    // Tap activates — identical result to hover on desktop
     items.forEach((item) => {
-      item.addEventListener('click', () => {
-        if (activeItem === item) return;
-        activeItem?.classList.remove('is-active');
-        item.classList.add('is-active');
-        activeItem = item;
-        activateBg(item.dataset.cap ?? null);
-        setDescription(item.dataset.desc ?? null);
-      });
+      item.addEventListener('click', () => activateItem(item));
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     SCROLL-PIN CAROUSEL  ·  ≤430px only
+     ────────────────────────────────────────────────────────────────────────
+     Wraps the section in a tall scroll container so the section pins
+     (position:sticky) while the user scrolls through each category.
+     Uses the GSAP ticker (same pattern as Services) — works with Lenis.
+     Nothing above 430px is touched.
+  ════════════════════════════════════════════════════════════════════════ */
+  if (window.innerWidth <= 430 && section) {
+
+    // px of scroll consumed per category transition (5 transitions = 1300px total)
+    const SCROLL_PER_CAP = 260;
+    const totalExtra     = SCROLL_PER_CAP * (items.length - 1);
+
+    // ── 1. Create tall scroll wrapper ─────────────────────────────────────
+    const wrapper = document.createElement('div');
+    wrapper.id    = 'capScrollWrapper';
+    wrapper.style.cssText = `position:relative;height:calc(100vh + ${totalExtra}px);`;
+    section.parentNode!.insertBefore(wrapper, section);
+    wrapper.appendChild(section);
+
+    // ── 2. Pin the section within the wrapper ─────────────────────────────
+    // Override inline so it beats any class-level CSS without touching the
+    // stylesheet (nothing above 430px is altered).
+    section.style.position  = 'sticky';
+    section.style.top       = '0';
+    section.style.height    = '100vh';
+    section.style.minHeight = 'unset';
+
+    // ── 3. GSAP ticker: map scroll progress → active category ─────────────
+    // Uses getBoundingClientRect() which is updated by Lenis every RAF frame.
+    let currentScrollIndex = 0; // item 0 already activated by mobile init above
+
+    gsap.ticker.add(() => {
+      const wRect   = wrapper.getBoundingClientRect();
+      // Pixels of the wrapper that have scrolled above the viewport top
+      const scrolled = Math.max(0, -wRect.top);
+      const progress = Math.min(1, scrolled / totalExtra);
+
+      // Spread 0→1 evenly across all items
+      const targetIdx = Math.min(
+        items.length - 1,
+        Math.floor(progress * items.length)
+      );
+
+      if (targetIdx !== currentScrollIndex) {
+        currentScrollIndex = targetIdx;
+        const target = items[targetIdx] as HTMLElement;
+        if (target) activateItem(target);
+      }
     });
   }
 </script>
