@@ -1826,29 +1826,32 @@ const storiesData = testimonials.map(t => ({
 
       if (target !== current) {
         wheelLocked = true;
-        setTimeout(() => { wheelLocked = false; }, 700); // 700ms debounce
+        setTimeout(() => { wheelLocked = false; }, 700);
 
         const snapY = trackTop + ((target + 0.5) / n) * totalTravel;
 
-        // Use lenis.scrollTo({immediate:true}) if Lenis is running (desktop).
-        // window.scrollTo is intercepted by Lenis and converted to a smooth
-        // 1.2s animation — during which onScroll fires at intermediate positions
-        // and causes jitter. immediate:true bypasses the animation entirely.
+        // lenis.scrollTo(immediate:true) has an early-return guard that skips
+        // the snap when targetScroll already equals snapY, leaving any in-progress
+        // animation running. Its reset() also reads actualScroll before the DOM
+        // has committed the new position on some frames.
+        // Safest approach: lenis.stop() kills velocity + animation entirely,
+        // then we set scrollTop directly (raw DOM, no Lenis interception),
+        // then lenis.start() re-enables in the next RAF once scroll events settle.
         const lenis = (window as any).__lenis;
         if (lenis) {
-          lenis.scrollTo(snapY, { immediate: true });
+          lenis.stop();
+          window.scrollTo({ top: snapY, behavior: 'instant' });
+          requestAnimationFrame(() => lenis.start());
         } else {
           window.scrollTo({ top: snapY, behavior: 'auto' });
         }
 
-        // snapTarget guards onScroll for the full wheelLocked window so no
-        // residual scroll events can re-activate the wrong slot
         snapTarget = target;
         setTimeout(() => { snapTarget = -1; }, 700);
 
         activate(target);
       } else {
-        // At edge — scroll past the section so the user isn't trapped
+        // At edge — scroll past the section so user isn't trapped
         const lenis = (window as any).__lenis;
         if (e.deltaY > 0) {
           const exitY = trackTop + totalTravel + 80;
