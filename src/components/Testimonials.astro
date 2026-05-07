@@ -1410,6 +1410,10 @@ const storiesData = testimonials.map(t => ({
   let hoverTimer: ReturnType<typeof setTimeout> | null = null;
   let scrollPaused = false; // suspended during sidebar expand/collapse animation
   let isExpanded   = window.innerWidth <= 768; // at ≤768px all 7 testimonials are in the carousel by default
+  // After a swipe snap, lock onScroll to only activate this index for 300ms
+  // (prevents iOS residual scroll events from re-activating the wrong slot).
+  // Unlike scrollPaused, onScroll still RUNS — the carousel feels unchanged.
+  let snapTarget   = -1;
 
   // ─── Activate a testimonial ───────────────────────────────────────────────
   function activate(i: number) {
@@ -1449,6 +1453,10 @@ const storiesData = testimonials.map(t => ({
     // dynamically on expand/collapse so each slot stays the same size (~125vh).
     const n   = isExpanded ? 7 : 5;
     const idx = Math.min(n - 1, Math.floor(progress * n));
+
+    // If a swipe snap is in progress, ignore any index that isn’t the target
+    // (iOS residual scroll events can push idx off by ±1 for a few frames).
+    if (snapTarget >= 0 && idx !== snapTarget) return;
 
     activate(idx);
   }
@@ -1755,14 +1763,13 @@ const storiesData = testimonials.map(t => ({
 
       window.scrollTo({ top: snapY, behavior: 'auto' });
 
-      // Block onScroll for 200ms to prevent iOS residual scroll events from
-      // re-activating the wrong slot after our instant jump. The switching flag
-      // guards for the first 120ms (while activate's setTimeout runs); scrollPaused
-      // covers the 120-200ms window after switching clears but before iOS settles.
-      scrollPaused = true;
-      setTimeout(() => { scrollPaused = false; }, 200);
+      // Protect against iOS residual scroll events re-activating the wrong slot.
+      // snapTarget locks onScroll to only allow the target slot for 300ms.
+      // Unlike scrollPaused=true, onScroll still RUNS every frame — it just
+      // ignores any index that isn't the intended target during the window.
+      snapTarget = target;
+      setTimeout(() => { snapTarget = -1; }, 300);
 
-      // Update the UI
       activate(target);
     }, { passive: true });
   }
