@@ -1412,6 +1412,11 @@ const storiesData = testimonials.map(t => ({
   let isExpanded   = window.innerWidth <= 768; // at ≤768px all 7 testimonials are in the carousel by default
 
   // ─── Activate a testimonial ───────────────────────────────────────────────
+  // IMPORTANT: new quote gets is-active (→ pointer-events:auto) IMMEDIATELY so
+  // a tap on its "Full Story +" button is never lost during the crossfade window.
+  // The old quote's is-active is removed after the same 120ms stagger so the
+  // CSS opacity transition still creates a clean crossfade — but the new quote's
+  // buttons are live from the moment activate() is called.
   function activate(i: number) {
     if (i === current || switching) return;
     // Safety: guard against out-of-bounds indices from scroll driver drift
@@ -1420,14 +1425,17 @@ const storiesData = testimonials.map(t => ({
 
     btns.forEach((b, idx) => b.classList.toggle('is-active', idx === i));
 
-    photos[current].classList.remove('is-active');
-    quotes[current].classList.remove('is-active');
-
+    const prev = current;
     current = i;
 
+    // Add new immediately — pointer-events:auto is live right away
+    photos[i].classList.add('is-active');
+    quotes[i].classList.add('is-active');
+
+    // Remove old after stagger — crossfade plays, switching gate clears
     setTimeout(() => {
-      photos[i].classList.add('is-active');
-      quotes[i].classList.add('is-active');
+      photos[prev].classList.remove('is-active');
+      quotes[prev].classList.remove('is-active');
       switching = false;
     }, 120);
   }
