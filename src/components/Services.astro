@@ -48,6 +48,7 @@ const VIEWER_H = 375;
           <div
             class="services__item reveal"
             data-index={String(index)}
+            data-image={service.image}
             style={`transition-delay: ${index * 0.1}s;`}
           >
             <div class="services__item-left">
@@ -73,6 +74,11 @@ const VIEWER_H = 375;
         </div>
       ))}
     </div>
+  </div>
+
+  {/* Mobile tap image viewer — pointer-events:none so scroll is never blocked */}
+  <div class="services__tap-viewer" id="servicesTapViewer" aria-hidden="true">
+    <img src="" alt="" draggable="false" />
   </div>
 </section>
 
@@ -292,11 +298,46 @@ const VIEWER_H = 375;
 
     .services__beyond-img { height: 37px; }
 
-    /* Viewer disabled on mobile — touch has no hover */
+    /* Desktop cursor-following viewer: disabled on mobile */
     .services__viewer { display: none; }
 
     /* Cancel the double-padding rule — gap is now owned by services padding-top */
     .services__header { margin-top: 0; }
+
+    /* ── Mobile tap image viewer ───────────────────────────────────────── */
+    /* position:fixed escapes ancestor stacking contexts.
+       pointer-events:none on the whole element means the transparent area
+       never blocks scroll or taps — only JS-wired row taps trigger it. */
+    .services__tap-viewer {
+      display: block;
+      position: fixed;
+      /* Slightly right of centre so it feels like it's emerging from content */
+      top: 42%;
+      right: 12px;
+      transform: translateY(-50%);
+      width: min(200px, 46vw);
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      border-radius: 2px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      z-index: 90; /* above section content, below nav */
+      will-change: opacity;
+    }
+
+    .services__tap-viewer.is-visible {
+      opacity: 1;
+    }
+
+    .services__tap-viewer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
   }
 
   /* ── 1440px: proportional scale-down from 1522px baseline ─── */
@@ -468,6 +509,59 @@ const VIEWER_H = 375;
       // Reset immediately (not in onComplete) so fast re-entry snaps vs slides correctly
       currentIndex = -1;
     });
+  }
+
+  // ── Mobile tap-to-show image overlay (≤768px, touch devices) ─────────────
+  // pointer-events:none on the viewer means it never blocks scroll.
+  // Row taps are the only way to show/switch; document tap dismisses.
+  if (isTouch && items.length) {
+    const tapViewer = document.getElementById('servicesTapViewer') as HTMLElement | null;
+    const tapImg    = tapViewer?.querySelector<HTMLImageElement>('img');
+
+    if (tapViewer && tapImg) {
+      let activeIndex = -1;
+      let switching   = false;
+
+      function showForIndex(i: number) {
+        tapImg!.src = (items[i] as HTMLElement).dataset.image ?? '';
+        tapViewer!.classList.add('is-visible');
+        activeIndex = i;
+      }
+
+      function hideTapViewer() {
+        tapViewer!.classList.remove('is-visible');
+        activeIndex = -1;
+        switching   = false;
+      }
+
+      items.forEach((item, i) => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation(); // prevent document dismiss listener from also firing
+
+          if (switching) return;
+
+          if (activeIndex === i) {
+            // Same row tapped again — dismiss
+            hideTapViewer();
+          } else if (activeIndex === -1) {
+            // Nothing visible — fade in
+            showForIndex(i);
+          } else {
+            // Different row — fade out current, then fade in new
+            switching = true;
+            tapViewer!.classList.remove('is-visible');
+            setTimeout(() => {
+              if (switching) { showForIndex(i); switching = false; }
+            }, 200); // matches the 0.25s fade-out, trimmed slightly for snappiness
+          }
+        });
+      });
+
+      // Tap anywhere outside a row → dismiss
+      document.addEventListener('click', () => {
+        if (activeIndex !== -1 && !switching) hideTapViewer();
+      });
+    }
   }
 
   // ── Scroll-linked body background + Testimonials reveal ─────────────────
