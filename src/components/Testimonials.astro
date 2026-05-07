@@ -1827,21 +1827,11 @@ const storiesData = testimonials.map(t => ({
       const trackTop    = track.getBoundingClientRect().top + window.scrollY;
       const totalTravel = track.offsetHeight - window.innerHeight;
 
-      // Sync current to actual scroll position before computing target.
-      // onScroll is disabled on desktop so current may be stale if Lenis
-      // had previously moved the page (e.g. entering the section with momentum).
-      // Without this sync the first wheel gesture reads the wrong current and
-      // snaps 2+ slots ahead instead of just one.
-      const scrolledNow = -(track.getBoundingClientRect().top);
-      const syncIdx     = Math.min(n - 1, Math.max(0, Math.floor((scrolledNow / totalTravel) * n)));
-      if (syncIdx !== current && !switching) {
-        // Silent sync: update class state instantly (no crossfade animation)
-        photos.forEach((p, i) => p.classList.toggle('is-active', i === syncIdx));
-        quotes.forEach((q, i) => q.classList.toggle('is-active', i === syncIdx));
-        btns.forEach((b, i)   => b.classList.toggle('is-active', i === syncIdx));
-        current = syncIdx;
-      }
-
+      // Do NOT sync current from scroll position here.
+      // If Lenis scrolled the page mid-section before our handler intercepted,
+      // syncing current to the Lenis position would then add +1 on top of that,
+      // causing a 2-3 slot jump. current must always be the last slot the USER
+      // deliberately activated (via a previous wheel snap or initial load = 0).
       const target = e.deltaY > 0
         ? Math.min(n - 1, current + 1)   // wheel down → next
         : Math.max(0,      current - 1);  // wheel up   → prev
@@ -1859,6 +1849,10 @@ const storiesData = testimonials.map(t => ({
         // Safest approach: lenis.stop() kills velocity + animation entirely,
         // then we set scrollTop directly (raw DOM, no Lenis interception),
         // then lenis.start() re-enables in the next RAF once scroll events settle.
+        // Set snapTarget BEFORE scrollTo so onScroll sees it immediately
+        snapTarget = target;
+        setTimeout(() => { snapTarget = -1; }, 700);
+
         const lenis = (window as any).__lenis;
         if (lenis) {
           lenis.stop();
@@ -1867,9 +1861,6 @@ const storiesData = testimonials.map(t => ({
         } else {
           window.scrollTo({ top: snapY, behavior: 'auto' });
         }
-
-        snapTarget = target;
-        setTimeout(() => { snapTarget = -1; }, 700);
 
         activate(target);
       } else {
