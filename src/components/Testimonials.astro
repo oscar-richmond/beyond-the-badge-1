@@ -1799,54 +1799,55 @@ const storiesData = testimonials.map(t => ({
   }
 
   // ── Wheel/trackpad snap (all breakpoints) ────────────────────────────────────
-  // Strategy: separate "snap-blocking" from "scroll-blocking".
+  // Rules that must hold simultaneously:
+  //   1. One physical gesture = exactly one testimonial advance.
+  //   2. The page MUST NOT drift out of the sticky zone (always preventDefault).
+  //   3. The user MUST NOT feel permanently stuck between gestures.
   //
-  // The problem with a fixed debounce: Mac trackpad momentum emits wheel events
-  // for 1-3 seconds. Calling e.preventDefault() on ALL of them leaves the user
-  // completely stuck. But NOT calling it lets Lenis advance the page further.
-  //
-  // Solution: once we have snapped for a gesture, we stop blocking scroll
-  // (no preventDefault / stopPropagation on momentum tail), letting Lenis handle
-  // the remaining momentum naturally. onScroll is disabled on desktop so Lenis
-  // drifting the page slightly does NOT advance the testimonial. We only block
-  // the SNAP action (gestureSnapped guard) using timestamp-gap detection:
-  // if the gap between two wheel events is > GESTURE_END_MS, it's a new gesture.
+  // Solution: timestamp-gap gesture detection (no timers, no clearTimeout races).
+  //   • Every wheel event in the zone calls preventDefault + stopPropagation.
+  //     This is the only way to stop Lenis from drifting the page out of zone.
+  //   • "New gesture" = gap between THIS event and the PREVIOUS event > 200ms.
+  //     Mac trackpad momentum events arrive every ~10-30ms.
+  //     A deliberate new swipe always has a gap of several hundred ms.
+  //   • gestureSnapped=true for entire gesture + momentum tail.
+  //     Reset to false on the FIRST event whose inter-event gap > 200ms.
   {
     const stickyWheel    = document.querySelector<HTMLElement>('.testimonials-sticky');
-    const GESTURE_END_MS = 300; // gap this long = new deliberate gesture
+    const GESTURE_END_MS = 200; // inter-event gap that signals a new deliberate gesture
     let   gestureSnapped = false;
     let   lastWheelTime  = 0;
 
     stickyWheel?.addEventListener('wheel', (e: WheelEvent) => {
       if (!track) return;
 
-      const rect = track.getBoundingClientRect();
+      const rect   = track.getBoundingClientRect();
       const inZone = rect.top <= 0 && rect.bottom >= window.innerHeight;
 
-      // Outside the sticky zone → let Lenis handle freely, reset snap state
       if (!inZone) {
+        // Outside zone: reset and let the page scroll freely
         gestureSnapped = false;
+        lastWheelTime  = 0;
         return;
       }
 
-      // ── Gesture-new detection ────────────────────────────────────────────
-      const now = Date.now();
-      const gap = now - lastWheelTime;
-      lastWheelTime = now;
-      if (gap > GESTURE_END_MS) {
-        gestureSnapped = false; // enough silence = new gesture
-      }
-
-      if (gestureSnapped) {
-        // Already snapped for this gesture.
-        // Do NOT preventDefault — let momentum reach Lenis naturally.
-        // onScroll is disabled on desktop so no testimonial will advance.
-        return;
-      }
-
-      // ── First event of a new gesture: take ownership ─────────────────────
+      // ALWAYS take ownership of scroll in the zone — no Lenis drift allowed
       e.preventDefault();
       e.stopPropagation();
+
+      // Gap-based gesture detection (no timers)
+      const now = Date.now();
+      const gap = lastWheelTime ? now - lastWheelTime : Infinity;
+      lastWheelTime = now;
+
+      if (gap > GESTURE_END_MS) {
+        gestureSnapped = false; // Long silence = this is a new deliberate gesture
+      }
+
+      if (gestureSnapped) return; // Same gesture's momentum tail — already snapped
+
+      // ── First event of a new gesture: snap ───────────────────────────────
+      gestureSnapped = true;
 
       const n           = isExpanded ? 7 : 5;
       const trackTop    = track.getBoundingClientRect().top + window.scrollY;
@@ -1854,8 +1855,6 @@ const storiesData = testimonials.map(t => ({
       const target      = e.deltaY > 0
         ? Math.min(n - 1, current + 1)
         : Math.max(0,      current - 1);
-
-      gestureSnapped = true; // block further snaps in this gesture
 
       if (target !== current) {
         const snapY = trackTop + ((target + 0.5) / n) * totalTravel;
@@ -1874,7 +1873,7 @@ const storiesData = testimonials.map(t => ({
 
         activate(target);
       } else {
-        // At edge — scroll past the section so user isn't trapped
+        // At edge — release the section so the user can continue scrolling
         const lenis = (window as any).__lenis;
         if (e.deltaY > 0) {
           const exitY = trackTop + totalTravel + 80;
