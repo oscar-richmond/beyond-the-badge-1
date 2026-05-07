@@ -60,6 +60,10 @@ const VIEWER_H = 375;
               </h3>
             </div>
             <span class="services__category">{service.category}</span>
+            {/* Per-row tap image — position:absolute relative to this row */}
+            <div class="services__row-image" aria-hidden="true">
+              <img src={service.image} alt="" draggable="false" />
+            </div>
           </div>
           <hr class="services__divider" />
         </>
@@ -74,11 +78,6 @@ const VIEWER_H = 375;
         </div>
       ))}
     </div>
-  </div>
-
-  {/* Mobile tap image viewer — pointer-events:none so scroll is never blocked */}
-  <div class="services__tap-viewer" id="servicesTapViewer" aria-hidden="true">
-    <img src="" alt="" draggable="false" />
   </div>
 </section>
 
@@ -244,6 +243,11 @@ const VIEWER_H = 375;
     display: none;
   }
 
+  /* Per-row tap image overlay — hidden on desktop; shown only at ≤768px */
+  .services__row-image {
+    display: none;
+  }
+
   /* Strip — no CSS transition; GSAP drives all animation for reliability */
   .services__viewer-strip {
     display: flex;
@@ -304,33 +308,43 @@ const VIEWER_H = 375;
     /* Cancel the double-padding rule — gap is now owned by services padding-top */
     .services__header { margin-top: 0; }
 
-    /* ── Mobile tap image viewer ───────────────────────────────────────── */
-    /* position:fixed escapes ancestor stacking contexts.
-       pointer-events:none on the whole element means the transparent area
-       never blocks scroll or taps — only JS-wired row taps trigger it. */
-    .services__tap-viewer {
+    /* ── Per-row tap image overlay ─────────────────────────────────────── */
+    /* position:absolute anchors each image to its own row so it scrolls
+       with the page. pointer-events:none means the overlay never blocks
+       scroll or taps — only JS-wired row taps trigger show/hide. */
+    .services__row-image {
       display: block;
-      position: fixed;
-      /* Slightly right of centre so it feels like it's emerging from content */
-      top: 42%;
-      right: 12px;
-      transform: translateY(-50%);
-      width: min(200px, 46vw);
+      position: absolute;
+      /* Slightly right of centre — feels anchored to its row content */
+      left: 55%;
+      top: 50%;
+      width: min(190px, 46vw);
       aspect-ratio: 4 / 5;
       overflow: hidden;
       border-radius: 2px;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.25s ease;
-      z-index: 90; /* above section content, below nav */
+      /* z-index relative to row stacking context — JS raises parent item
+         to z-index:5 when active so the image paints above adjacent rows */
+      z-index: 2;
       will-change: opacity;
     }
 
-    .services__tap-viewer.is-visible {
+    /* Alternating rotation per row — same angle every time it's tapped.
+       nth-of-type counts <div> children only, ignoring <hr> dividers. */
+    .services__item:nth-of-type(odd)  .services__row-image {
+      transform: translateY(-50%) rotate(5deg);
+    }
+    .services__item:nth-of-type(even) .services__row-image {
+      transform: translateY(-50%) rotate(-5deg);
+    }
+
+    .services__row-image.is-visible {
       opacity: 1;
     }
 
-    .services__tap-viewer img {
+    .services__row-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -512,24 +526,29 @@ const VIEWER_H = 375;
   }
 
   // ── Mobile tap-to-show image overlay (≤768px, touch devices) ─────────────
-  // pointer-events:none on the viewer means it never blocks scroll.
-  // Row taps are the only way to show/switch; document tap dismisses.
+  // Each row has its own .services__row-image (position:absolute, pre-loaded).
+  // pointer-events:none on the overlay — scroll and outside taps pass through.
+  // The active row's z-index is raised to 5 so its image paints above siblings.
   if (isTouch && items.length) {
-    const tapViewer = document.getElementById('servicesTapViewer') as HTMLElement | null;
-    const tapImg    = tapViewer?.querySelector<HTMLImageElement>('img');
+    const rowImages = Array.from(
+      document.querySelectorAll<HTMLElement>('.services__row-image')
+    );
 
-    if (tapViewer && tapImg) {
+    if (rowImages.length) {
       let activeIndex = -1;
       let switching   = false;
 
       function showForIndex(i: number) {
-        tapImg!.src = (items[i] as HTMLElement).dataset.image ?? '';
-        tapViewer!.classList.add('is-visible');
+        rowImages[i].classList.add('is-visible');
+        (items[i] as HTMLElement).style.zIndex = '5'; // rise above sibling rows
         activeIndex = i;
       }
 
       function hideTapViewer() {
-        tapViewer!.classList.remove('is-visible');
+        rowImages.forEach((img, i) => {
+          img.classList.remove('is-visible');
+          (items[i] as HTMLElement).style.zIndex = '';
+        });
         activeIndex = -1;
         switching   = false;
       }
@@ -549,7 +568,10 @@ const VIEWER_H = 375;
           } else {
             // Different row — fade out current, then fade in new
             switching = true;
-            tapViewer!.classList.remove('is-visible');
+            const prevIdx = activeIndex;
+            rowImages[prevIdx].classList.remove('is-visible');
+            (items[prevIdx] as HTMLElement).style.zIndex = '';
+            activeIndex = -1;
             setTimeout(() => {
               if (switching) { showForIndex(i); switching = false; }
             }, 200); // matches the 0.25s fade-out, trimmed slightly for snappiness
