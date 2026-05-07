@@ -1707,6 +1707,48 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
+  // ── Mobile swipe-to-advance: any vertical swipe on the sticky panel ──────────
+  // Instead of requiring the user to scroll a fixed distance, a single swipe
+  // (any size ≥5px) snaps to the exact scroll position for the next/prev
+  // testimonial. scrollPaused stops the scroll driver fighting the snap.
+  if (tMobile) {
+    const stickyEl = document.querySelector<HTMLElement>('.testimonials-sticky');
+    let swipeStartY = 0;
+    let swipeStartX = 0;
+
+    stickyEl?.addEventListener('touchstart', (e: TouchEvent) => {
+      swipeStartY = e.touches[0].clientY;
+      swipeStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    stickyEl?.addEventListener('touchend', (e: TouchEvent) => {
+      const dy = swipeStartY - e.changedTouches[0].clientY; // + = swipe up = advance
+      const dx = Math.abs(swipeStartX - e.changedTouches[0].clientX);
+
+      // Ignore: taps (<5px), horizontal swipes, or when no track
+      if (Math.abs(dy) < 5 || dx > Math.abs(dy) || !track) return;
+
+      const n      = isExpanded ? 7 : 5;
+      const target = dy > 0
+        ? Math.min(n - 1, current + 1)   // swipe up   → next testimonial
+        : Math.max(0,      current - 1);  // swipe down → prev testimonial
+
+      if (target === current) return; // already at first/last — let page scroll normally
+
+      // Calculate exact scroll position for the target slot.
+      // Land 1px past the slot boundary so onScroll's Math.floor picks up target reliably.
+      const trackTop     = track.getBoundingClientRect().top + window.scrollY;
+      const totalTravel  = track.offsetHeight - window.innerHeight;
+      const targetScrollY = trackTop + (target / n) * totalTravel + 1;
+
+      // Pause the scroll driver for the duration of the smooth snap (~600ms)
+      scrollPaused = true;
+      setTimeout(() => { scrollPaused = false; }, 700);
+
+      window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+    }, { passive: true });
+  }
+
   // ── Campaign video modal (Stephanie Wenborn #1 and Niamh Bryne #3) ─────────────────────
   // Sources are driven by data-video-webm / data-video-mp4 on each .t-play-btn so the same
   // modal element serves both testimonials without duplicating markup.
