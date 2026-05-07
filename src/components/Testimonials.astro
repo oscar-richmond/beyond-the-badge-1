@@ -466,6 +466,10 @@ const storiesData = testimonials.map(t => ({
     /* Explicit height so position:absolute quotes have a containing block
        and the stage never reflows when switching testimonials. */
     height: clamp(360px, 46vh, 540px);
+    /* Chrome: touch-action:manipulation on the stage means the browser fires
+       click on child buttons without gesture-based suppression, even when the
+       parent .testimonials-sticky has touchstart/touchend listeners. */
+    touch-action: manipulation;
   }
 
   .t-quote {
@@ -1770,7 +1774,18 @@ const storiesData = testimonials.map(t => ({
       // Unlike scrollPaused=true, onScroll still RUNS every frame — it just
       // ignores any index that isn't the intended target during the window.
       snapTarget = target;
-      setTimeout(() => { snapTarget = -1; }, 300);
+      // Chrome: scroll momentum can drift the page after our instant snap.
+      // snapTarget blocks wrong-slot activations for 300ms, but after 300ms
+      // the guard clears and onScroll may activate the wrong slot if the page
+      // settled off-target. Fix: re-snap to the correct position BEFORE the
+      // guard clears so onScroll always finds the right slot on release.
+      setTimeout(() => {
+        const trackTop2    = track.getBoundingClientRect().top + window.scrollY;
+        const totalTravel2 = track.offsetHeight - window.innerHeight;
+        const n2           = isExpanded ? 7 : 5;
+        window.scrollTo({ top: trackTop2 + ((target + 0.5) / n2) * totalTravel2, behavior: 'auto' });
+        snapTarget = -1;
+      }, 300);
 
       activate(target);
     }, { passive: true });
