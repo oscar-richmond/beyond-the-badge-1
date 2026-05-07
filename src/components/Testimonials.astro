@@ -950,6 +950,8 @@ const storiesData = testimonials.map(t => ({
     display: inline-flex;
     align-items: center;
     margin-top: 40px;
+    /* iOS: suppress click-delay and prevent parent touchstart listener from swallowing the tap */
+    touch-action: manipulation;
     font-family: var(--font-sans);
     font-variation-settings: normal;
     font-size: 0.8rem;
@@ -1955,26 +1957,10 @@ const storiesData = testimonials.map(t => ({
   }
 
   // Bind story buttons — index matches testimonial array order.
-  // On mobile, touchend fires directly on the button BEFORE the parent swipe
-  // handler can interfere. We preventDefault() to stop the 300ms synthesised
-  // click from double-firing. The click listener handles desktop fallback.
+  // touch-action:manipulation (set in CSS) tells iOS to fire the click event
+  // immediately without gesture-based suppression, so the parent swipe handler's
+  // touchstart listener cannot interfere. click is the only event needed.
   document.querySelectorAll<HTMLButtonElement>('.t-story-btn').forEach((btn, idx) => {
-    let storyTouchStartY = 0;
-
-    btn.addEventListener('touchstart', (e: TouchEvent) => {
-      storyTouchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    btn.addEventListener('touchend', (e: TouchEvent) => {
-      // Only treat as a tap if finger barely moved (<30px) — not a scroll
-      // 30px: large enough for natural press motion, small enough to exclude scroll
-      const moved = Math.abs(e.changedTouches[0].clientY - storyTouchStartY);
-      if (moved > 30) return;
-      e.preventDefault(); // stops synthesised click → no double-fire
-      openFsModal(idx);
-    }, { passive: false });
-
-    // Desktop fallback (no touch events on desktop)
     btn.addEventListener('click', () => openFsModal(idx));
   });
 
