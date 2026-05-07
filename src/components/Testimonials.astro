@@ -1755,8 +1755,14 @@ const storiesData = testimonials.map(t => ({
 
       window.scrollTo({ top: snapY, behavior: 'auto' });
 
-      // Update the UI — safe to call after scrollTo because activate() guards
-      // against duplicate calls with (i === current) check
+      // Block onScroll for 200ms to prevent iOS residual scroll events from
+      // re-activating the wrong slot after our instant jump. The switching flag
+      // guards for the first 120ms (while activate's setTimeout runs); scrollPaused
+      // covers the 120-200ms window after switching clears but before iOS settles.
+      scrollPaused = true;
+      setTimeout(() => { scrollPaused = false; }, 200);
+
+      // Update the UI
       activate(target);
     }, { passive: true });
   }
@@ -1953,9 +1959,10 @@ const storiesData = testimonials.map(t => ({
     }, { passive: true });
 
     btn.addEventListener('touchend', (e: TouchEvent) => {
-      // Only treat as a tap if finger barely moved (<12px) — not a scroll
+      // Only treat as a tap if finger barely moved (<30px) — not a scroll
+      // 30px: large enough for natural press motion, small enough to exclude scroll
       const moved = Math.abs(e.changedTouches[0].clientY - storyTouchStartY);
-      if (moved > 12) return;
+      if (moved > 30) return;
       e.preventDefault(); // stops synthesised click → no double-fire
       openFsModal(idx);
     }, { passive: false });
