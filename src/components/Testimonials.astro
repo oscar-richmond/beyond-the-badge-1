@@ -1167,8 +1167,10 @@ const storiesData = testimonials.map(t => ({
       width: 100%;
     }
     /* Quotes: opacity crossfade — elements stay in DOM for JS line-reveal measurement */
-    .t-quote         { position: absolute; inset: 0; width: 100%; opacity: 0; display: block; }
-    .t-quote.is-active { opacity: 1; }
+    /* pointer-events:none on inactive quotes prevents their invisible buttons from
+       intercepting taps that visually land on the active quote's buttons. */
+    .t-quote         { position: absolute; inset: 0; width: 100%; opacity: 0; display: block; pointer-events: none; }
+    .t-quote.is-active { opacity: 1; pointer-events: auto; }
     /* Play button: in-flow inside btn-row */
     .t-play-btn {
       position: relative;
