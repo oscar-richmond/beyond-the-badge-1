@@ -6,7 +6,7 @@
   <!-- Editorial brand statement -->
   <div class="hero__text container">
     <p class="hero__statement">
-      At <em>Beyond the Badge</em>, we believe cultural<br>relevance isn't earned through logos.
+      At <em>Beyond the Badge</em>, we believe cultural <span class="hero__break"></span>relevance isn't earned through logos.
     </p>
   </div>
 
@@ -92,6 +92,18 @@
     font-style: italic;
     font-weight: 400;
     font-variation-settings: "wght" 500, "hght" 1000;
+  }
+
+  /* Desktop: acts as a line break between 'cultural' and 'relevance'.
+     Mobile (≤768px): collapses to inline so text flows naturally with a space. */
+  .hero__break {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .hero__break {
+      display: inline;
+    }
   }
 
   /* ── Image wrapper ── */
@@ -182,12 +194,6 @@
 
   /* ── 390px ─────────────────────────────────────────────────────────── */
   @media (max-width: 390px) {
-    /* Remove forced line-break between "cultural" and "relevance" so the
-       text wraps naturally to the container width instead of breaking early */
-    .hero__statement br {
-      display: none;
-    }
-
     /* 3/4 size: 645×0.75=484px, 651×0.75=488px.
        z-index:2 (above text/video at z:1) so the B renders continuously
        over the video — without it the opaque video covered the B and it
@@ -203,12 +209,10 @@
     }
   }
 
-  /* ── 450px: Pro Max spacing + gap controls ────────────────────────── */
+  /* ── 500px: Pro Max spacing + gap controls ────────────────────────── */
   @media (max-width: 500px) {
     /* Gap 1: zero hero bottom padding; About padding-top owns the 120px */
     .hero { padding-bottom: 0; }
-
-    .hero__statement br { display: none; }
 
     .hero__watermark {
       width: 484px;
