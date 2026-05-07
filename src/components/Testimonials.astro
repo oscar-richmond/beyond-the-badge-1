@@ -1333,7 +1333,9 @@ const storiesData = testimonials.map(t => ({
   /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
   @media (max-width: 500px) {
     .testimonials-sticky {
-      padding: 48px 0; /* symmetrical — content stays vertically centred */
+      /* 100dvh tracks URL-bar show/hide; min() scales padding on short viewports */
+      height: 100dvh;
+      padding: min(48px, 4dvh) 0;
     }
 
     .testimonials__heading { margin-bottom: 12px; }
@@ -1347,9 +1349,11 @@ const storiesData = testimonials.map(t => ({
 
     .testimonials__photo-stage {
       width: 100%;
-      height: 238px;
+      /* min() shrinks photo on short viewports (e.g. iPhone with URL bars ~665px)
+         so the total content fits within 100dvh without overflow+clip */
+      height: min(238px, 22dvh);
+      min-height: 100px;
       aspect-ratio: unset;
-      min-height: unset;
       overflow: hidden;
     }
 
@@ -1358,10 +1362,11 @@ const storiesData = testimonials.map(t => ({
 
     .testimonials__quote-stage {
       width: 100%;
-      height: 400px;
-      min-height: unset;
+      /* Scale down on short viewports so total content fits in 100dvh */
+      height: min(400px, 45dvh);
+      min-height: 220px;
       margin-right: 0;
-      margin-top: 20px;
+      margin-top: min(20px, 2dvh);
     }
 
     .t-quote blockquote {
@@ -1787,15 +1792,13 @@ const storiesData = testimonials.map(t => ({
         activate(target);
       } else {
         // At edge — scroll past the section.
-        // Must use behavior:'auto' (instant) — 'smooth' is suppressed by Chrome
-        // when touchstart had preventDefault(), leaving the user trapped.
-        if (dy > 0) {
-          // Past last testimonial → enter next section
-          window.scrollTo({ top: trackTop + totalTravel + 80, behavior: 'auto' });
-        } else {
-          // Before first testimonial → scroll above section
-          window.scrollTo({ top: Math.max(0, trackTop - 80), behavior: 'auto' });
-        }
+        // behavior:'auto' (not 'smooth') — smooth is suppressed by Chrome after
+        // touchstart preventDefault(). setTimeout(0) defers past Safari's own
+        // touch-resolution phase, which otherwise cancels window.scrollTo().
+        const exitY = dy > 0
+          ? trackTop + totalTravel + 80          // past last → next section
+          : Math.max(0, trackTop - 80);          // before first → above section
+        setTimeout(() => { window.scrollTo({ top: exitY, behavior: 'auto' }); }, 0);
       }
     }, { passive: true });
   }
