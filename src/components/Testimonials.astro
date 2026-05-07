@@ -1335,7 +1335,7 @@ const storiesData = testimonials.map(t => ({
     .testimonials-sticky {
       /* 100dvh tracks URL-bar show/hide; min() scales padding on short viewports */
       height: 100dvh;
-      padding: min(48px, 4dvh) 0;
+      padding: min(48px, 4svh) 0;
     }
 
     .testimonials__heading { margin-bottom: 12px; }
@@ -1351,7 +1351,7 @@ const storiesData = testimonials.map(t => ({
       width: 100%;
       /* min() shrinks photo on short viewports (e.g. iPhone with URL bars ~665px)
          so the total content fits within 100dvh without overflow+clip */
-      height: min(238px, 22dvh);
+      height: min(238px, 22svh);
       min-height: 100px;
       aspect-ratio: unset;
       overflow: hidden;
@@ -1363,10 +1363,10 @@ const storiesData = testimonials.map(t => ({
     .testimonials__quote-stage {
       width: 100%;
       /* Scale down on short viewports so total content fits in 100dvh */
-      height: min(400px, 45dvh);
+      height: min(400px, 45svh);
       min-height: 220px;
       margin-right: 0;
-      margin-top: min(20px, 2dvh);
+      margin-top: min(20px, 2svh);
     }
 
     .t-quote blockquote {
