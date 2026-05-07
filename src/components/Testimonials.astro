@@ -1232,7 +1232,7 @@ const storiesData = testimonials.map(t => ({
   @media (max-width: 390px) {
     /* Tighten sticky panel vertical padding so everything fits in 100vh */
     .testimonials-sticky {
-      padding: 60px 0 16px; /* Gap 3: heading 120px from viewport top */
+      padding: 48px 0; /* symmetrical — content stays vertically centred */
     }
 
     /* Reduce header / rule spacing */
@@ -1318,7 +1318,7 @@ const storiesData = testimonials.map(t => ({
   /* ── 430px: identical to 390px — covers iPhone Pro Max ──────────────── */
   @media (max-width: 500px) {
     .testimonials-sticky {
-      padding: 60px 0 16px;
+      padding: 48px 0; /* symmetrical — content stays vertically centred */
     }
 
     .testimonials__heading { margin-bottom: 12px; }
@@ -1735,11 +1735,15 @@ const storiesData = testimonials.map(t => ({
 
       if (target === current) return; // already at first/last — let page scroll normally
 
-      // Calculate exact scroll position for the target slot.
-      // Land 1px past the slot boundary so onScroll's Math.floor picks up target reliably.
+      // 1. Activate immediately so the UI updates on this swipe (not the next).
+      activate(target);
+
+      // 2. Scroll to the CENTRE of the target slot so onScroll agrees with
+      //    the UI after the pause expires. Using centre (+ 0.5) avoids landing
+      //    on a slot boundary where rounding could pick the wrong index.
       const trackTop     = track.getBoundingClientRect().top + window.scrollY;
       const totalTravel  = track.offsetHeight - window.innerHeight;
-      const targetScrollY = trackTop + (target / n) * totalTravel + 1;
+      const targetScrollY = trackTop + ((target + 0.5) / n) * totalTravel;
 
       // Pause the scroll driver for the duration of the smooth snap (~600ms)
       scrollPaused = true;
