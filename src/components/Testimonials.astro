@@ -1708,9 +1708,10 @@ const storiesData = testimonials.map(t => ({
   }
 
   // ── Mobile swipe-to-advance: any vertical swipe on the sticky panel ──────────
-  // Instead of requiring the user to scroll a fixed distance, a single swipe
-  // (any size ≥5px) snaps to the exact scroll position for the next/prev
-  // testimonial. scrollPaused stops the scroll driver fighting the snap.
+  // behavior:'auto' (instant jump) is critical — behavior:'smooth' fights iOS
+  // momentum scroll, causing the page to end up at the wrong position and
+  // requiring 2-3 swipes. The instant jump kills momentum immediately, putting
+  // the page at exactly the right position on the first swipe.
   if (tMobile) {
     const stickyEl = document.querySelector<HTMLElement>('.testimonials-sticky');
     let swipeStartY = 0;
@@ -1735,23 +1736,22 @@ const storiesData = testimonials.map(t => ({
 
       if (target === current) return; // already at first/last — let page scroll normally
 
-      // 1. Activate immediately so the UI updates on this swipe (not the next).
+      // Instant jump to the centre of the target slot.
+      // - Kills iOS momentum scroll immediately (no fight with smooth scroll)
+      // - onScroll fires once with the correct position → activate() is a no-op
+      //   because current was already updated by the activate() call below
+      const trackTop    = track.getBoundingClientRect().top + window.scrollY;
+      const totalTravel = track.offsetHeight - window.innerHeight;
+      const snapY       = trackTop + ((target + 0.5) / n) * totalTravel;
+
+      window.scrollTo({ top: snapY, behavior: 'auto' });
+
+      // Update the UI — safe to call after scrollTo because activate() guards
+      // against duplicate calls with (i === current) check
       activate(target);
-
-      // 2. Scroll to the CENTRE of the target slot so onScroll agrees with
-      //    the UI after the pause expires. Using centre (+ 0.5) avoids landing
-      //    on a slot boundary where rounding could pick the wrong index.
-      const trackTop     = track.getBoundingClientRect().top + window.scrollY;
-      const totalTravel  = track.offsetHeight - window.innerHeight;
-      const targetScrollY = trackTop + ((target + 0.5) / n) * totalTravel;
-
-      // Pause the scroll driver for the duration of the smooth snap (~600ms)
-      scrollPaused = true;
-      setTimeout(() => { scrollPaused = false; }, 700);
-
-      window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
     }, { passive: true });
   }
+
 
   // ── Campaign video modal (Stephanie Wenborn #1 and Niamh Bryne #3) ─────────────────────
   // Sources are driven by data-video-webm / data-video-mp4 on each .t-play-btn so the same
