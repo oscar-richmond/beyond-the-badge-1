@@ -1773,10 +1773,22 @@ const storiesData = testimonials.map(t => ({
       const dx    = Math.abs(e.changedTouches[0].clientX - swipeStartX);
       const dyAbs = Math.abs(dy);
 
-      // Ignore taps (<10px) and horizontal gestures
-      if (dyAbs < 10 || dx > dyAbs) return;
+      const n = isExpanded ? 7 : 5;
 
-      const n      = isExpanded ? 7 : 5;
+      // At the first or last testimonial, even a short swipe (≥3px, more
+      // vertical than horizontal) should exit the section — not get trapped.
+      // Away from edges, require ≥10px to avoid accidental advances.
+      const atFirstEdge = current === 0     && dy < 0; // swiping down at start
+      const atLastEdge  = current === n - 1 && dy > 0; // swiping up  at end
+      const atEdge      = atFirstEdge || atLastEdge;
+
+      // Horizontal gestures always ignored
+      if (dx > dyAbs) return;
+      // Tap (< 3px) always ignored
+      if (dyAbs < 3) return;
+      // Short swipe (3–9px) only allowed as an edge-exit, not a mid-carousel advance
+      if (dyAbs < 10 && !atEdge) return;
+
       const target = dy > 0
         ? Math.min(n - 1, current + 1)   // finger up   → next
         : Math.max(0,      current - 1);  // finger down → prev
