@@ -1460,10 +1460,17 @@ const storiesData = testimonials.map(t => ({
     const n   = isExpanded ? 7 : 5;
     const idx = Math.min(n - 1, Math.floor(progress * n));
 
-    // If a swipe snap is in progress, ignore any index that isn’t the target
-    // (iOS residual scroll events can push idx off by ±1 for a few frames).
-    if (snapTarget >= 0 && idx !== snapTarget) return;
+    // Desktop: wheel handler owns all advancement.
+    // Lenis momentum advances current through multiple slots during one gesture,
+    // so letting onScroll run freely would make wheel snaps jump 2-3 slots.
+    // Only confirm a snap that the wheel handler already initiated.
+    if (!tMobile) {
+      if (snapTarget >= 0 && idx === snapTarget) activate(idx);
+      return;
+    }
 
+    // Mobile: proportional scroll driver with snap-guard.
+    if (snapTarget >= 0 && idx !== snapTarget) return;
     activate(idx);
   }
 
@@ -1816,13 +1823,28 @@ const storiesData = testimonials.map(t => ({
       // Debounce: ignore bursts from trackpad momentum during the snap window
       if (wheelLocked) return;
 
-      const n      = isExpanded ? 7 : 5;
+      const n           = isExpanded ? 7 : 5;
+      const trackTop    = track.getBoundingClientRect().top + window.scrollY;
+      const totalTravel = track.offsetHeight - window.innerHeight;
+
+      // Sync current to actual scroll position before computing target.
+      // onScroll is disabled on desktop so current may be stale if Lenis
+      // had previously moved the page (e.g. entering the section with momentum).
+      // Without this sync the first wheel gesture reads the wrong current and
+      // snaps 2+ slots ahead instead of just one.
+      const scrolledNow = -(track.getBoundingClientRect().top);
+      const syncIdx     = Math.min(n - 1, Math.max(0, Math.floor((scrolledNow / totalTravel) * n)));
+      if (syncIdx !== current && !switching) {
+        // Silent sync: update class state instantly (no crossfade animation)
+        photos.forEach((p, i) => p.classList.toggle('is-active', i === syncIdx));
+        quotes.forEach((q, i) => q.classList.toggle('is-active', i === syncIdx));
+        btns.forEach((b, i)   => b.classList.toggle('is-active', i === syncIdx));
+        current = syncIdx;
+      }
+
       const target = e.deltaY > 0
         ? Math.min(n - 1, current + 1)   // wheel down → next
         : Math.max(0,      current - 1);  // wheel up   → prev
-
-      const trackTop    = track.getBoundingClientRect().top + window.scrollY;
-      const totalTravel = track.offsetHeight - window.innerHeight;
 
       if (target !== current) {
         wheelLocked = true;
