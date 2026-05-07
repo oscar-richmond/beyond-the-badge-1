@@ -386,12 +386,28 @@ const navItems = [
 
   // Hide on scroll down, reveal on scroll up — plus at-top state
   let lastScrollY = window.scrollY;
+  // Cache the testimonials track for the mobile sticky-zone check
+  const testimonialsTrack = document.getElementById('testimonials') as HTMLElement | null;
 
   const updateNav = () => {
-    // Don’t touch the header while the mobile nav is open
+    // Don't touch the header while the mobile nav is open
     if (mobileNav?.classList.contains('active')) return;
 
     const currentScrollY = window.scrollY;
+
+    // ── Mobile: keep header hidden inside the testimonials sticky zone ───
+    // While the track top is at/above the viewport and its bottom is still
+    // below the viewport the sticky panel is locked — showing the header on
+    // scroll-up would cover content and interfere with swipe-to-advance.
+    if (window.innerWidth <= 768 && testimonialsTrack) {
+      const rect = testimonialsTrack.getBoundingClientRect();
+      if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+        header?.classList.add('nav-hidden');
+        lastScrollY = currentScrollY;
+        return;
+      }
+    }
+
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
       header?.classList.add('nav-hidden');
     } else {
