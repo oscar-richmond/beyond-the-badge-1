@@ -1723,69 +1723,71 @@ const storiesData = testimonials.map(t => ({
     });
   }
 
-  // ── Mobile swipe-to-advance (cross-browser) ─────────────────────────────────
-  // Key design: touchmove with passive:false lets us call e.preventDefault()
-  // the moment a clear vertical swipe is detected. This stops the browser from
-  // accumulating momentum BEFORE we snap — so Chrome can never drift post-snap.
-  // When the gesture does NOT qualify as a swipe (tap, horizontal, edge),
-  // we return without calling preventDefault and natural scroll is unaffected.
+  // ── Mobile swipe-to-advance ──────────────────────────────────────────────────
+  // Chrome commits scroll direction at touchstart, before the first touchmove.
+  // So calling e.preventDefault() in touchmove is too late on Chrome — the
+  // browser has already taken ownership of the gesture.
+  // Fix: passive:false on touchstart + e.preventDefault() immediately for
+  // non-button touches. This tells Chrome "JS owns this gesture" before any
+  // scroll can start. We then manually handle exit-section scrolling for the
+  // first/last testimonial edge cases.
+  // Note: pointer events (pointerdown/pointerup) fire BEFORE touch events, so
+  // our pointerup-based button handler is unaffected by this preventDefault.
   if (tMobile) {
-    const stickyEl   = document.querySelector<HTMLElement>('.testimonials-sticky');
-    let swipeStartY  = 0;
-    let swipeStartX  = 0;
-    let swipeActive  = false; // true once gesture is confirmed as a swipe
+    const stickyEl = document.querySelector<HTMLElement>('.testimonials-sticky');
+    let swipeStartY = 0;
+    let swipeStartX = 0;
 
     stickyEl?.addEventListener('touchstart', (e: TouchEvent) => {
       if ((e.target as Element).closest('button, a, [role="button"]')) {
-        swipeStartY = -1; // sentinel — ignore, let click fire normally
-        return;
+        swipeStartY = -1; // sentinel — pointer events handle this tap
+        return;           // do NOT preventDefault — old-iOS needs it for pointerup fallback
       }
       swipeStartY = e.touches[0].clientY;
       swipeStartX = e.touches[0].clientX;
-      swipeActive = false;
-    }, { passive: true });
+      // Prevent BEFORE Chrome decides scroll direction — the only reliable fix.
+      e.preventDefault();
+    }, { passive: false });
 
-    // passive:false required so we can preventDefault() to kill browser momentum.
     stickyEl?.addEventListener('touchmove', (e: TouchEvent) => {
-      if (swipeStartY === -1 || !track) return;
-      const fingerDY  = e.touches[0].clientY - swipeStartY;
-      const fingerDX  = Math.abs(e.touches[0].clientX - swipeStartX);
-      const fingerAbs = Math.abs(fingerDY);
-
-      if (!swipeActive && fingerAbs > 15 && fingerAbs > fingerDX) {
-        const n      = isExpanded ? 7 : 5;
-        const hasSlot = fingerDY < 0 ? current < n - 1 : current > 0;
-        if (hasSlot) swipeActive = true;
-      }
-
-      // Block browser scroll only for confirmed swipe gestures so momentum
-      // never builds — this is the critical fix for Chrome.
-      if (swipeActive) e.preventDefault();
+      if (swipeStartY === -1) return;
+      e.preventDefault(); // keep suppressing throughout gesture
     }, { passive: false });
 
     stickyEl?.addEventListener('touchend', (e: TouchEvent) => {
-      const wasSwipe = swipeActive;
-      swipeActive = false;
-      if (swipeStartY === -1 || !wasSwipe || !track) return;
+      if (swipeStartY === -1 || !track) return;
 
-      const dy     = swipeStartY - e.changedTouches[0].clientY;
+      const dy    = swipeStartY - e.changedTouches[0].clientY; // +ve = finger up = advance
+      const dx    = Math.abs(e.changedTouches[0].clientX - swipeStartX);
+      const dyAbs = Math.abs(dy);
+
+      // Ignore taps (<10px) and horizontal gestures
+      if (dyAbs < 10 || dx > dyAbs) return;
+
       const n      = isExpanded ? 7 : 5;
       const target = dy > 0
-        ? Math.min(n - 1, current + 1)
-        : Math.max(0,      current - 1);
-
-      if (target === current) return;
+        ? Math.min(n - 1, current + 1)   // finger up   → next
+        : Math.max(0,      current - 1);  // finger down → prev
 
       const trackTop    = track.getBoundingClientRect().top + window.scrollY;
       const totalTravel = track.offsetHeight - window.innerHeight;
-      window.scrollTo({ top: trackTop + ((target + 0.5) / n) * totalTravel, behavior: 'auto' });
 
-      // Brief snapTarget window: catches any residual scroll events on browsers
-      // that don't fully respect preventDefault (some older Android WebViews).
-      snapTarget = target;
-      setTimeout(() => { snapTarget = -1; }, 200);
-
-      activate(target);
+      if (target !== current) {
+        // Snap to target slot centre
+        window.scrollTo({ top: trackTop + ((target + 0.5) / n) * totalTravel, behavior: 'auto' });
+        snapTarget = target;
+        setTimeout(() => { snapTarget = -1; }, 200);
+        activate(target);
+      } else {
+        // At edge — scroll past the section
+        if (dy > 0) {
+          // Past last testimonial → enter next section
+          window.scrollTo({ top: trackTop + totalTravel + 80, behavior: 'smooth' });
+        } else {
+          // Before first testimonial → scroll above section
+          window.scrollTo({ top: Math.max(0, trackTop - 80), behavior: 'smooth' });
+        }
+      }
     }, { passive: true });
   }
 
