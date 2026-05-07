@@ -1718,6 +1718,13 @@ const storiesData = testimonials.map(t => ({
     let swipeStartX = 0;
 
     stickyEl?.addEventListener('touchstart', (e: TouchEvent) => {
+      // If the touch starts on a button, link, or any interactive element,
+      // mark as non-swipe so touchend leaves the click event untouched.
+      const origin = e.target as Element;
+      if (origin.closest('button, a, [role="button"]')) {
+        swipeStartY = -1; // sentinel — touchend will bail immediately
+        return;
+      }
       swipeStartY = e.touches[0].clientY;
       swipeStartX = e.touches[0].clientX;
     }, { passive: true });
@@ -1726,8 +1733,8 @@ const storiesData = testimonials.map(t => ({
       const dy = swipeStartY - e.changedTouches[0].clientY; // + = swipe up = advance
       const dx = Math.abs(swipeStartX - e.changedTouches[0].clientX);
 
-      // Ignore: taps (<5px), horizontal swipes, or when no track
-      if (Math.abs(dy) < 5 || dx > Math.abs(dy) || !track) return;
+      // Ignore: touch started on an interactive element, taps (<5px), horizontal swipes
+      if (swipeStartY === -1 || Math.abs(dy) < 5 || dx > Math.abs(dy) || !track) return;
 
       const n      = isExpanded ? 7 : 5;
       const target = dy > 0
