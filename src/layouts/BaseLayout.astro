@@ -259,6 +259,10 @@ const {
           smoothWheel: true,
           touchMultiplier: 2,
         });
+        // Expose globally so other components (e.g. Testimonials wheel snap)
+        // can call lenis.scrollTo(..., { immediate: true }) for instant snaps
+        // without going through Lenis's smooth animation pipeline.
+        (window as any).__lenis = lenis;
 
         // Feed Lenis into rAF — this is what drives the animation
         function raf(time: number) {

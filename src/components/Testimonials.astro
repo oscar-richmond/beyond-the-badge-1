@@ -1828,18 +1828,34 @@ const storiesData = testimonials.map(t => ({
         wheelLocked = true;
         setTimeout(() => { wheelLocked = false; }, 700); // 700ms debounce
 
-        window.scrollTo({ top: trackTop + ((target + 0.5) / n) * totalTravel, behavior: 'auto' });
+        const snapY = trackTop + ((target + 0.5) / n) * totalTravel;
 
+        // Use lenis.scrollTo({immediate:true}) if Lenis is running (desktop).
+        // window.scrollTo is intercepted by Lenis and converted to a smooth
+        // 1.2s animation — during which onScroll fires at intermediate positions
+        // and causes jitter. immediate:true bypasses the animation entirely.
+        const lenis = (window as any).__lenis;
+        if (lenis) {
+          lenis.scrollTo(snapY, { immediate: true });
+        } else {
+          window.scrollTo({ top: snapY, behavior: 'auto' });
+        }
+
+        // snapTarget guards onScroll for the full wheelLocked window so no
+        // residual scroll events can re-activate the wrong slot
         snapTarget = target;
-        setTimeout(() => { snapTarget = -1; }, 250);
+        setTimeout(() => { snapTarget = -1; }, 700);
 
         activate(target);
       } else {
         // At edge — scroll past the section so the user isn't trapped
+        const lenis = (window as any).__lenis;
         if (e.deltaY > 0) {
-          window.scrollTo({ top: trackTop + totalTravel + 80, behavior: 'smooth' });
+          const exitY = trackTop + totalTravel + 80;
+          lenis ? lenis.scrollTo(exitY) : window.scrollTo({ top: exitY, behavior: 'smooth' });
         } else {
-          window.scrollTo({ top: Math.max(0, trackTop - 80), behavior: 'smooth' });
+          const exitY = Math.max(0, trackTop - 80);
+          lenis ? lenis.scrollTo(exitY) : window.scrollTo({ top: exitY, behavior: 'smooth' });
         }
       }
     }, { passive: false });
