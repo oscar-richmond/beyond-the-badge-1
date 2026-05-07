@@ -552,6 +552,8 @@ const storiesData = testimonials.map(t => ({
 
     /* Sticky pin stays: do NOT override position/height here */
     .testimonials-sticky {
+      /* 100dvh = dynamic viewport height; handles Chrome URL-bar show/hide */
+      height: 100dvh;
       justify-content: center;
       padding: 32px 0;
       overflow: clip;
@@ -1240,7 +1242,12 @@ const storiesData = testimonials.map(t => ({
   @media (max-width: 390px) {
     /* Tighten sticky panel vertical padding so everything fits in 100vh */
     .testimonials-sticky {
-      padding: 48px 0; /* symmetrical — content stays vertically centred */
+      /* 100dvh = dynamic viewport height: adjusts as Chrome/Safari URL bars show/hide.
+         Without this, 100vh (the initial containing block) can exceed window.innerHeight
+         when the address bar is visible, causing content to overflow and appear
+         shifted/clipped at the top. */
+      height: 100dvh;
+      padding: 48px 0;
     }
 
     /* Reduce header / rule spacing */
@@ -1779,13 +1786,15 @@ const storiesData = testimonials.map(t => ({
         setTimeout(() => { snapTarget = -1; }, 200);
         activate(target);
       } else {
-        // At edge — scroll past the section
+        // At edge — scroll past the section.
+        // Must use behavior:'auto' (instant) — 'smooth' is suppressed by Chrome
+        // when touchstart had preventDefault(), leaving the user trapped.
         if (dy > 0) {
           // Past last testimonial → enter next section
-          window.scrollTo({ top: trackTop + totalTravel + 80, behavior: 'smooth' });
+          window.scrollTo({ top: trackTop + totalTravel + 80, behavior: 'auto' });
         } else {
           // Before first testimonial → scroll above section
-          window.scrollTo({ top: Math.max(0, trackTop - 80), behavior: 'smooth' });
+          window.scrollTo({ top: Math.max(0, trackTop - 80), behavior: 'auto' });
         }
       }
     }, { passive: true });
