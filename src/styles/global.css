@@ -428,7 +428,7 @@ select:focus-visible {
 }
 
 .footer__logo-img {
-  width: 204px;
+  width: 153px;
   height: auto;
   filter: brightness(0) invert(1);
 }
