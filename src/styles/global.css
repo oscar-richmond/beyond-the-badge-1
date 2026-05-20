@@ -254,6 +254,20 @@ button {
   clip-path: inset(0 0 0% 0);
 }
 
+/* ── Reduced motion: skip all reveal transitions ───────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal--left,
+  .reveal--right,
+  .reveal--scale,
+  .reveal--clip {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
 /* --- 1440px compact scaling (proportional scale from 1522px baseline) --- */
 @media (max-width: 1440px) {
   :root {
@@ -350,6 +364,22 @@ button {
 ::selection {
   background-color: var(--color-forest);
   color: var(--color-cream);
+}
+
+/* --- Keyboard focus styles (focus-visible: mouse users unaffected) --- */
+:focus-visible {
+  outline: 2px solid #004f26;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Suppress focus ring on elements that have their own focus styling */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #004f26;
+  outline-offset: 2px;
 }
 
 /* ═══════════════════════════════════════════════════════
