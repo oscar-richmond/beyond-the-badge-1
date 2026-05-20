@@ -10,7 +10,7 @@ const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
   <!-- Editorial brand statement -->
   <div class="hero__text container">
     <h1 class="hero__statement">
-      {heroData.statementPrefix}<em>Beyond the Badge</em>{heroData.statementSuffix}
+      {heroData.statementPrefix}<em>Beyond the Badge</em>{heroData.statementLine1 || heroData.statementSuffix}<span class="hero__break"></span>{heroData.statementLine2 ?? ''}
     </h1>
   </div>
 

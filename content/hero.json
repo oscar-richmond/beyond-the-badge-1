@@ -1,6 +1,7 @@
 {
   "statementPrefix": "At ",
-  "statementSuffix": ", we believe cultural relevance isn't earned through logos.",
+  "statementLine1": ", we believe cultural",
+  "statementLine2": "relevance isn't earned through logos.",
   "heroPosterImage": "/hero-bg.jpg",
   "heroVideoMp4": "/hero-video.mp4",
   "heroVideoWebm": "/hero-video.webm"
