@@ -118,6 +118,22 @@ const testimonials = [
     image2: '',
     images: [`${base}benett-1.webp`],
   },
+  {
+    name: 'Alan Gilpin',
+    title: 'CEO, World Rugby',
+    quoteBefore: '\u201cAcross four Rugby World Cups, Laura and her team were one of the most thoughtful partners we\u2019ve ever worked with at World Rugby. Her ambition for the Defender programme ',
+    quoteHighlight: 'went well beyond logo placement',
+    quoteAfter: '. She wanted the sponsorship to reach audiences rugby has historically struggled to speak to.\u201d',
+    image: `${base}alan-gilpin.jpg`,
+    mobileImage: `${base}alan-gilpin.jpg`,
+    paragraphs: [
+      '\u201cAcross four Rugby World Cups, Laura and her team were one of the most thoughtful partners we\u2019ve ever worked with at World Rugby. Her ambition for the Defender programme went well beyond logo placement. She wanted the sponsorship to reach audiences rugby has historically struggled to speak to, young fans, communities under-represented in our crowds, and players with disabilities.',
+      'Laura and her team delivered on it and more. The work we did together helped change who pictured themselves inside the sport, and raised the bar for what a mainstream partnership in rugby could look like.',
+      'That instinct for making a partnership matter is rare. Beyond The Badge is in extremely good hands with her at the helm.\u201d',
+    ],
+    image2: '',
+    images: [`${base}gilpin-1.jpg`, `${base}gilpin-2.jpg`, `${base}gilpin-3.jpg`, `${base}gilpin-4.jpg`, `${base}gilpin-5.jpg`],
+  },
 ];
 
 // Serialised subset for the full-story modal JS
@@ -201,7 +217,7 @@ const storiesData = testimonials.map(t => ({
                 <strong class="t-client-name">{t.name}</strong>
                 <span class="t-client-role">{t.title}</span>
               </footer>
-              {(i === 1 || i === 3 || i === 5) ? (
+              {(i === 1 || i === 3 || i === 5 || i === 7) ? (
                 <div class="t-btn-row">
                   <button type="button" class="t-story-btn">
                     <span class="t-story-btn__text">The Full Story +</span>
@@ -212,16 +228,19 @@ const storiesData = testimonials.map(t => ({
                     data-video-webm={
                       i === 1 ? `${base}wenborn-campaign.webm` :
                       i === 5 ? ''                              :
+                      i === 7 ? `${base}gilpin-campaign.webm`  :
                                 `${base}campaign-video.webm`
                     }
                     data-video-mp4={
-                      i === 1 ? `${base}wenborn-campaign.mp4` :
-                      i === 5 ? `${base}amadi-campaign.mp4`   :
+                      i === 1 ? `${base}wenborn-campaign.mp4`    :
+                      i === 5 ? `${base}amadi-campaign.mp4`      :
+                      i === 7 ? `${base}gilpin-campaign.mp4`     :
                                 `${base}campaign-video.mp4`
                     }
                     aria-label={
                       i === 1 ? 'Play EON Bond film campaign video' :
                       i === 5 ? 'Play Jaguar Land Rover — British Red Cross campaign video' :
+                      i === 7 ? 'Play World Rugby Defender campaign video' :
                                 'Play Gorillaz × Jaguar Land Rover campaign video'
                     }
                   >
@@ -310,7 +329,7 @@ const storiesData = testimonials.map(t => ({
 <style>
   /* ─── Scroll track (outer, 300vh) ─── */
   .testimonials-track {
-    height: 625vh;
+    height: 625vh; /* 5 initial slots × 125vh */
     background: transparent;
     /* Needed so sticky child has correct offset parent */
     position: relative;
@@ -676,7 +695,7 @@ const storiesData = testimonials.map(t => ({
     .t-btn-row   { margin-top: 20px; flex-wrap: wrap; gap: 8px; }
 
     /* All 7 testimonials available in the carousel from the start */
-    .testimonials-track { height: 875vh !important; } /* 7 slots × 125vh */
+    .testimonials-track { height: 1000vh !important; } /* 8 slots × 125vh */
 
     /* Hide More voices / Show fewer — all testimonials are already in the carousel */
     .t-more-btn { display: none !important; }
@@ -1469,7 +1488,7 @@ const storiesData = testimonials.map(t => ({
     const progress = scrolled / totalTravel;
     // n matches the number of visible scroll slots — track height is adjusted
     // dynamically on expand/collapse so each slot stays the same size (~125vh).
-    const n   = isExpanded ? 7 : 5;
+    const n   = isExpanded ? 8 : 5;
     const idx = Math.min(n - 1, Math.floor(progress * n));
 
     // If a swipe snap is in progress, ignore any index that isn’t the target
@@ -1496,7 +1515,7 @@ const storiesData = testimonials.map(t => ({
     // Resize track so each slot stays ~125vh: 625vh÷5=125vh, 875vh÷7=125vh.
     // Skip on mobile where track height is 'auto' (set by media query).
     if (track && window.innerWidth > 768) {
-      track.style.height = isExpanded ? '875vh' : '625vh';
+      track.style.height = isExpanded ? '1000vh' : '625vh';
     }
 
     extraNames?.classList.toggle('is-open', isExpanded);
