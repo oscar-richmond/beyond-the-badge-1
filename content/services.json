@@ -1,0 +1,33 @@
+{
+  "sectionHeading": "Our approach",
+  "items": [
+    {
+      "number": "(01)",
+      "title": "Influence",
+      "beyondText": "expectation",
+      "category": "PARTNERSHIPS",
+      "image": "/hover-1.jpg"
+    },
+    {
+      "number": "(02)",
+      "title": "Stories",
+      "beyondText": "the playbook",
+      "category": "STORYTELLING",
+      "image": "/hover-2.jpg"
+    },
+    {
+      "number": "(03)",
+      "title": "Connection",
+      "beyondText": "the handshake",
+      "category": "RELATIONSHIPS",
+      "image": "/hover-3.jpg"
+    },
+    {
+      "number": "(04)",
+      "title": "Sponsorship",
+      "beyondText": "the signage",
+      "category": "CULTURE",
+      "image": "/hover-4.jpg"
+    }
+  ]
+}

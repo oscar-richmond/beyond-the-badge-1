@@ -1,0 +1,27 @@
+{
+  "marqueeItems": [
+    "Brand Strategy",
+    "Cultural Programming",
+    "Purpose, Impact & Legacy",
+    "Brand Partnerships",
+    "Talent Integration",
+    "Cinematic Product Integration",
+    "Brand Experience",
+    "Lifestyle Licensing",
+    "Collections",
+    "Network & Talent Introductions",
+    "Content & Storytelling",
+    "Community Building",
+    "Trend & Cultural Intelligence"
+  ],
+  "barText": "Let's build something together.",
+  "barButtonLabel": "Get in touch",
+  "ctaImages": [
+    "/cta-slide-1.jpg",
+    "/cta-slide-2.jpg",
+    "/cta-slide-3.jpg",
+    "/cta-slide-4.jpg",
+    "/cta-slide-5.jpg",
+    "/cta-slide-6.jpg"
+  ]
+}

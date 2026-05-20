@@ -6,14 +6,19 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "tinacms dev -c \"astro dev\"",
     "build": "astro build",
+    "build:cms": "tinacms build && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^6.0.4",
     "gsap": "^3.14.2",
-    "lenis": "^1.3.19"
+    "lenis": "^1.3.19",
+    "tinacms": "^3.8.1"
+  },
+  "devDependencies": {
+    "@tinacms/cli": "^2.3.1"
   }
 }

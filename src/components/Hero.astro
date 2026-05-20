@@ -1,4 +1,8 @@
 ---
+import heroData from '../../content/hero.json';
+
+const base = import.meta.env.BASE_URL;
+const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
 ---
 
 <section class="hero" id="hero">
@@ -6,7 +10,7 @@
   <!-- Editorial brand statement -->
   <div class="hero__text container">
     <h1 class="hero__statement">
-      At <em>Beyond the Badge</em>, we believe cultural <span class="hero__break"></span>relevance isn't earned through logos.
+      {heroData.statementPrefix}<em>Beyond the Badge</em><span class="hero__break"></span>{heroData.statementSuffix}
     </h1>
   </div>
 
@@ -20,10 +24,10 @@
       playsinline
       disablepictureinpicture
       preload="auto"
-      poster={`${import.meta.env.BASE_URL}hero-bg.jpg`}
+      poster={img(heroData.heroPosterImage)}
     >
-      <source src={`${import.meta.env.BASE_URL}hero-video.webm`} type="video/webm" />
-      <source src={`${import.meta.env.BASE_URL}hero-video.mp4`}  type="video/mp4"  />
+      <source src={img(heroData.heroVideoWebm)} type="video/webm" />
+      <source src={img(heroData.heroVideoMp4)}  type="video/mp4"  />
     </video>
   </div>
   <!-- B logo watermark — behind everything -->

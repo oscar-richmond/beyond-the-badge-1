@@ -1,22 +1,7 @@
 ---
-const processes = [
-  {
-    title: 'Shared Partnerships.',
-    text: 'We don\'t just sell sponsorships, we broker relationships that build mutual value for brands and cultural spaces.'
-  },
-  {
-    title: 'Culture First, always.',
-    text: 'Authenticity isn\'t a buzzword for us. It is the starting point for every conversation, activation, and campaign.'
-  },
-  {
-    title: 'Elevated Productions.',
-    text: 'Curated experiences that transcend traditional marketing, creating lasting memories for your target audience.'
-  },
-  {
-    title: 'End-to-End Delivery.',
-    text: 'From initial strategy to final execution, we handle every detail so you can focus on the big picture.'
-  }
-];
+import processData from '../../content/process.json';
+
+const processes = processData.items || [];
 ---
 
 <section class="process section" id="process">
@@ -27,10 +12,10 @@ const processes = [
   <div class="container">
     <div class="process__header">
       <h2 class="process__heading">
-        What we do<br /><span class="process__heading-highlight">Differently.</span>
+        What we do<br /><span class="process__heading-highlight">{processData.headingHighlight || 'Differently.'}</span>
       </h2>
       <p class="process__intro">
-        Four ways we help brands move beyond surface-level marketing into meaningful cultural participation.
+        {processData.intro || 'Four ways we help brands move beyond surface-level marketing into meaningful cultural participation.'}
       </p>
     </div>
 

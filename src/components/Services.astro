@@ -1,35 +1,13 @@
 ---
+import servicesData from '../../content/services.json';
+
 const base = import.meta.env.BASE_URL;
-const services = [
-  {
-    number: '(01)',
-    title: 'Influence',
-    beyondText: 'expectation',
-    category: 'PARTNERSHIPS',
-    image: `${base}hover-1.jpg`,
-  },
-  {
-    number: '(02)',
-    title: 'Stories',
-    beyondText: 'the playbook',
-    category: 'STORYTELLING',
-    image: `${base}hover-2.jpg`,
-  },
-  {
-    number: '(03)',
-    title: 'Connection',
-    beyondText: 'the handshake',
-    category: 'RELATIONSHIPS',
-    image: `${base}hover-3.jpg`,
-  },
-  {
-    number: '(04)',
-    title: 'Sponsorship',
-    beyondText: 'the signage',
-    category: 'CULTURE',
-    image: `${base}hover-4.jpg`,
-  },
-];
+const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
+
+const services = (servicesData.items || []).map(s => ({
+  ...s,
+  image: img(s.image),
+}));
 
 const VIEWER_W = 300;
 const VIEWER_H = 375;
@@ -38,7 +16,7 @@ const VIEWER_H = 375;
 <section class="services" id="services">
   <div class="container">
     <div class="services__header">
-      <h2 class="services__heading">Our approach</h2>
+      <h2 class="services__heading">{servicesData.sectionHeading || 'Our approach'}</h2>
     </div>
 
     <div class="services__list">

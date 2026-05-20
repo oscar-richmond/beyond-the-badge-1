@@ -1,4 +1,6 @@
 ---
+import globalData from '../../content/global.json';
+
 interface Props {
   cream?: boolean;
 }
@@ -8,7 +10,7 @@ const base = import.meta.env.BASE_URL;
 const navItems = [
   { href: `${base}terms`,   label: 'Terms & Conditions' },
   { href: `${base}privacy`, label: 'Privacy Policy' },
-  { href: 'https://www.instagram.com', label: 'Instagram' },
+  { href: globalData.instagramUrl || 'https://www.instagram.com', label: 'Instagram' },
 ];
 ---
 
@@ -28,7 +30,7 @@ const navItems = [
     </div>
 
     <div class="footer__bottom">
-      <a href="mailto:hello@beyondthebadge.agency" class="footer__nav-link">hello@beyondthebadge.agency</a>
+      <a href={`mailto:${globalData.contactEmail || 'hello@beyondthebadge.agency'}`} class="footer__nav-link">{globalData.contactEmail || 'hello@beyondthebadge.agency'}</a>
 
       <nav class="footer__nav" aria-label="Footer navigation">
         <ul class="footer__nav-list">
@@ -41,7 +43,7 @@ const navItems = [
       </nav>
 
       <div class="footer__legal">
-        <span>© Beyond The Badge 2026</span>
+        <span>{globalData.copyrightText || '© Beyond The Badge 2026'}</span>
         <span class="footer__legal-sep">·</span>
         <a href="https://selfhood-studios.com/" target="_blank" rel="noopener noreferrer" class="footer__nav-link footer__legal-link">Site by Selfhood Studios</a>
       </div>

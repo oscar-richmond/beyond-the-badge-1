@@ -1,21 +1,11 @@
 ---
-const marqueeItems = [
-  "Brand Strategy",
-  "Cultural Programming",
-  "Purpose, Impact & Legacy",
-  "Brand Partnerships",
-  "Talent Integration",
-  "Cinematic Product Integration",
-  "Brand Experience",
-  "Lifestyle Licensing",
-  "Collections",
-  "Network & Talent Introductions",
-  "Content & Storytelling",
-  "Community Building",
-  "Trend & Cultural Intelligence",
-];
+import ctaData from '../../content/cta.json';
 
 const base = import.meta.env.BASE_URL;
+const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
+
+const marqueeItems = ctaData.marqueeItems || [];
+const ctaImages    = (ctaData.ctaImages || []).map(img);
 ---
 
 <!--
@@ -37,21 +27,18 @@ const base = import.meta.env.BASE_URL;
   </div>
 
   <div class="cta__image-wrap reveal">
-    <div class="cta__layer cta__layer--active" style={`background-image: url('${base}cta-slide-1.jpg')`}></div>
-    <div class="cta__layer" style={`background-image: url('${base}cta-slide-2.jpg')`}></div>
-    <div class="cta__layer" style={`background-image: url('${base}cta-slide-3.jpg')`}></div>
-    <div class="cta__layer" style={`background-image: url('${base}cta-slide-4.jpg')`}></div>
-    <div class="cta__layer" style={`background-image: url('${base}cta-slide-5.jpg')`}></div>
-    <div class="cta__layer" style={`background-image: url('${base}cta-slide-6.jpg')`}></div>
+    {ctaImages.map((src, i) => (
+      <div class={`cta__layer${i === 0 ? ' cta__layer--active' : ''}`} style={`background-image: url('${src}')`}></div>
+    ))}
   </div>
 </section>
 
 <!-- ② CTA bar — sits below the section, aligned to page margins -->
 <div class="cta__bar-outer container">
   <a href={`${base}contact`} class="cta__bar">
-    <p class="cta__bar-text">Let's build something together.</p>
+    <p class="cta__bar-text">{ctaData.barText || "Let's build something together."}</p>
     <span class="cta__bar-btn">
-      <span class="cta__bar-btn-label">Get in touch</span>
+      <span class="cta__bar-btn-label">{ctaData.barButtonLabel || 'Get in touch'}</span>
       <svg class="cta__bar-btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>

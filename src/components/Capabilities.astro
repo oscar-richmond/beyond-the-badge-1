@@ -1,47 +1,16 @@
 ---
+import capabilitiesData from '../../content/capabilities.json';
+
 const base = import.meta.env.BASE_URL;
+const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
 
-const capabilities = [
-  {
-    key: 'brand-partnerships',
-    label: 'Meaningful Partnerships',
-    img: 'cap-02.jpg',
-    description: 'Connections that move people and shift cultural narratives.',
-  },
-  {
-    key: 'cultural-strategy',
-    label: 'Cultural Presence',
-    img: 'cap-03.jpg',
-    description: 'Showing up in art, sport, and entertainment with a point of view — and a contribution.',
-  },
-  {
-    key: 'art-direction',
-    label: 'Legacy Building',
-    img: 'cap-04.jpg',
-    description: 'Designing deep-rooted social agendas and purpose strategies that endure.',
-  },
-  {
-    key: 'talent-relations',
-    label: 'Authentic Storytelling',
-    img: 'cap-05.jpg',
-    description: 'Moving from loud to considered — every touchpoint deliberate.',
-  },
-  {
-    key: 'event-production',
-    label: 'Brand Experience',
-    img: 'cap-06.jpg',
-    description: 'Transforming global brand moments through bold concept creation.',
-  },
-  {
-    key: 'community',
-    label: 'Lifestyle & Licensing',
-    img: 'cap-07.jpg',
-    description: 'Curating narrative-driven collections and drops designed to tell a story.',
-  },
-];
+const capabilities = (capabilitiesData.items || []).map(c => ({
+  ...c,
+  img: c.img, // stored as /images/capabilities/cap-XX.jpg
+}));
 
-const SCROLL_PER_CAP = 600; // px of scroll per category on mobile
-const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 3000px
+const SCROLL_PER_CAP = 600;
+const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1);
 ---
 
 <!--
@@ -57,13 +26,13 @@ const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 3000px
     <div
       class="cap-bg"
       data-cap="default"
-      style={`background-image: url('${base}images/capabilities/cap-01.jpg')`}
+      style={`background-image: url('${img(capabilitiesData.defaultBackgroundImage || '/images/capabilities/cap-01.jpg')}')`}
     ></div>
     {capabilities.map((c) => (
       <div
         class="cap-bg"
         data-cap={c.key}
-        style={`background-image: url('${base}images/capabilities/${c.img}')`}
+        style={`background-image: url('${img(c.img)}')`}
       ></div>
     ))}
 
@@ -75,7 +44,7 @@ const TOTAL_EXTRA    = SCROLL_PER_CAP * (capabilities.length - 1); // 3000px
 
       <!-- Eyebrow row -->
       <div class="cap-header">
-        <p class="cap-eyebrow">The Categories We're Redefining</p>
+        <p class="cap-eyebrow">{capabilitiesData.eyebrow || 'The Categories We\'re Redefining'}</p>
         <hr class="cap-rule" />
       </div>
 

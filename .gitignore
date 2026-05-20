@@ -3,3 +3,10 @@ node_modules/
 dist/
 .DS_Store
 .vercel
+
+# TinaCMS generated files (rebuild on deploy)
+tina/__generated__/
+
+# Local env (contains TinaCloud secrets)
+.env.local
+.env

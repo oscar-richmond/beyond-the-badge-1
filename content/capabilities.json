@@ -1,0 +1,42 @@
+{
+  "eyebrow": "The Categories We're Redefining",
+  "defaultBackgroundImage": "/images/capabilities/cap-01.jpg",
+  "items": [
+    {
+      "key": "brand-partnerships",
+      "label": "Meaningful Partnerships",
+      "img": "/images/capabilities/cap-02.jpg",
+      "description": "Connections that move people and shift cultural narratives."
+    },
+    {
+      "key": "cultural-strategy",
+      "label": "Cultural Presence",
+      "img": "/images/capabilities/cap-03.jpg",
+      "description": "Showing up in art, sport, and entertainment with a point of view — and a contribution."
+    },
+    {
+      "key": "art-direction",
+      "label": "Legacy Building",
+      "img": "/images/capabilities/cap-04.jpg",
+      "description": "Designing deep-rooted social agendas and purpose strategies that endure."
+    },
+    {
+      "key": "talent-relations",
+      "label": "Authentic Storytelling",
+      "img": "/images/capabilities/cap-05.jpg",
+      "description": "Moving from loud to considered — every touchpoint deliberate."
+    },
+    {
+      "key": "event-production",
+      "label": "Brand Experience",
+      "img": "/images/capabilities/cap-06.jpg",
+      "description": "Transforming global brand moments through bold concept creation."
+    },
+    {
+      "key": "community",
+      "label": "Lifestyle & Licensing",
+      "img": "/images/capabilities/cap-07.jpg",
+      "description": "Curating narrative-driven collections and drops designed to tell a story."
+    }
+  ]
+}

@@ -1,4 +1,8 @@
 ---
+import aboutData from '../../content/about-section.json';
+
+const base = import.meta.env.BASE_URL;
+const img = (p: string) => p ? `${base}${p.replace(/^\//, '')}` : '';
 ---
 
 <section class="about section" id="about">
@@ -6,24 +10,18 @@
   <div class="container">
     <div class="about__content">
       <p class="about__intro">
-        Led by industry leader <a href="/about#founder" class="about__laura-link"><em>Laura Wood</em></a> who spent a decade as Global Director of Brand Partnerships, Experience and Collections at Jaguar Land Rover, our mission is to help brands move beyond surface-level marketing and into meaningful cultural participation.
+        {aboutData.introPrefix}<a href={aboutData.lauraLinkHref} class="about__laura-link"><em>{aboutData.lauraLinkText}</em></a>{aboutData.introSuffix}
       </p>
     </div>
 
     <div class="about__visual" style="transition-delay: 0.15s;">
       <div class="about__image-grid" data-reveal-group>
-        <div class="about__image-wrapper reveal--scale">
-          <span class="about__image-label">(01)</span>
-          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-1.jpg')`}></div>
-        </div>
-        <div class="about__image-wrapper reveal--scale">
-          <span class="about__image-label">(02)</span>
-          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-2.jpg')`}></div>
-        </div>
-        <div class="about__image-wrapper reveal--scale">
-          <span class="about__image-label">(03)</span>
-          <div class="about__image-item" style={`background-image: url('${import.meta.env.BASE_URL}about-3.jpg')`}></div>
-        </div>
+        {(aboutData.images || []).map((imgPath, i) => (
+          <div class="about__image-wrapper reveal--scale">
+            <span class="about__image-label">({String(i + 1).padStart(2, '0')})</span>
+            <div class="about__image-item" style={`background-image: url('${img(imgPath)}')`}></div>
+          </div>
+        ))}
       </div>
     </div>
   </div>
