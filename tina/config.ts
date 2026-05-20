@@ -37,7 +37,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'hero' },
         fields: [
@@ -73,7 +72,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'about-section' },
         fields: [
@@ -108,7 +106,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'services' },
         fields: [
@@ -138,7 +135,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'capabilities' },
         fields: [
@@ -168,7 +164,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'process' },
         fields: [
@@ -197,7 +192,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'cta' },
         fields: [
@@ -227,7 +221,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'testimonials' },
         fields: [
@@ -311,7 +304,6 @@ export default defineConfig({
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => '/',
         },
         match: { include: 'global' },
         fields: [
