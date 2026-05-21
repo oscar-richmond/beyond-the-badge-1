@@ -469,6 +469,109 @@ const InstagramUrlField = wrapFieldsWithMeta((props: any) => {
   );
 });
 
+// ── 6. PHONE NUMBER FIELD ────────────────────────────────────────────────
+//
+// Validates common phone formats: international (+44...) or local (07...).
+// Shows a live green/red border + icon. Empty value is allowed.
+//
+// Applies to: contact.phone
+//
+const PhoneField = wrapFieldsWithMeta((props: any) => {
+  const { input } = props;
+  const value: string = input.value ?? '';
+  const isEmpty  = !value.trim();
+  const isValid  = isEmpty || /^[+]?[\d\s\-().]{7,}$/.test(value.trim());
+
+  const borderColor = !isValid ? '#ef4444' : value ? '#22c55e' : '#d1d5db';
+  const icon        = value ? (isValid ? '✅' : '❌') : null;
+
+  return (
+    <div>
+      <div style={{ position: 'relative' }}>
+        <input
+          {...input}
+          type="text"
+          placeholder="+44 7342 026099"
+          style={{
+            width: '100%',
+            padding: '7px 38px 7px 10px',
+            borderRadius: '6px',
+            border: `1.5px solid ${borderColor}`,
+            fontFamily: 'ui-monospace, "Cascadia Code", monospace',
+            fontSize: '13px',
+            boxSizing: 'border-box',
+            transition: 'border-color 0.15s',
+          }}
+        />
+        {icon && (
+          <span
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '14px',
+              lineHeight: 1,
+              pointerEvents: 'none',
+            }}
+          >
+            {icon}
+          </span>
+        )}
+      </div>
+      {!isValid && (
+        <p style={{ color: '#ef4444', fontSize: '12px', margin: '5px 0 0', lineHeight: 1.4 }}>
+          Enter a valid phone number — e.g.{' '}
+          <code style={{ background: '#fee2e2', padding: '0 3px', borderRadius: '3px' }}>+44 7342 026099</code>
+        </p>
+      )}
+    </div>
+  );
+});
+
+// ── 7. META DESCRIPTION FIELD ────────────────────────────────────────────
+//
+// Textarea with a live character counter. Turns green at 120–160 characters
+// (Google's recommended range for meta descriptions), amber if too short,
+// red if over 160. Empty state shows a neutral grey border.
+//
+// Applies to: aboutPage.pageDescription, contact.pageDescription
+//
+const MetaDescField = wrapFieldsWithMeta((props: any) => {
+  const { input } = props;
+  const value: string = input.value ?? '';
+  const len     = value.length;
+  const inRange = len >= 120 && len <= 160;
+  const color   = !len ? '#d1d5db' : inRange ? '#16a34a' : len < 120 ? '#d97706' : '#ef4444';
+
+  return (
+    <div>
+      <textarea
+        {...input}
+        rows={3}
+        style={{
+          width: '100%',
+          padding: '8px 10px',
+          borderRadius: '6px',
+          border: `1.5px solid ${color}`,
+          fontSize: '14px',
+          lineHeight: 1.55,
+          resize: 'vertical',
+          boxSizing: 'border-box',
+          fontFamily: 'inherit',
+          transition: 'border-color 0.15s',
+        }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px' }}>
+        <span style={{ fontSize: '11px', color: '#9ca3af' }}>Google recommends 120–160 characters</span>
+        <span style={{ fontSize: '11px', fontVariantNumeric: 'tabular-nums', fontWeight: 600, color }}>
+          {len}{inRange ? ' ✓' : len > 160 ? ' — too long' : len > 0 ? ' — too short' : ''}
+        </span>
+      </div>
+    </div>
+  );
+});
+
 // ─── Branch Detection ─────────────────────────────────────────────────────
 
 // Branch detection: prefer explicit env var, then Vercel's commit ref, then 'main'
@@ -515,21 +618,21 @@ export default defineConfig({
         fields: [
           {
             name:        'statementPrefix',
-            label:       'Statement — opening text',
+            label:       'Statement — word before brand name',
             type:        'string',
-            description: 'Text before "Beyond the Badge" (include trailing space)',
+            description: 'Rendered immediately before "Beyond the Badge" on the same line. Include a trailing space if you need a gap (e.g. "At ").',
           },
           {
             name:        'statementLine1',
-            label:       'Statement — line 1 text (after brand name)',
+            label:       'Statement — text after brand name (line 1)',
             type:        'string',
-            description: 'Text after "Beyond the Badge" up to the line break (e.g. ", we believe cultural")',
+            description: 'Appears directly after "Beyond the Badge" on the first line (e.g. ", we believe cultural").',
           },
           {
             name:        'statementLine2',
-            label:       'Statement — line 2 text',
+            label:       'Statement — second line',
             type:        'string',
-            description: 'Text on the second line (e.g. "relevance isn\'t earned through logos.")',
+            description: 'The continuation on the second line (e.g. "relevance isn\'t earned through logos.").',
           },
           { name: 'heroPosterImage', label: 'Hero poster image',   type: 'image' },
           {
@@ -567,7 +670,12 @@ export default defineConfig({
             ui:    { component: 'textarea' },
           },
           { name: 'lauraLinkText', label: 'Link text',  type: 'string' },
-          { name: 'lauraLinkHref', label: 'Link URL',   type: 'string' },
+          {
+            name:        'lauraLinkHref',
+            label:       'Link URL',
+            type:        'string',
+            description: 'Where the name link goes — typically "/about" or an anchor. Use a relative path (e.g. /about).',
+          },
           {
             name:  'introSuffix',
             label: 'Intro text — after name link',
@@ -575,10 +683,11 @@ export default defineConfig({
             ui:    { component: 'textarea' },
           },
           {
-            name:  'images',
-            label: 'Section images (3)',
-            type:  'image',
-            list:  true,
+            name:        'images',
+            label:       'Section images (3)',
+            type:        'image',
+            list:        true,
+            description: 'Images appear left-to-right in the grid. Recommended: portrait orientation, consistent cropping.',
           },
         ],
       },
@@ -602,9 +711,14 @@ export default defineConfig({
             list:  true,
             ui:    { itemProps: (item: any) => ({ label: `${item?.number} ${item?.title}` }) },
             fields: [
-              { name: 'number',     label: 'Number (e.g. "(01)")',     type: 'string' },
-              { name: 'title',      label: 'Title',                    type: 'string' },
-              { name: 'beyondText', label: 'Text after "beyond"',      type: 'string' },
+              { name: 'number',     label: 'Row number (e.g. "(01)")',  type: 'string' },
+              { name: 'title',      label: 'Title',                    type: 'string', isTitle: true, required: true },
+              {
+                name:        'beyondText',
+                label:       'Completes "Beyond ___"',
+                type:        'string',
+                description: 'The word or phrase that follows "beyond" in the row subline (e.g. "the signage" → renders as "Beyond the signage").',
+              },
               { name: 'category',   label: 'Category tag',             type: 'string' },
               { name: 'image',      label: 'Hover image',              type: 'image'  },
             ],
@@ -724,7 +838,7 @@ export default defineConfig({
                 type:  'string',
                 ui:    { component: CapabilityKeyField as any },
               },
-              { name: 'label',       label: 'Label',             type: 'string' },
+              { name: 'label',       label: 'Label',             type: 'string', isTitle: true, required: true },
               { name: 'img',         label: 'Background image',  type: 'image'  },
               {
                 name: 'description',
@@ -788,7 +902,7 @@ export default defineConfig({
             list:  true,
             ui:    { itemProps: (item: any) => ({ label: item?.title }) },
             fields: [
-              { name: 'title', label: 'Title',     type: 'string' },
+              { name: 'title', label: 'Title',     type: 'string', isTitle: true, required: true },
               { name: 'text',  label: 'Body text', type: 'string', ui: { component: 'textarea' } },
             ],
           },
@@ -805,18 +919,13 @@ export default defineConfig({
         match: { include: 'about' },
         fields: [
 
-          // ── Page meta ──────────────────────────────────────────────
-          { name: 'pageTitle',       label: 'Page title (SEO)',        type: 'string' },
-          { name: 'pageDescription', label: 'Meta description (SEO)',  type: 'string',
-            ui: { component: 'textarea' } },
-
-          // ── Hero section ───────────────────────────────────────────
+          // ── Hero section ───────────────────────────────────────
           {
             name: 'hero', label: '1 — Hero section', type: 'object',
             fields: [
               { name: 'sectionLabel',        label: 'Section label (e.g. "About Us")',         type: 'string' },
-              { name: 'introBefore',         label: 'Intro — text before keywords',            type: 'string',
-                ui: { component: 'textarea' } },
+              { name: 'introBefore',  label: 'Intro — text before keywords',  type: 'string',
+                description: 'The sentence that leads into the keyword list (e.g. "We connect brands with the spaces where culture is created —").' },
               { name: 'introAfter',          label: 'Intro — text after keywords',             type: 'string' },
               { name: 'keywordArt',          label: 'Keyword: Art',                            type: 'string' },
               { name: 'keywordSport',        label: 'Keyword: Sport',                          type: 'string' },
@@ -881,8 +990,8 @@ export default defineConfig({
               { name: 'sectionLabel',    label: 'Section label (e.g. "The Founder")', type: 'string' },
 
               // Headline split into 7 parts to preserve no-break formatting in the template
-              { name: 'headlinePre',     label: 'Headline — intro (before name)',     type: 'string',
-                ui: { component: 'textarea' } },
+              { name: 'headlinePre',  label: 'Headline — intro (before name)',  type: 'string',
+                description: 'Opens the founder bio headline (e.g. "After 25 years at the intersection of luxury, culture, and communication,").' },
               { name: 'founderName',     label: 'Founder name (italic, hover-reveals portrait)', type: 'string' },
               { name: 'headlineMid1',    label: 'Headline — after name, before badge word', type: 'string',
                 description: 'e.g. "knows that a brand is not a"' },
@@ -905,6 +1014,20 @@ export default defineConfig({
               { name: 'readMoreLabel',   label: '"Read more" button label',           type: 'string' },
               { name: 'readLessLabel',   label: '"Read less" button label',           type: 'string' },
             ],
+          },
+
+          // ── Page SEO (shown last — focus on content first) ─────────
+          {
+            name:        'pageTitle',
+            label:       'Page title (SEO)',
+            type:        'string',
+            description: 'Shown in the browser tab and search results (e.g. "About — Beyond the Badge").',
+          },
+          {
+            name:        'pageDescription',
+            label:       'Meta description (SEO)',
+            type:        'string',
+            ui:          { component: MetaDescField as any },
           },
 
         ],
@@ -954,7 +1077,8 @@ export default defineConfig({
             name:        'phone',
             label:       'Phone number',
             type:        'string',
-            description: 'Display value shown on the page (e.g. "+4473 4202 6099"). Spaces are stripped automatically for the tel: link.',
+            ui:          { component: PhoneField as any },
+            description: 'Shown on the page and used for the tel: link. Spaces are stripped automatically for the clickable link.',
           },
           {
             name:  'email',
@@ -1020,8 +1144,7 @@ export default defineConfig({
             name:  'pageDescription',
             label: 'Meta description (SEO)',
             type:  'string',
-            ui:    { component: 'textarea' },
-            description: 'Used by search engines. Aim for 120–160 characters.',
+            ui:    { component: MetaDescField as any },
           },
 
         ],
