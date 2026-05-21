@@ -612,103 +612,6 @@ export default defineConfig({
         ],
       },
 
-      // ── ⚡ Capabilities ──────────────────────────────────────────────────
-      {
-        name:   'capabilities',
-        label:  '⚡ Capabilities',
-        path:   'content',
-        format: 'json',
-        ui: {
-          allowedActions: { create: false, delete: false },
-        },
-        match: { include: 'capabilities' },
-        fields: [
-          { name: 'eyebrow',                label: 'Eyebrow text',            type: 'string' },
-          { name: 'defaultBackgroundImage', label: 'Default background image', type: 'image'  },
-          {
-            name:  'items',
-            label: 'Capabilities',
-            type:  'object',
-            list:  true,
-            ui:    { itemProps: (item: any) => ({ label: item?.label }) },
-            fields: [
-              {
-                name:  'key',
-                label: 'Key (unique, no spaces)',
-                type:  'string',
-                ui:    { component: CapabilityKeyField as any },
-              },
-              { name: 'label',       label: 'Label',             type: 'string' },
-              { name: 'img',         label: 'Background image',  type: 'image'  },
-              {
-                name: 'description',
-                label: 'Description',
-                type: 'string',
-                ui: { component: 'textarea' },
-              },
-            ],
-          },
-        ],
-      },
-
-      // ── 🔄 Process ───────────────────────────────────────────────────────
-      {
-        name:   'process',
-        label:  '🔄 Process',
-        path:   'content',
-        format: 'json',
-        ui: {
-          allowedActions: { create: false, delete: false },
-        },
-        match: { include: 'process' },
-        fields: [
-          { name: 'heading',          label: 'Heading',                   type: 'string' },
-          { name: 'headingHighlight', label: 'Heading highlight (italic)', type: 'string' },
-          { name: 'intro',            label: 'Intro text',                type: 'string', ui: { component: 'textarea' } },
-          {
-            name:  'items',
-            label: 'Process cards',
-            type:  'object',
-            list:  true,
-            ui:    { itemProps: (item: any) => ({ label: item?.title }) },
-            fields: [
-              { name: 'title', label: 'Title',     type: 'string' },
-              { name: 'text',  label: 'Body text', type: 'string', ui: { component: 'textarea' } },
-            ],
-          },
-        ],
-      },
-
-      // ── 📣 CTA Section ───────────────────────────────────────────────────
-      {
-        name:   'cta',
-        label:  '📣 CTA section',
-        path:   'content',
-        format: 'json',
-        ui: {
-          allowedActions: { create: false, delete: false },
-        },
-        match: { include: 'cta' },
-        fields: [
-          {
-            name:        'marqueeItems',
-            label:       'Marquee items',
-            type:        'string',
-            list:        true,
-            description: 'Services listed in the scrolling ticker tape. Character count shown per tag — aim to keep each under 32 chars.',
-            ui:          { component: MarqueeItemField as any },
-          },
-          { name: 'barText',        label: 'CTA bar text',         type: 'string' },
-          { name: 'barButtonLabel', label: 'CTA bar button label', type: 'string' },
-          {
-            name:  'ctaImages',
-            label: 'Slideshow images',
-            type:  'image',
-            list:  true,
-          },
-        ],
-      },
-
       // ── 💬 Testimonials ──────────────────────────────────────────────────
       {
         name:   'testimonials',
@@ -795,30 +698,100 @@ export default defineConfig({
         ],
       },
 
-      // ── ⚙️ Global settings ───────────────────────────────────────────────
+      // ── ⚡ Capabilities ──────────────────────────────────────────────────
       {
-        name:   'globalSettings',
-        label:  '⚙️ Global settings',
+        name:   'capabilities',
+        label:  '⚡ Capabilities',
         path:   'content',
         format: 'json',
         ui: {
           allowedActions: { create: false, delete: false },
         },
-        match: { include: 'global' },
+        match: { include: 'capabilities' },
+        fields: [
+          { name: 'eyebrow',                label: 'Eyebrow text',            type: 'string' },
+          { name: 'defaultBackgroundImage', label: 'Default background image', type: 'image'  },
+          {
+            name:  'items',
+            label: 'Capabilities',
+            type:  'object',
+            list:  true,
+            ui:    { itemProps: (item: any) => ({ label: item?.label }) },
+            fields: [
+              {
+                name:  'key',
+                label: 'Key (unique, no spaces)',
+                type:  'string',
+                ui:    { component: CapabilityKeyField as any },
+              },
+              { name: 'label',       label: 'Label',             type: 'string' },
+              { name: 'img',         label: 'Background image',  type: 'image'  },
+              {
+                name: 'description',
+                label: 'Description',
+                type: 'string',
+                ui: { component: 'textarea' },
+              },
+            ],
+          },
+        ],
+      },
+
+      // ── 📣 CTA Section ───────────────────────────────────────────────────
+      {
+        name:   'cta',
+        label:  '📣 CTA section',
+        path:   'content',
+        format: 'json',
+        ui: {
+          allowedActions: { create: false, delete: false },
+        },
+        match: { include: 'cta' },
         fields: [
           {
-            name:  'contactEmail',
-            label: 'Contact email',
-            type:  'string',
-            ui:    { component: EmailField as any },
+            name:        'marqueeItems',
+            label:       'Marquee items',
+            type:        'string',
+            list:        true,
+            description: 'Services listed in the scrolling ticker tape. Character count shown per tag — aim to keep each under 32 chars.',
+            ui:          { component: MarqueeItemField as any },
           },
+          { name: 'barText',        label: 'CTA bar text',         type: 'string' },
+          { name: 'barButtonLabel', label: 'CTA bar button label', type: 'string' },
           {
-            name:  'instagramUrl',
-            label: 'Instagram URL',
-            type:  'string',
-            ui:    { component: InstagramUrlField as any },
+            name:  'ctaImages',
+            label: 'Slideshow images',
+            type:  'image',
+            list:  true,
           },
-          { name: 'copyrightText', label: 'Copyright text', type: 'string' },
+        ],
+      },
+
+      // ── 🔄 Process ───────────────────────────────────────────────────────
+      {
+        name:   'process',
+        label:  '🔄 Process',
+        path:   'content',
+        format: 'json',
+        ui: {
+          allowedActions: { create: false, delete: false },
+        },
+        match: { include: 'process' },
+        fields: [
+          { name: 'heading',          label: 'Heading',                   type: 'string' },
+          { name: 'headingHighlight', label: 'Heading highlight (italic)', type: 'string' },
+          { name: 'intro',            label: 'Intro text',                type: 'string', ui: { component: 'textarea' } },
+          {
+            name:  'items',
+            label: 'Process cards',
+            type:  'object',
+            list:  true,
+            ui:    { itemProps: (item: any) => ({ label: item?.title }) },
+            fields: [
+              { name: 'title', label: 'Title',     type: 'string' },
+              { name: 'text',  label: 'Body text', type: 'string', ui: { component: 'textarea' } },
+            ],
+          },
         ],
       },
 
@@ -936,6 +909,33 @@ export default defineConfig({
             description: 'Used by search engines. Aim for 120–160 characters.',
           },
 
+        ],
+      },
+
+      // ── ⚙️ Global settings ───────────────────────────────────────────────
+      {
+        name:   'globalSettings',
+        label:  '⚙️ Global settings',
+        path:   'content',
+        format: 'json',
+        ui: {
+          allowedActions: { create: false, delete: false },
+        },
+        match: { include: 'global' },
+        fields: [
+          {
+            name:  'contactEmail',
+            label: 'Contact email',
+            type:  'string',
+            ui:    { component: EmailField as any },
+          },
+          {
+            name:  'instagramUrl',
+            label: 'Instagram URL',
+            type:  'string',
+            ui:    { component: InstagramUrlField as any },
+          },
+          { name: 'copyrightText', label: 'Copyright text', type: 'string' },
         ],
       },
 
