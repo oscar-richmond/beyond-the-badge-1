@@ -6,6 +6,7 @@ dist/
 
 # TinaCMS generated files (rebuild on deploy)
 tina/__generated__/
+public/admin/
 
 # Local env (contains TinaCloud secrets)
 .env.local
