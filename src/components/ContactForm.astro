@@ -1,30 +1,73 @@
 ---
+interface Props {
+  eyebrow?:             string;
+  headingMain?:         string;
+  headingItalic?:       string;
+  subtext?:             string;
+  phone?:               string;
+  email?:               string;
+  nameLabel?:           string;
+  namePlaceholder?:     string;
+  emailLabel?:          string;
+  emailPlaceholder?:    string;
+  companyLabel?:        string;
+  companyPlaceholder?:  string;
+  messageLabel?:        string;
+  messagePlaceholder?:  string;
+  privacyNote?:         string;
+  submitLabel?:         string;
+  successHeadline?:     string;
+  successSub?:          string;
+}
+
+const {
+  eyebrow            = 'GET IN TOUCH',
+  headingMain        = "Let's build something",
+  headingItalic      = 'worth remembering.',
+  subtext            = "We're selective about who we work with — and we think that's a good thing. If you believe in the power of culture to move people, let's talk.",
+  phone              = '+4473 4202 6099',
+  email              = 'hello@beyondthebadge.agency',
+  nameLabel          = 'Name',
+  namePlaceholder    = 'Your name',
+  emailLabel         = 'Email',
+  emailPlaceholder   = 'your@email.com',
+  companyLabel       = 'Company / Brand',
+  companyPlaceholder = 'Company name',
+  messageLabel       = 'Message',
+  messagePlaceholder = "Tell us about your brand and what you're looking to achieve...",
+  privacyNote        = "We'll only use your information to respond to your enquiry.",
+  submitLabel        = 'Send message',
+  successHeadline    = 'Message received.',
+  successSub         = "Thank you for reaching out. We'll be in touch shortly.",
+} = Astro.props;
+
+// Derive a clean tel: href from the display phone number
+const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
 ---
 
 <section class="contact section" id="contact">
   <div class="container">
     <div class="contact__header">
-      <span class="contact__tag">GET IN TOUCH</span>
+      <span class="contact__tag">{eyebrow}</span>
       <h1 class="contact__heading">
-        Let's build something<br />
-        <em class="contact__heading-em">worth remembering.</em>
+        {headingMain}<br />
+        <em class="contact__heading-em">{headingItalic}</em>
       </h1>
     </div>
 
     <div class="contact__body">
       <div class="contact__info">
         <p class="contact__subtext">
-          We're selective about who we work with — and we think that's a good thing.
-          If you believe in the power of culture to move people, let's talk.
+          {subtext}
         </p>
         <div class="contact__details">
-          <a href="tel:+447342026099" class="contact__detail-link">
+          <a href={phoneHref} class="contact__detail-link">
             <span class="contact__detail-label">Phone</span>
-            <span class="contact__detail-value">+4473 4202 6099</span>
+            <span class="contact__detail-value">{phone}</span>
           </a>
-          <a href="mailto:hello@beyondthebadge.agency" class="contact__detail-link">
+          <a href={`mailto:${email}`} class="contact__detail-link">
             <span class="contact__detail-label">Email</span>
-            <span class="contact__detail-value">hello@beyondthebadge.agency</span>
+            <span class="contact__detail-value">{email}</span>
           </a>
         </div>
       </div>
@@ -35,9 +78,9 @@
         <!-- Success panel (hidden until submission succeeds) -->
         <div class="contact__success-panel" id="contact-success-panel" aria-live="polite" hidden>
           <span class="contact__success-tick" aria-hidden="true">✓</span>
-          <p class="contact__success-headline">Message received.</p>
+          <p class="contact__success-headline">{successHeadline}</p>
           <p class="contact__success-sub">
-            Thank you for reaching out. We'll be in touch shortly.
+            {successSub}
           </p>
         </div>
 
@@ -49,14 +92,14 @@
           <div class="contact__field-row">
             <div class="contact__field" id="field-name">
               <label for="contact-name" class="contact__label">
-                Name <span class="contact__required" aria-hidden="true">*</span>
+                {nameLabel} <span class="contact__required" aria-hidden="true">*</span>
               </label>
               <input
                 type="text"
                 id="contact-name"
                 name="name"
                 class="contact__input"
-                placeholder="Your name"
+                placeholder={namePlaceholder}
                 autocomplete="name"
                 required
                 aria-required="true"
@@ -66,14 +109,14 @@
             </div>
             <div class="contact__field" id="field-email">
               <label for="contact-email" class="contact__label">
-                Email <span class="contact__required" aria-hidden="true">*</span>
+                {emailLabel} <span class="contact__required" aria-hidden="true">*</span>
               </label>
               <input
                 type="email"
                 id="contact-email"
                 name="email"
                 class="contact__input"
-                placeholder="your@email.com"
+                placeholder={emailPlaceholder}
                 autocomplete="email"
                 required
                 aria-required="true"
@@ -85,14 +128,14 @@
 
           <div class="contact__field" id="field-company">
             <label for="contact-company" class="contact__label">
-              Company / Brand <span class="contact__required" aria-hidden="true">*</span>
+              {companyLabel} <span class="contact__required" aria-hidden="true">*</span>
             </label>
             <input
               type="text"
               id="contact-company"
               name="company"
               class="contact__input"
-              placeholder="Company name"
+              placeholder={companyPlaceholder}
               autocomplete="organization"
               required
               aria-required="true"
@@ -103,13 +146,13 @@
 
           <div class="contact__field" id="field-message">
             <label for="contact-message" class="contact__label">
-              Message <span class="contact__required" aria-hidden="true">*</span>
+              {messageLabel} <span class="contact__required" aria-hidden="true">*</span>
             </label>
             <textarea
               id="contact-message"
               name="message"
               class="contact__input contact__textarea"
-              placeholder="Tell us about your brand and what you're looking to achieve..."
+              placeholder={messagePlaceholder}
               rows="5"
               required
               aria-required="true"
@@ -120,10 +163,10 @@
 
           <div class="contact__form-footer">
             <p class="contact__privacy">
-              We'll only use your information to respond to your enquiry.
+              {privacyNote}
             </p>
-            <button type="submit" class="contact__submit" id="contact-submit" aria-live="polite">
-              <span class="contact__submit-text">Send message</span>
+            <button type="submit" class="contact__submit" id="contact-submit" aria-live="polite" data-submit-label={submitLabel}>
+              <span class="contact__submit-text">{submitLabel}</span>
               <span class="contact__submit-arrow" aria-hidden="true">→</span>
             </button>
           </div>
@@ -660,7 +703,8 @@
     if (!submitBtn || !submitText) return;
     submitBtn.disabled = loading;
     submitBtn.classList.toggle('is-loading', loading);
-    submitText.textContent = loading ? 'Sending—' : 'Send message';
+    const label = submitBtn.dataset.submitLabel || 'Send message';
+    submitText.textContent = loading ? 'Sending\u2014' : label;
   }
 
   // ── Live validation: clear error as soon as field becomes valid ────────────

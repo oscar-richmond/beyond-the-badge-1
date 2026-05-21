@@ -4,11 +4,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Footer from '../components/Footer.astro';
+import data from '../../content/contact.json';
 ---
 
 <BaseLayout
-  title="Contact — Beyond the Badge"
-  description="Get in touch with Beyond the Badge. We connect brands with the spaces where culture is created."
+  title={data.pageTitle}
+  description={data.pageDescription}
 >
   <style is:global>
     /* ── Contact section → cream background + dark text ───────────────────── */
@@ -149,7 +150,26 @@ import Footer from '../components/Footer.astro';
   <Header />
 
   <main>
-    <ContactForm />
+    <ContactForm
+      eyebrow={data.eyebrow}
+      headingMain={data.headingMain}
+      headingItalic={data.headingItalic}
+      subtext={data.subtext}
+      phone={data.phone}
+      email={data.email}
+      nameLabel={data.form.nameLabel}
+      namePlaceholder={data.form.namePlaceholder}
+      emailLabel={data.form.emailLabel}
+      emailPlaceholder={data.form.emailPlaceholder}
+      companyLabel={data.form.companyLabel}
+      companyPlaceholder={data.form.companyPlaceholder}
+      messageLabel={data.form.messageLabel}
+      messagePlaceholder={data.form.messagePlaceholder}
+      privacyNote={data.form.privacyNote}
+      submitLabel={data.form.submitLabel}
+      successHeadline={data.successHeadline}
+      successSub={data.successSub}
+    />
   </main>
 
   <Footer />
