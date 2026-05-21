@@ -795,6 +795,121 @@ export default defineConfig({
         ],
       },
 
+      // ── 📖 About page ────────────────────────────────────────────────────
+      {
+        name:   'aboutPage',
+        label:  '📖 About page',
+        path:   'content',
+        format: 'json',
+        ui: { allowedActions: { create: false, delete: false } },
+        match: { include: 'about' },
+        fields: [
+
+          // ── Page meta ──────────────────────────────────────────────
+          { name: 'pageTitle',       label: 'Page title (SEO)',        type: 'string' },
+          { name: 'pageDescription', label: 'Meta description (SEO)',  type: 'string',
+            ui: { component: 'textarea' } },
+
+          // ── Hero section ───────────────────────────────────────────
+          {
+            name: 'hero', label: '1 — Hero section', type: 'object',
+            fields: [
+              { name: 'sectionLabel',        label: 'Section label (e.g. "About Us")',         type: 'string' },
+              { name: 'introBefore',         label: 'Intro — text before keywords',            type: 'string',
+                ui: { component: 'textarea' } },
+              { name: 'introAfter',          label: 'Intro — text after keywords',             type: 'string' },
+              { name: 'keywordArt',          label: 'Keyword: Art',                            type: 'string' },
+              { name: 'keywordSport',        label: 'Keyword: Sport',                          type: 'string' },
+              { name: 'keywordFilm',         label: 'Keyword: Film',                           type: 'string' },
+              { name: 'keywordEntertainment',label: 'Keyword: Entertainment',                  type: 'string' },
+              { name: 'keywordAdventure',    label: 'Keyword: Adventure',                      type: 'string' },
+              { name: 'keywordCommunity',    label: 'Keyword: Community',                      type: 'string' },
+              { name: 'ctaText',             label: 'CTA link text (e.g. "Get in touch →")',   type: 'string',
+                description: 'Appears bottom-left, links to the contact form.' },
+            ],
+          },
+
+          // ── Image pair ─────────────────────────────────────────────
+          {
+            name: 'imagePair', label: '2 — Image pair (keyword states)', type: 'object',
+            description: 'Each keyword state swaps both photos simultaneously when the user hovers a word in the hero.',
+            fields: [
+              { name: 'photo1Default',       label: 'Left — Default',        type: 'image' },
+              { name: 'photo1Art',           label: 'Left — Art',            type: 'image' },
+              { name: 'photo1Sport',         label: 'Left — Sport',          type: 'image' },
+              { name: 'photo1Film',          label: 'Left — Film',           type: 'image' },
+              { name: 'photo1Entertainment', label: 'Left — Entertainment',  type: 'image' },
+              { name: 'photo1Adventure',     label: 'Left — Adventure',      type: 'image' },
+              { name: 'photo1Community',     label: 'Left — Community',      type: 'image' },
+              { name: 'photo2Default',       label: 'Right — Default',       type: 'image' },
+              { name: 'photo2Art',           label: 'Right — Art',           type: 'image' },
+              { name: 'photo2Sport',         label: 'Right — Sport',         type: 'image' },
+              { name: 'photo2Film',          label: 'Right — Film',          type: 'image' },
+              { name: 'photo2Entertainment', label: 'Right — Entertainment', type: 'image' },
+              { name: 'photo2Adventure',     label: 'Right — Adventure',     type: 'image' },
+              { name: 'photo2Community',     label: 'Right — Community',     type: 'image' },
+            ],
+          },
+
+          // ── Statement section ──────────────────────────────────────
+          {
+            name: 'statement', label: '3 — Statement section', type: 'object',
+            fields: [
+              { name: 'body',            label: 'Body paragraph',                              type: 'string',
+                ui: { component: 'textarea' } },
+              { name: 'taglinePlain',    label: 'Tagline — fixed text (e.g. "Less logo.")',    type: 'string' },
+              { name: 'rotatingPhrases', label: 'Tagline — rotating phrases',                  type: 'string', list: true,
+                description: 'Each phrase cycles in after the fixed tagline text.' },
+            ],
+          },
+
+          // ── Four-image strip ───────────────────────────────────────
+          {
+            name: 'imageGrid', label: '4 — Four-image strip', type: 'object',
+            fields: [
+              { name: 'image1', label: 'Image 1 (narrow column)',  type: 'image' },
+              { name: 'image2', label: 'Image 2 (narrow column)',  type: 'image' },
+              { name: 'image3', label: 'Image 3 (wide column)',    type: 'image' },
+              { name: 'image4', label: 'Image 4 (labelled "01")',  type: 'image' },
+            ],
+          },
+
+          // ── Founder bio ────────────────────────────────────────────
+          {
+            name: 'bio', label: '5 — Founder bio', type: 'object',
+            fields: [
+              { name: 'sectionLabel',    label: 'Section label (e.g. "The Founder")', type: 'string' },
+
+              // Headline split into 7 parts to preserve no-break formatting in the template
+              { name: 'headlinePre',     label: 'Headline — intro (before name)',     type: 'string',
+                ui: { component: 'textarea' } },
+              { name: 'founderName',     label: 'Founder name (italic, hover-reveals portrait)', type: 'string' },
+              { name: 'headlineMid1',    label: 'Headline — after name, before badge word', type: 'string',
+                description: 'e.g. "knows that a brand is not a"' },
+              { name: 'headlineBadgeWord', label: 'Headline — "badge" word (no-break formatted)', type: 'string',
+                description: 'e.g. "badge—it\'s" — this word uses no-break formatting to prevent the em-dash splitting across lines.' },
+              { name: 'headlineMid2',    label: 'Headline — after badge word, before team size', type: 'string',
+                ui: { component: 'textarea' },
+                description: 'e.g. "a feeling. Following a decade as Global Director..."' },
+              { name: 'headlineTeamNum', label: 'Headline — team size number (gets "+" superscript)', type: 'string',
+                description: 'Just the number, e.g. "70". The "+" and superscript formatting are applied automatically.' },
+              { name: 'headlinePost',    label: 'Headline — closing phrase',          type: 'string',
+                description: 'e.g. "to redefine brand experience & culture."' },
+
+              { name: 'body',            label: 'Bio intro paragraph',                type: 'string',
+                ui: { component: 'textarea' } },
+              { name: 'expandParagraphs', label: 'Expanded bio paragraphs ("Read more")', type: 'string', list: true,
+                ui: { component: 'textarea' },
+                description: 'Each item is one paragraph shown when the reader clicks "Read more".' },
+              { name: 'portrait',        label: 'Founder portrait (hover-reveals over name)', type: 'image' },
+              { name: 'readMoreLabel',   label: '"Read more" button label',           type: 'string' },
+              { name: 'readLessLabel',   label: '"Read less" button label',           type: 'string' },
+            ],
+          },
+
+        ],
+      },
+
       // ── 📬 Contact page ──────────────────────────────────────────────────
       {
         name:   'contact',

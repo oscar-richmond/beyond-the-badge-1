@@ -5,13 +5,15 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
 import CTA from '../components/CTA.astro';
+import data from '../../content/about.json';
+import contactData from '../../content/contact.json';
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset (watermark)
 ---
 
 <BaseLayout
-  title="About — Beyond the Badge"
-  description="Learn about Beyond the Badge — the cultural brand partnership agency led by Laura Wood."
+  title={data.pageTitle}
+  description={data.pageDescription}
 >
   <Header />
   <main class="about-page">
@@ -19,18 +21,18 @@ const base = import.meta.env.BASE_URL;
     <!-- 1. Hero -->
     <section class="about-hero">
       <h1 class="about-hero__text" data-reveal-delay="-0.4">
-        We connect brands with the spaces where culture is created —
-        <em data-keyword="art">art</em>,
-        <em data-keyword="sport">sport</em>, <em data-keyword="film">film</em>, <em data-keyword="entertainment">entertainment</em>, <em data-keyword="adventure">adventure</em> and <em data-keyword="community">community</em>.
-        Not to chase the moment, but to shape what comes next.
+        {data.hero.introBefore}
+        <em data-keyword="art">{data.hero.keywordArt}</em>,
+        <em data-keyword="sport">{data.hero.keywordSport}</em>, <em data-keyword="film">{data.hero.keywordFilm}</em>, <em data-keyword="entertainment">{data.hero.keywordEntertainment}</em>, <em data-keyword="adventure">{data.hero.keywordAdventure}</em> and <em data-keyword="community">{data.hero.keywordCommunity}</em>.
+        {data.hero.introAfter}
       </h1>
-      <span class="about-hero__label">About Us</span>
+      <span class="about-hero__label">{data.hero.sectionLabel}</span>
     </section>
 
     <!-- 2. Image pair with caption -->
     <section class="about-images">
       <div class="about-images__cta-col">
-        <a href="#contact" class="about-images__link"><span>Get in touch →</span></a>
+        <a href="#contact" class="about-images__link"><span>{data.hero.ctaText}</span></a>
       </div>
       <div class="about-images__photos-col" data-reveal-group>
         <div class="about-images__item reveal--scale" data-reveal-immediate>
@@ -44,13 +46,13 @@ const base = import.meta.env.BASE_URL;
             <span class="about-images__num-inner" data-state="community">(13)</span>
           </span>
           <div class="about-images__photo" id="about-photo-1">
-            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-page-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-art-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-sport-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-film-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-entertainment-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-adventure-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-community-1.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${data.imagePair.photo1Default}')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo1Art}')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo1Sport}')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo1Film}')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo1Entertainment}')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo1Adventure}')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo1Community}')`}></div>
           </div>
         </div>
         <div class="about-images__item reveal--scale" data-reveal-immediate>
@@ -64,13 +66,13 @@ const base = import.meta.env.BASE_URL;
             <span class="about-images__num-inner" data-state="community">(14)</span>
           </span>
           <div class="about-images__photo" id="about-photo-2">
-            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${base}about-page-right-default.jpg')`}></div>
-            <div class="about-images__layer" data-state="art"           style={`background-image: url('${base}about-art-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${base}about-sport-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="film"          style={`background-image: url('${base}about-film-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${base}about-adventure-1.jpg')`}></div>
-            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${base}about-entertainment-2.jpg')`}></div>
-            <div class="about-images__layer" data-state="community"     style={`background-image: url('${base}about-community-2.jpg')`}></div>
+            <div class="about-images__layer is-active" data-state="default"      style={`background-image: url('${data.imagePair.photo2Default}')`}></div>
+            <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo2Art}')`}></div>
+            <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo2Sport}')`}></div>
+            <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo2Film}')`}></div>
+            <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo2Entertainment}')`}></div>
+            <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo2Adventure}')`}></div>
+            <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo2Community}')`}></div>
           </div>
         </div>
       </div>
@@ -81,18 +83,14 @@ const base = import.meta.env.BASE_URL;
       <img class="about-statement__watermark" src={`${base}logo-monogram.png`} alt="" aria-hidden="true" />
       <div class="about-statement__inner">
         <p class="about-statement__text" data-reveal-delay="0.3">
-          We build emotional resonance, not just recognition. Through bold partnerships,
-          authentic storytelling, cultural programming, and meaningful conversations with
-          talent and communities, we help brands earn their place in culture — not by
-          playing the corporate playbook, but by showing up with purpose, humility, and
-          a point of view.
+          {data.statement.body}
         </p>
         <div class="about-statement__tagline">
-          <span class="about-tagline-plain">Less logo.</span>
+          <span class="about-tagline-plain">{data.statement.taglinePlain}</span>
           <span class="about-tagline-rotating-wrapper" aria-live="polite">
-            <span class="about-rotating-phrase">More legacy.</span>
-            <span class="about-rotating-phrase">More Partnerships.</span>
-            <span class="about-rotating-phrase">More Sponsorship.</span>
+            {data.statement.rotatingPhrases.map((phrase) => (
+              <span class="about-rotating-phrase">{phrase}</span>
+            ))}
           </span>
         </div>
       </div>
@@ -101,17 +99,17 @@ const base = import.meta.env.BASE_URL;
     <!-- 4. Four-image strip -->
     <section class="about-image-grid" data-reveal-group>
       <div class="about-image-grid__item reveal--scale">
-        <img src={`${base}about-grid-1.jpg`} alt="" loading="lazy" />
+        <img src={data.imageGrid.image1} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item reveal--scale">
-        <img src={`${base}about-grid-2.jpg`} alt="" loading="lazy" />
+        <img src={data.imageGrid.image2} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item reveal--scale">
-        <img src={`${base}hero-bg.jpg`} alt="" loading="lazy" />
+        <img src={data.imageGrid.image3} alt="" loading="lazy" />
       </div>
       <div class="about-image-grid__item about-image-grid__item--labeled reveal--scale">
         <span class="about-image-grid__index">(01)</span>
-        <img src={`${base}about-grid-4.jpg`} alt="" loading="lazy" />
+        <img src={data.imageGrid.image4} alt="" loading="lazy" />
       </div>
     </section>
 
@@ -120,52 +118,66 @@ const base = import.meta.env.BASE_URL;
       <div class="about-bio__inner">
         <div class="about-bio__content">
           <h2 class="about-bio__headline">
-            After 25 years at the intersection of luxury, culture, and communication,
-            <em>Laura Wood</em> knows that a brand is not a <span style="white-space:nowrap">badge—it's</span> a feeling.
-            Following a decade as Global Director at Jaguar Land Rover, where she led a team of <span style="white-space:nowrap">70<sup>+</sup></span>
-            to redefine brand experience &amp; culture.
+            {data.bio.headlinePre}
+            <em>{data.bio.founderName}</em> {data.bio.headlineMid1} <span style="white-space:nowrap">{data.bio.headlineBadgeWord}</span> {data.bio.headlineMid2} <span style="white-space:nowrap">{data.bio.headlineTeamNum}<sup>+</sup></span>
+            {data.bio.headlinePost}
           </h2>
           <p class="about-bio__body">
-            She specializes in moving brands past surface-level marketing and into meaningful
-            cultural participation. From managing £80M+ global budgets to curating world-class
-            collaborations, her work is defined by one goal: helping brands stop marketing and
-            start mattering.
+            {data.bio.body}
           </p>
 
           <div class="about-bio__expand" id="bio-expand" aria-hidden="true">
             <div class="about-bio__expand-inner">
-              <div class="about-bio__expand-para">
-                <div class="bio-inner">Having spent over two decades building world-class teams and narratives for some of the most recognisable names in the world, Laura now helps brands navigate the complexities of cultural affinity and strategic growth.</div>
-              </div>
-              <div class="about-bio__expand-para">
-                <div class="bio-inner">As Director of Brand Partnerships, Experience &amp; Collections at Jaguar Land Rover, she led a team of incredible professionals to redefine the cultural strategy for the "House of Brands," curating high-profile collaborations and reimagining global brand experiences for Range Rover, Defender, Discovery &amp; Jaguar. Her corporate tenure was preceded by a successful entrepreneurial career as a Partner at The Brooklyn Brothers and Co-Founder of Golden Goose PR, where she launched over 30 businesses.</div>
-              </div>
-              <div class="about-bio__expand-para">
-                <div class="bio-inner">Outside of Beyond The Badge, Laura extends her expertise into the humanitarian sector, where she serves as an External Committee Member for the British Red Cross Donations Acceptance Committee. In this role, she leverages her strategic judgment and experience in risk and governance to help the organization navigate complex ethical decisions regarding donations.</div>
-              </div>
-              <div class="about-bio__expand-para">
-                <div class="bio-inner">An award-winning strategist with a Cannes Lions Gold and PR Week Global Awards to her name, Laura's leadership is defined by the principles of empowerment and growth. Through Beyond The Badge, she brings her "big brand" expertise and entrepreneurial agility to help clients build meaningful connections that go far deeper than a logo.</div>
-              </div>
+              {data.bio.expandParagraphs.map((para) => (
+                <div class="about-bio__expand-para">
+                  <div class="bio-inner">{para}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <button type="button" id="bio-read-more-btn" class="about-bio__btn">
-            <span id="bio-btn-text">Read more +</span>
+          <button
+            type="button"
+            id="bio-read-more-btn"
+            class="about-bio__btn"
+            data-read-more={data.bio.readMoreLabel}
+            data-read-less={data.bio.readLessLabel}
+          >
+            <span id="bio-btn-text">{data.bio.readMoreLabel}</span>
           </button>
           <img
             class="about-bio__portrait"
-            src={`${base}laura-portrait.png`}
-            alt="Laura Wood"
+            src={data.bio.portrait}
+            alt={data.bio.founderName}
             aria-hidden="true"
           />
         </div>
-        <span class="about-bio__label">The Founder</span>
+        <span class="about-bio__label">{data.bio.sectionLabel}</span>
       </div>
     </section>
 
   </main>
 
-  <ContactForm />
+  <ContactForm
+    eyebrow={contactData.eyebrow}
+    headingMain={contactData.headingMain}
+    headingItalic={contactData.headingItalic}
+    subtext={contactData.subtext}
+    phone={contactData.phone}
+    email={contactData.email}
+    nameLabel={contactData.form.nameLabel}
+    namePlaceholder={contactData.form.namePlaceholder}
+    emailLabel={contactData.form.emailLabel}
+    emailPlaceholder={contactData.form.emailPlaceholder}
+    companyLabel={contactData.form.companyLabel}
+    companyPlaceholder={contactData.form.companyPlaceholder}
+    messageLabel={contactData.form.messageLabel}
+    messagePlaceholder={contactData.form.messagePlaceholder}
+    privacyNote={contactData.form.privacyNote}
+    submitLabel={contactData.form.submitLabel}
+    successHeadline={contactData.successHeadline}
+    successSub={contactData.successSub}
+  />
   <Footer cream />
 </BaseLayout>
 
@@ -1359,12 +1371,14 @@ const base = import.meta.env.BASE_URL;
 
   if (readMoreBtn && bioExpand && btnTextEl) {
     let bioExpanded = false;
+    const readMoreLabel = readMoreBtn.dataset.readMore || 'Read more +';
+    const readLessLabel = readMoreBtn.dataset.readLess || 'Read less −';
 
     readMoreBtn.addEventListener('click', () => {
       bioExpanded = !bioExpanded;
       bioExpand.classList.toggle('is-open', bioExpanded);
       bioExpand.setAttribute('aria-hidden', String(!bioExpanded));
-      btnTextEl.textContent = bioExpanded ? 'Read less −' : 'Read more +';
+      btnTextEl.textContent = bioExpanded ? readLessLabel : readMoreLabel;
     });
   }
 </script>

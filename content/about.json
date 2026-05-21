@@ -1,0 +1,68 @@
+{
+  "pageTitle": "About — Beyond the Badge",
+  "pageDescription": "Learn about Beyond the Badge — the cultural brand partnership agency led by Laura Wood.",
+
+  "hero": {
+    "sectionLabel": "About Us",
+    "introBefore": "We connect brands with the spaces where culture is created —",
+    "introAfter": "Not to chase the moment, but to shape what comes next.",
+    "keywordArt": "art",
+    "keywordSport": "sport",
+    "keywordFilm": "film",
+    "keywordEntertainment": "entertainment",
+    "keywordAdventure": "adventure",
+    "keywordCommunity": "community",
+    "ctaText": "Get in touch →"
+  },
+
+  "imagePair": {
+    "photo1Default": "/about-page-1.jpg",
+    "photo1Art": "/about-art-1.jpg",
+    "photo1Sport": "/about-sport-1.jpg",
+    "photo1Film": "/about-film-1.jpg",
+    "photo1Entertainment": "/about-entertainment-1.jpg",
+    "photo1Adventure": "/about-adventure-2.jpg",
+    "photo1Community": "/about-community-1.jpg",
+    "photo2Default": "/about-page-right-default.jpg",
+    "photo2Art": "/about-art-2.jpg",
+    "photo2Sport": "/about-sport-2.jpg",
+    "photo2Film": "/about-film-2.jpg",
+    "photo2Entertainment": "/about-adventure-1.jpg",
+    "photo2Adventure": "/about-entertainment-2.jpg",
+    "photo2Community": "/about-community-2.jpg"
+  },
+
+  "statement": {
+    "body": "We build emotional resonance, not just recognition. Through bold partnerships, authentic storytelling, cultural programming, and meaningful conversations with talent and communities, we help brands earn their place in culture — not by playing the corporate playbook, but by showing up with purpose, humility, and a point of view.",
+    "taglinePlain": "Less logo.",
+    "rotatingPhrases": ["More legacy.", "More Partnerships.", "More Sponsorship."]
+  },
+
+  "imageGrid": {
+    "image1": "/about-grid-1.jpg",
+    "image2": "/about-grid-2.jpg",
+    "image3": "/hero-bg.jpg",
+    "image4": "/about-grid-4.jpg"
+  },
+
+  "bio": {
+    "sectionLabel": "The Founder",
+    "headlinePre": "After 25 years at the intersection of luxury, culture, and communication,",
+    "founderName": "Laura Wood",
+    "headlineMid1": "knows that a brand is not a",
+    "headlineBadgeWord": "badge—it's",
+    "headlineMid2": "a feeling. Following a decade as Global Director at Jaguar Land Rover, where she led a team of",
+    "headlineTeamNum": "70",
+    "headlinePost": "to redefine brand experience & culture.",
+    "body": "She specializes in moving brands past surface-level marketing and into meaningful cultural participation. From managing £80M+ global budgets to curating world-class collaborations, her work is defined by one goal: helping brands stop marketing and start mattering.",
+    "expandParagraphs": [
+      "Having spent over two decades building world-class teams and narratives for some of the most recognisable names in the world, Laura now helps brands navigate the complexities of cultural affinity and strategic growth.",
+      "As Director of Brand Partnerships, Experience & Collections at Jaguar Land Rover, she led a team of incredible professionals to redefine the cultural strategy for the \"House of Brands,\" curating high-profile collaborations and reimagining global brand experiences for Range Rover, Defender, Discovery & Jaguar. Her corporate tenure was preceded by a successful entrepreneurial career as a Partner at The Brooklyn Brothers and Co-Founder of Golden Goose PR, where she launched over 30 businesses.",
+      "Outside of Beyond The Badge, Laura extends her expertise into the humanitarian sector, where she serves as an External Committee Member for the British Red Cross Donations Acceptance Committee. In this role, she leverages her strategic judgment and experience in risk and governance to help the organization navigate complex ethical decisions regarding donations.",
+      "An award-winning strategist with a Cannes Lions Gold and PR Week Global Awards to her name, Laura's leadership is defined by the principles of empowerment and growth. Through Beyond The Badge, she brings her \"big brand\" expertise and entrepreneurial agility to help clients build meaningful connections that go far deeper than a logo."
+    ],
+    "portrait": "/laura-portrait.png",
+    "readMoreLabel": "Read more +",
+    "readLessLabel": "Read less −"
+  }
+}
