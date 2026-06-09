@@ -4,11 +4,12 @@
 
   "hero": {
     "sectionLabel": "About Us",
-    "introBefore": "We connect brands with the spaces where culture is created —",
+    "introBefore": "We connect brands with the spaces where culture is created in",
     "introAfter": "Not to chase the moment, but to shape what comes next.",
     "keywordArt": "art",
     "keywordSport": "sport",
     "keywordFilm": "film",
+    "keywordMusic": "music",
     "keywordEntertainment": "entertainment",
     "keywordAdventure": "adventure",
     "keywordCommunity": "community",
@@ -33,7 +34,7 @@
   },
 
   "statement": {
-    "body": "We build emotional resonance, not just recognition. Through bold partnerships, authentic storytelling, cultural programming, and meaningful conversations with talent and communities, we help brands earn their place in culture — not by playing the corporate playbook, but by showing up with purpose, humility, and a point of view.",
+    "body": "We build emotional resonance, not just recognition. Through bold partnerships, authentic storytelling, cultural programming, and meaningful conversations with talent and communities, we help brands earn their place in culture, not by playing the corporate playbook, but by showing up with purpose, humility, and a point of view.",
     "taglinePlain": "Less logo.",
     "rotatingPhrases": ["More legacy.", "More Partnerships.", "More Sponsorship."]
   },
@@ -50,7 +51,7 @@
     "headlinePre": "After 25 years at the intersection of luxury, culture, and communication,",
     "founderName": "Laura Wood",
     "headlineMid1": "knows that a brand is not a",
-    "headlineBadgeWord": "badge—it's",
+    "headlineBadgeWord": "badge, it's",
     "headlineMid2": "a feeling. Following a decade as Global Director at Jaguar Land Rover, where she led a team of",
     "headlineTeamNum": "70",
     "headlinePost": "to redefine brand experience & culture.",

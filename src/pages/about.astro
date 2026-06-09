@@ -23,7 +23,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
       <h1 class="about-hero__text" data-reveal-delay="-0.4">
         {data.hero.introBefore}
         <em data-keyword="art">{data.hero.keywordArt}</em>,
-        <em data-keyword="sport">{data.hero.keywordSport}</em>, <em data-keyword="film">{data.hero.keywordFilm}</em>, <em data-keyword="entertainment">{data.hero.keywordEntertainment}</em>, <em data-keyword="adventure">{data.hero.keywordAdventure}</em> and <em data-keyword="community">{data.hero.keywordCommunity}</em>.
+        <em data-keyword="sport">{data.hero.keywordSport}</em>, <em data-keyword="film">{data.hero.keywordFilm}</em>, <em data-keyword="music">{data.hero.keywordMusic}</em>, <em data-keyword="entertainment">{data.hero.keywordEntertainment}</em>, <em data-keyword="adventure">{data.hero.keywordAdventure}</em> and <em data-keyword="community">{data.hero.keywordCommunity}</em>.
         {data.hero.introAfter}
       </h1>
       <span class="about-hero__label">{data.hero.sectionLabel}</span>
@@ -41,6 +41,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <span class="about-images__num-inner" data-state="art">(03)</span>
             <span class="about-images__num-inner" data-state="sport">(05)</span>
             <span class="about-images__num-inner" data-state="film">(07)</span>
+            <span class="about-images__num-inner" data-state="music">(07)</span>
             <span class="about-images__num-inner" data-state="entertainment">(09)</span>
             <span class="about-images__num-inner" data-state="adventure">(11)</span>
             <span class="about-images__num-inner" data-state="community">(13)</span>
@@ -50,6 +51,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo1Art}')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo1Sport}')`}></div>
             <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo1Film}')`}></div>
+            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo1Film}')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo1Entertainment}')`}></div>
             <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo1Adventure}')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo1Community}')`}></div>
@@ -61,6 +63,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <span class="about-images__num-inner" data-state="art">(04)</span>
             <span class="about-images__num-inner" data-state="sport">(06)</span>
             <span class="about-images__num-inner" data-state="film">(08)</span>
+            <span class="about-images__num-inner" data-state="music">(08)</span>
             <span class="about-images__num-inner" data-state="entertainment">(10)</span>
             <span class="about-images__num-inner" data-state="adventure">(12)</span>
             <span class="about-images__num-inner" data-state="community">(14)</span>
@@ -70,6 +73,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo2Art}')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo2Sport}')`}></div>
             <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo2Film}')`}></div>
+            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo2Film}')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo2Entertainment}')`}></div>
             <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo2Adventure}')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo2Community}')`}></div>
