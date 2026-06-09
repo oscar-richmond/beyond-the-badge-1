@@ -1,4 +1,3 @@
 {
-  "buildCommand": "npm run build:cms",
-  "nodeVersion": "22.x"
+  "buildCommand": "npm run build:cms"
 }
