@@ -3,5 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://beyondthebadge.co.uk',
+  site: 'https://www.beyondthebadge.agency',
 });
