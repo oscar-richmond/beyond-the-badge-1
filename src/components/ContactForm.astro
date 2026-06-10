@@ -760,17 +760,25 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
           email:   data.email,
           company: data.company,
           message: data.message,
-          // Formsubmit options
           _subject: `New enquiry from ${data.name} — Beyond the Badge`,
           _captcha: 'false',
           _template: 'table',
         }),
       });
 
-      const json = await res.json();
+      // FormSubmit occasionally returns HTML instead of JSON (e.g. on first
+      // submission after activation). Parse text first, then attempt JSON decode.
+      const text = await res.text();
+      let success = false;
+      try {
+        const json = JSON.parse(text);
+        success = res.ok && json.success === 'true';
+      } catch {
+        // Non-JSON response — treat an HTTP 200 as success
+        success = res.ok;
+      }
 
-      if (res.ok && json.success === 'true') {
-        // ── Success ──────────────────────────────────────────────────────────
+      if (success) {
         form.style.display = 'none';
         if (successPanel) successPanel.classList.add('is-visible');
         form.reset();
