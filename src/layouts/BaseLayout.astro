@@ -71,10 +71,14 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     <title>{title}</title>
 
-    <!-- Hide CookieYes banner until the splash screen has finished -->
+    <!-- CookieYes banner: hide until splash exits + typography overrides -->
     <style>
       #cookieyes-banner { visibility: hidden !important; opacity: 0 !important; transition: opacity 0.4s ease !important; }
       #cookieyes-banner.btb-cookie-visible { visibility: visible !important; opacity: 1 !important; }
+
+      #cookieyes-banner .cky-title { font-size: 18px !important; font-weight: 700 !important; }
+      #cookieyes-banner .cky-notice-des,
+      #cookieyes-banner .cky-notice-des * { font-family: 'Inter', system-ui, sans-serif !important; }
     </style>
   </head>
   <body>
