@@ -70,6 +70,12 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
     <link rel="preload" href="/fonts/awesome-serif-italic-var.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
     <title>{title}</title>
+
+    <!-- Hide CookieYes banner until the splash screen has finished -->
+    <style>
+      #cookieyes-banner { visibility: hidden !important; opacity: 0 !important; transition: opacity 0.4s ease !important; }
+      #cookieyes-banner.btb-cookie-visible { visibility: visible !important; opacity: 1 !important; }
+    </style>
   </head>
   <body>
     <!-- Custom dot cursor (desktop / fine-pointer only) -->
@@ -77,6 +83,29 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     <!-- Full luxury splash screen (first visit per session) -->
     <SplashScreen />
+
+    <!-- Reveal CookieYes banner only after the splash screen exits -->
+    <script is:inline>
+      function showCookieBanner() {
+        var banner = document.getElementById('cookieyes-banner');
+        if (banner) {
+          banner.classList.add('btb-cookie-visible');
+        } else {
+          // Banner not yet injected by CookieYes — observe the DOM for it
+          var observer = new MutationObserver(function(_, obs) {
+            var b = document.getElementById('cookieyes-banner');
+            if (b) { b.classList.add('btb-cookie-visible'); obs.disconnect(); }
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+      }
+
+      if ((window).__splashDone) {
+        showCookieBanner();
+      } else {
+        document.addEventListener('splashDone', showCookieBanner, { once: true });
+      }
+    </script>
 
     <!-- Lightweight page-to-page transition curtain (z-index below splash) -->
     <div id="btb-curtain" aria-hidden="true">
