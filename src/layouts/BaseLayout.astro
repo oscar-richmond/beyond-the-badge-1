@@ -13,7 +13,7 @@ interface Props {
 const siteUrl = 'https://www.beyondthebadge.agency';
 
 const {
-  title = 'Beyond The Badge — Cultural Brand Partnerships',
+  title = 'Beyond the Badge — Cultural Brand Partnerships',
   description = 'We connect brands with the spaces where culture is created in art, sport, film, music, entertainment, adventure and community. Not to chase the moment, but to shape what comes next.',
   ogImage = `${siteUrl}/og-image.png`,
 } = Astro.props;
@@ -49,7 +49,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
     <meta property="og:locale" content="en_GB" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content="Beyond The Badge" />
+    <meta property="og:image:alt" content="Beyond the Badge" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
