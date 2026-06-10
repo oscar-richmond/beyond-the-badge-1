@@ -745,40 +745,29 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
       return;
     }
 
-    // ── Send via formsubmit.co AJAX ────────────────────────────────────────
+    // ── Send via Web3Forms ─────────────────────────────────────────────────
     setLoading(true);
 
     try {
-      const res = await fetch('https://formsubmit.co/ajax/info@beyondthebadge.agency', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method:  'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept':        'application/json',
         },
         body: JSON.stringify({
-          name:    data.name,
-          email:   data.email,
-          company: data.company,
-          message: data.message,
-          _subject: `New enquiry from ${data.name} — Beyond the Badge`,
-          _captcha: 'false',
-          _template: 'table',
+          access_key: 'REPLACE_WITH_WEB3FORMS_KEY',
+          name:        data.name,
+          email:       data.email,
+          company:     data.company,
+          message:     data.message,
+          subject:     `New enquiry from ${data.name} — Beyond the Badge`,
         }),
       });
 
-      // FormSubmit occasionally returns HTML instead of JSON (e.g. on first
-      // submission after activation). Parse text first, then attempt JSON decode.
-      const text = await res.text();
-      let success = false;
-      try {
-        const json = JSON.parse(text);
-        success = res.ok && json.success === 'true';
-      } catch {
-        // Non-JSON response — treat an HTTP 200 as success
-        success = res.ok;
-      }
+      const json = await res.json();
 
-      if (success) {
+      if (res.ok && json.success) {
         form.style.display = 'none';
         if (successPanel) successPanel.classList.add('is-visible');
         form.reset();
