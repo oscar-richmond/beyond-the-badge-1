@@ -51,7 +51,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo1Art}')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo1Sport}')`}></div>
             <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo1Film}')`}></div>
-            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo1Film}')`}></div>
+            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo1Music}')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo1Entertainment}')`}></div>
             <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo1Adventure}')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo1Community}')`}></div>
@@ -73,7 +73,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
             <div class="about-images__layer" data-state="art"           style={`background-image: url('${data.imagePair.photo2Art}')`}></div>
             <div class="about-images__layer" data-state="sport"         style={`background-image: url('${data.imagePair.photo2Sport}')`}></div>
             <div class="about-images__layer" data-state="film"          style={`background-image: url('${data.imagePair.photo2Film}')`}></div>
-            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo2Film}')`}></div>
+            <div class="about-images__layer" data-state="music"         style={`background-image: url('${data.imagePair.photo2Music}')`}></div>
             <div class="about-images__layer" data-state="entertainment" style={`background-image: url('${data.imagePair.photo2Entertainment}')`}></div>
             <div class="about-images__layer" data-state="adventure"     style={`background-image: url('${data.imagePair.photo2Adventure}')`}></div>
             <div class="about-images__layer" data-state="community"     style={`background-image: url('${data.imagePair.photo2Community}')`}></div>
@@ -341,7 +341,7 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 16px;
-    padding: 60px var(--section-padding-x) 60px 0;  /* was hardcoded 40px — now tracks the global padding token */
+    padding: 60px var(--section-padding-x) 60px 0; 
   }
 
   .about-images__item {
@@ -1117,42 +1117,42 @@ const base = import.meta.env.BASE_URL; // retained for non-CMS decorative asset 
 <style is:global>
   /* ── Field title labels (NAME, EMAIL, COMPANY, MESSAGE) ── */
   .page-about .contact__label {
-    color: rgba(232, 224, 212, 0.58); /* was 0.40 */
+    color: rgba(232, 224, 212, 0.58);
   }
 
   /* ── Placeholder fill text (your name, your@email.com …) ── */
   .page-about .contact__input::placeholder {
-    color: rgba(232, 224, 212, 0.36); /* was 0.22 */
+    color: rgba(232, 224, 212, 0.36);
   }
 
   /* ── Input underline (resting) ── */
   .page-about .contact__input {
-    border-bottom-color: rgba(232, 224, 212, 0.28); /* was 0.18 */
+    border-bottom-color: rgba(232, 224, 212, 0.28);
   }
 
   /* ── Input underline (focused) ── */
   .page-about .contact__input:focus {
-    border-bottom-color: rgba(232, 224, 212, 0.70); /* was 0.55 */
+    border-bottom-color: rgba(232, 224, 212, 0.70);
   }
 
   /* ── Section eyebrow tag (GET IN TOUCH) ── */
   .page-about .contact__tag {
-    color: rgba(232, 224, 212, 0.62); /* was 0.45 */
+    color: rgba(232, 224, 212, 0.62);
   }
 
   /* ── Contact detail label (Phone / Email) ── */
   .page-about .contact__detail-label {
-    color: rgba(232, 224, 212, 0.52); /* was 0.35 */
+    color: rgba(232, 224, 212, 0.52);
   }
 
   /* ── Privacy disclaimer text ── */
   .page-about .contact__privacy {
-    color: rgba(232, 224, 212, 0.46); /* was 0.30 */
+    color: rgba(232, 224, 212, 0.46);
   }
 
   /* ── Submit button border ── */
   .page-about .contact__submit {
-    border-color: rgba(232, 224, 212, 0.58); /* was 0.40 */
+    border-color: rgba(232, 224, 212, 0.58);
   }
 </style>
 

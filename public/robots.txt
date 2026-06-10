@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://beyondthebadge.co.uk/sitemap.xml
+Sitemap: https://www.beyondthebadge.agency/sitemap.xml

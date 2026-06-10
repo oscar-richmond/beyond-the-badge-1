@@ -1,4 +1,6 @@
 ---
+import globalData from '../../content/global.json';
+
 const base = import.meta.env.BASE_URL;
 const navItems = [
   { href: import.meta.env.BASE_URL, label: 'Home',    comma: true  },
@@ -61,7 +63,7 @@ const navItems = [
   <div class="mobile-nav__contact">
     <a href="tel:+447342026099" class="mobile-nav__contact-link">+4473 4202 6099</a>
     <a href="mailto:info@beyondthebadge.agency" class="mobile-nav__contact-link">Info@beyondthebadge.agency</a>
-    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="mobile-nav__contact-link">Follow us on Instagram</a>
+    <a href={globalData.instagramUrl || 'https://www.instagram.com'} target="_blank" rel="noopener noreferrer" class="mobile-nav__contact-link">Follow us on Instagram</a>
   </div>
 
   <!-- Legal links -->
