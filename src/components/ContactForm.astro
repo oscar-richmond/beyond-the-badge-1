@@ -160,6 +160,8 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
             <span class="contact__error" id="error-message" role="alert" aria-live="polite"></span>
           </div>
 
+          <div class="h-captcha" data-captcha="true"></div>
+
           <div class="contact__form-footer">
             <p class="contact__privacy">
               {privacyNote}
@@ -756,12 +758,13 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
           'Accept':        'application/json',
         },
         body: JSON.stringify({
-          access_key: '45ecc130-3c08-4a0a-a77e-283cb385a0c7',
-          name:        data.name,
-          email:       data.email,
-          company:     data.company,
-          message:     data.message,
-          subject:     `New enquiry from ${data.name} — Beyond the Badge`,
+          access_key:          '45ecc130-3c08-4a0a-a77e-283cb385a0c7',
+          name:                 data.name,
+          email:                data.email,
+          company:              data.company,
+          message:              data.message,
+          subject:              `New enquiry from ${data.name} — Beyond the Badge`,
+          'h-captcha-response': (form.querySelector('textarea[name="h-captcha-response"]') as HTMLTextAreaElement | null)?.value ?? '',
         }),
       });
 
