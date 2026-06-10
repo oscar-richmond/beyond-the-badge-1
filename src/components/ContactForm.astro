@@ -160,7 +160,7 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
             <span class="contact__error" id="error-message" role="alert" aria-live="polite"></span>
           </div>
 
-          <div class="h-captcha" data-captcha="true"></div>
+          <div class="h-captcha contact__captcha" data-captcha="true" data-theme="dark" data-size="compact"></div>
 
           <div class="contact__form-footer">
             <p class="contact__privacy">
@@ -390,6 +390,11 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
   .contact__error.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .contact__captcha {
+    margin-top: 28px;
+    margin-bottom: 4px;
   }
 
   .contact__form-footer {
