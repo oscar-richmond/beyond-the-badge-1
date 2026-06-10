@@ -77,7 +77,6 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
 
         <!-- Success panel (hidden until submission succeeds) -->
         <div class="contact__success-panel" id="contact-success-panel" aria-live="polite" hidden>
-          <span class="contact__success-tick" aria-hidden="true">✓</span>
           <p class="contact__success-headline">{successHeadline}</p>
           <p class="contact__success-sub">
             {successSub}
@@ -502,21 +501,13 @@ const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
   .contact__success-panel {
     display: none;   /* overrides HTML [hidden]; JS sets display:flex on success */
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
-    padding: 48px 0;
+    padding: 0;
   }
 
   .contact__success-panel.is-visible {
     display: flex;
-  }
-
-  .contact__success-tick {
-    font-size: 1.1rem;
-    color: #8CB7A0;
-    font-family: var(--font-sans);
-    font-variation-settings: normal;
-    letter-spacing: 0;
   }
 
   .contact__success-headline {
