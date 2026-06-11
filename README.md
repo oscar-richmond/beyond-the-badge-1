@@ -1,43 +1,70 @@
-# Astro Starter Kit: Minimal
+# Beyond the Badge
+
+Astro website for Beyond the Badge, a cultural brand partnerships studio. The site is built as a static Astro app with TinaCMS-backed content editing.
+
+## Tech stack
+
+- [Astro](https://astro.build/) for static pages and components
+- [TinaCMS](https://tina.io/) for editable JSON and Markdown content
+- GSAP and Lenis for page transitions, reveal animation, and smooth scrolling
+- Node.js `>=22.12.0`
+
+## Getting started
+
+Install dependencies from the lockfile:
 
 ```sh
-npm create astro@latest -- --template minimal
+npm ci
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Start the local development server with TinaCMS:
 
-## 🚀 Project Structure
+```sh
+npm run dev
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+By default Astro serves the site at `http://localhost:4321`.
+
+## Useful commands
+
+| Command | Action |
+| :-- | :-- |
+| `npm ci` | Install dependencies from `package-lock.json` |
+| `npm run dev` | Start TinaCMS and the Astro dev server |
+| `npm run build` | Build the static site to `dist/` |
+| `npm run build:cms` | Build TinaCMS when Tina credentials are present, then build Astro |
+| `npm run preview` | Preview the production build locally |
+| `npm run astro -- --help` | Show Astro CLI help |
+
+## Project structure
 
 ```text
 /
-├── public/
+├── content/              # Tina-managed JSON content for page sections
+├── public/               # Static assets served from the site root
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/       # Astro components for homepage and shared sections
+│   ├── content/          # Markdown collections for services and testimonials
+│   ├── layouts/          # Shared page layout and global browser scripts
+│   ├── pages/            # Route entry points
+│   └── styles/           # Global styles and design tokens
+├── tina/                 # TinaCMS schema and editor configuration
+└── astro.config.mjs
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Content editing
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Most page copy is stored in `content/*.json` and is exposed through the TinaCMS schema in `tina/config.tsx`. Service and testimonial entries live in Markdown collections under:
 
-Any static assets, like images, can be placed in the `public/` directory.
+- `src/content/services/`
+- `src/content/testimonials/`
 
-## 🧞 Commands
+The content collection schemas are defined in `src/content.config.ts`.
 
-All commands are run from the root of the project, from a terminal:
+## Build and deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The app is configured with the production site URL `https://beyondthebadge.co.uk` in `astro.config.mjs`.
 
-## 👀 Want to learn more?
+Use `npm run build` for a standard static build. In environments with TinaCloud credentials, use `npm run build:cms`; it runs the TinaCMS build step only when `TINA_CLIENT_ID` is available, then builds Astro.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Local environment files such as `.env` and `.env.local` are intentionally ignored because they may contain TinaCloud secrets.
