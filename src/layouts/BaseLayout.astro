@@ -22,7 +22,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 ---
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js splash-active">
   <head>
     <!-- Start cookieyes banner -->
     <script id="cookieyes" is:inline type="text/javascript" src="https://cdn-cookieyes.com/client_data/09a6dfb585e2bad0854f8584bbe08c3e/script.js"></script>
@@ -71,21 +71,6 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     <title>{title}</title>
 
-    <!-- CookieYes: hide banner until splash exits; injected style is removed on splashDone -->
-    <style id="cky-splash-hide">
-      #cookieyes-banner, .cky-consent-container { display: none !important; visibility: hidden !important; z-index: -1 !important; }
-    </style>
-
-    <!-- CookieYes typography overrides (loaded after CookieYes script so they take priority) -->
-    <style>
-      #cookieyes-banner .cky-title,
-      .cky-consent-container .cky-title { font-size: 18px !important; font-weight: 700 !important; }
-
-      #cookieyes-banner .cky-notice-des,
-      #cookieyes-banner .cky-notice-des *,
-      .cky-consent-container .cky-notice-des,
-      .cky-consent-container .cky-notice-des * { font-family: 'Inter', system-ui, sans-serif !important; }
-    </style>
   </head>
   <body>
     <!-- Custom dot cursor (desktop / fine-pointer only) -->
@@ -97,10 +82,8 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
     <!-- Reveal CookieYes banner only after the splash screen exits -->
     <script is:inline>
       function showCookieBanner() {
-        var hideStyle = document.getElementById('cky-splash-hide');
-        if (hideStyle) hideStyle.parentNode.removeChild(hideStyle);
+        document.documentElement.classList.remove('splash-active');
       }
-
       if ((window).__splashDone) {
         showCookieBanner();
       } else {
@@ -122,6 +105,27 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
     <slot />
 
     <style is:global>
+      /* ── CookieYes: hide banner while splash is active ───────────── */
+      html.splash-active #cookieyes-banner,
+      html.splash-active .cky-consent-container {
+        display: none !important;
+        visibility: hidden !important;
+        z-index: -1 !important;
+      }
+
+      /* ── CookieYes typography overrides ─────────────────────────── */
+      #cookieyes-banner .cky-title,
+      .cky-consent-container .cky-title {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      }
+      #cookieyes-banner .cky-notice-des,
+      #cookieyes-banner .cky-notice-des *,
+      .cky-consent-container .cky-notice-des,
+      .cky-consent-container .cky-notice-des * {
+        font-family: 'Inter', system-ui, sans-serif !important;
+      }
+
       /* ── Page-transition curtain (between pages, not splash) ─────── */
       #btb-curtain {
         position: fixed;
