@@ -71,14 +71,20 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     <title>{title}</title>
 
-    <!-- CookieYes banner: hide until splash exits + typography overrides -->
-    <style>
-      #cookieyes-banner { visibility: hidden !important; opacity: 0 !important; transition: opacity 0.4s ease !important; }
-      #cookieyes-banner.btb-cookie-visible { visibility: visible !important; opacity: 1 !important; }
+    <!-- CookieYes: hide banner until splash exits; injected style is removed on splashDone -->
+    <style id="cky-splash-hide">
+      #cookieyes-banner, .cky-consent-container { display: none !important; }
+    </style>
 
-      #cookieyes-banner .cky-title { font-size: 18px !important; font-weight: 700 !important; }
+    <!-- CookieYes typography overrides (loaded after CookieYes script so they take priority) -->
+    <style>
+      #cookieyes-banner .cky-title,
+      .cky-consent-container .cky-title { font-size: 18px !important; font-weight: 700 !important; }
+
       #cookieyes-banner .cky-notice-des,
-      #cookieyes-banner .cky-notice-des * { font-family: 'Inter', system-ui, sans-serif !important; }
+      #cookieyes-banner .cky-notice-des *,
+      .cky-consent-container .cky-notice-des,
+      .cky-consent-container .cky-notice-des * { font-family: 'Inter', system-ui, sans-serif !important; }
     </style>
   </head>
   <body>
@@ -91,17 +97,8 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
     <!-- Reveal CookieYes banner only after the splash screen exits -->
     <script is:inline>
       function showCookieBanner() {
-        var banner = document.getElementById('cookieyes-banner');
-        if (banner) {
-          banner.classList.add('btb-cookie-visible');
-        } else {
-          // Banner not yet injected by CookieYes — observe the DOM for it
-          var observer = new MutationObserver(function(_, obs) {
-            var b = document.getElementById('cookieyes-banner');
-            if (b) { b.classList.add('btb-cookie-visible'); obs.disconnect(); }
-          });
-          observer.observe(document.body, { childList: true, subtree: true });
-        }
+        var hideStyle = document.getElementById('cky-splash-hide');
+        if (hideStyle) hideStyle.parentNode.removeChild(hideStyle);
       }
 
       if ((window).__splashDone) {
