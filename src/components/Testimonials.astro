@@ -1359,7 +1359,7 @@ const storiesData = testimonials.map(t => ({
     const progress = scrolled / totalTravel;
     // n matches the number of visible scroll slots — track height is adjusted
     // dynamically on expand/collapse so each slot stays the same size (~125vh).
-    const n   = isExpanded ? 8 : 5;
+    const n   = isExpanded ? 7 : 5;
     const idx = Math.min(n - 1, Math.floor(progress * n));
 
     // If a swipe snap is in progress, ignore any index that isn’t the target
@@ -1687,20 +1687,19 @@ const storiesData = testimonials.map(t => ({
       const totalTravel = track.offsetHeight - window.innerHeight;
 
       if (target !== current) {
-        // Snap to target slot centre
-        window.scrollTo({ top: trackTop + ((target + 0.5) / n) * totalTravel, behavior: 'auto' });
+        // Snap to target slot centre.
+        // Direct scrollTop assignment bypasses Chrome's post-preventDefault
+        // restriction that silently drops window.scrollTo() calls.
+        document.documentElement.scrollTop = trackTop + ((target + 0.5) / n) * totalTravel;
         snapTarget = target;
         setTimeout(() => { snapTarget = -1; }, 200);
         activate(target);
       } else {
         // At edge — scroll past the section.
-        // behavior:'auto' (not 'smooth') — smooth is suppressed by Chrome after
-        // touchstart preventDefault(). setTimeout(0) defers past Safari's own
-        // touch-resolution phase, which otherwise cancels window.scrollTo().
         const exitY = dy > 0
           ? trackTop + totalTravel + 80          // past last → next section
           : Math.max(0, trackTop - 80);          // before first → above section
-        setTimeout(() => { window.scrollTo({ top: exitY, behavior: 'auto' }); }, 0);
+        document.documentElement.scrollTop = exitY;
       }
     }, { passive: true });
   }
