@@ -73,7 +73,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
     <!-- CookieYes: hide banner until splash exits; injected style is removed on splashDone -->
     <style id="cky-splash-hide">
-      #cookieyes-banner, .cky-consent-container { display: none !important; }
+      #cookieyes-banner, .cky-consent-container { display: none !important; visibility: hidden !important; z-index: -1 !important; }
     </style>
 
     <!-- CookieYes typography overrides (loaded after CookieYes script so they take priority) -->
